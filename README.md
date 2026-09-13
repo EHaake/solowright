@@ -8,18 +8,15 @@ own work at fixed gates, and reports back in plain language. It is not
 an enterprise platform and doesn't try to be. Every design choice in it
 was measured on real projects, and the record of why is in the repo.
 
-It comes in two parts:
-
-- **This repo** is the system itself, packaged as a Claude Skill named
-  `spec-driven-development`: the process, three subagent roles, the
-  document templates, the model policy, and the design record.
-  Installed once; applies to every project.
-- **[`solowright-template`](https://github.com/EHaake/solowright-template)**
-  is the project scaffold — a GitHub template repo that seeds a new
-  project's `CLAUDE.md`, `spec.md`, `plan.md`, `tasks.md`, and
-  `brief.md`. New to spec-driven development, or wondering why you'd
-  want it? Its README and `How-To-Use.md` are the human guide; this
-  one covers getting the skill installed and kept current.
+It is one thing to install: a Claude Skill named
+`spec-driven-development` plus three subagent definitions. The skill
+carries the process, the document templates a new project is
+scaffolded from, the model policy, and the design record. There is no
+separate project template to clone — the first session of a project
+scaffolds it from the templates here, so every project starts from the
+current ones. New to spec-driven development, or wondering why you'd
+want it? `How-To-Use.md` in this repo is the human guide; this file
+covers installing the skill and keeping it current.
 
 **This repo is not itself read by Claude Code or claude.ai.** It's the
 place changes get made and history gets kept; the skill only actually
@@ -32,7 +29,10 @@ sync outward, not a live location either tool reads from directly.
 ```
 SKILL.md                        AI-facing instructions — the file that
                                  actually gets loaded once installed
-assets/
+How-To-Use.md                   The human guide: starting and running a
+                                 project, and what your part of it is
+assets/                         Everything a new project is scaffolded
+                                 from, plus the subagent definitions
   CLAUDE-template.md            Constitution skeleton
   spec-template.md              spec.md skeleton
   plan-template.md              plan.md skeleton
@@ -40,6 +40,8 @@ assets/
   design-brief-template.md      brief.md skeleton, for projects with a UI
   settings-template.json        .claude/settings.json a project gets at
                                  setup: session model and effort
+  pull-request-template.md      .github/PULL_REQUEST_TEMPLATE.md
+  gitignore-template            .gitignore starting point
   skeptical-reviewer.md         Source copy of the reviewer subagent —
                                  see "Installing" below for where the
                                  active copy actually lives
@@ -55,18 +57,18 @@ references/
                                  kept out of what every session loads
 ```
 
-`README.md` (this file) and `How-To-Use.md`, if you keep a copy here,
-are for humans — nothing in this repo besides `SKILL.md`, `assets/`, and
-`references/` is read by either tool.
+`README.md` (this file) and `How-To-Use.md` are for humans — nothing in
+this repo besides `SKILL.md`, `assets/`, and `references/` is read by
+either tool.
 
 ## The flow, in one paragraph
 
-A project starts in chat, at the top tier: the idea, the constitution
-(which also writes the project's `.claude/settings.json`), and the first
-spec, plan, and tasks — nothing has a codebase yet. From then on,
-Claude Code sessions in the project open on the session tier at
-medium effort, automatically. Each later spec is a conversation in a
-Claude Code session of its own, switched to the top tier by the person
+A project starts in Claude Code: an empty repository, one sentence,
+and the first session scaffolds it from the skill's templates, then
+hosts the idea, constitution, and first-spec conversations. Sessions
+in the project open on the session tier at medium effort,
+automatically. Each spec is a conversation in a Claude Code session of
+its own, switched to the top tier by the person
 (the only manual model choice in the workflow); once approved, that
 same session dispatches the planner and the sign-off at the top tier,
 then hands off to an implementation session on the session tier that
@@ -155,10 +157,21 @@ The full decision record — what was measured, what was tried first,
 and what evidence would change each choice — is
 `references/design-record.md`.
 
+## Starting a project
+
+Create an empty repository, open Claude Code in it, and say "Start a
+new Solowright project." The first session scaffolds the repo from
+`assets/` and walks through the idea, the constitution, and the first
+spec; `How-To-Use.md` has the full sequence and what your part of it
+is. Projects used to start from a separate template repo,
+`solowright-template`; it is archived, because a copy of the templates
+drifted from the originals within weeks — the design record has the
+numbers.
+
 ## Installing
 
-Two separate installs, two separate places — updating this repo doesn't
-propagate to either automatically.
+Two copies, two places — updating this repo doesn't propagate to
+either automatically.
 
 ### Claude Code
 
@@ -177,32 +190,26 @@ inside the skill folder.
 Verify it's actually recognized, not just present: open Claude Code
 anywhere and ask what skills are available.
 
-### claude.ai
+### claude.ai (optional)
 
-Settings → Capabilities → enable "Code execution and file creation"
+Only needed if you like to think an idea through in chat before a repo
+exists; nothing in the workflow depends on it. Settings → Capabilities
+→ enable "Code execution and file creation"
 (skills won't appear in the menu until this is on). Then zip `SKILL.md`,
 `assets/`, and `references/` together — the zip's root should be the
 `spec-driven-development` folder itself, not the loose files and not an
 extra wrapper folder around it. Settings → Customize → Skills → upload
 the zip, toggle it on.
 
-Verify with a fresh chat: ask it to start a new SDD project and confirm
-it references the methodology unprompted.
+Verify with a fresh chat: ask what Solowright is and confirm it answers
+from the skill rather than guessing.
 
 ## Updating
 
-Edit here first, commit normally. Then manually re-sync both install
-locations — copy the changed files to the Claude Code path, re-zip and
-re-upload for claude.ai. Nothing pushes automatically to either; this
-repo having the fix doesn't mean either installed copy has it yet.
-
-## The companion repo
-
-**[`solowright-template`](https://github.com/EHaake/solowright-template)**
-is the project-scaffold counterpart — a GitHub template
-repo (the actual "Template repository" feature) that seeds a new
-project's `CLAUDE.md`/`spec.md`/`plan.md`/`tasks.md`/`brief.md`. This
-repo and that one are deliberately separate: this one is the
-methodology, installed once, applying to every project; that one is a
-starting point, cloned fresh per project, with no ongoing link back to
-either this repo or itself once used.
+Edit here first, commit normally. Then manually re-sync the install
+locations — copy the changed files to the Claude Code path, and re-zip
+and re-upload for claude.ai if you use it. Nothing pushes automatically
+to either; this repo having the fix doesn't mean an installed copy has
+it yet. Projects already scaffolded keep the templates they started
+with; only `CLAUDE.md`'s model policy is expected to be brought up to
+date when the policy changes, and the skill says how.

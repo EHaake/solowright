@@ -1,0 +1,16 @@
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Environment / secrets — never commit real values
+.env
+.env.local
+
+# Add language- or platform-specific entries here once CLAUDE.md's
+# Platform section is filled in for this project (e.g. node_modules/,
+# .build/, __pycache__/, *.xcuserstate).

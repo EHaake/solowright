@@ -405,3 +405,51 @@ Wellwrought. The skill's installed name stays
 `spec-driven-development` for now, since that is the tooling name
 Claude Code triggers on and renaming it would mean a reinstall on
 every machine.
+
+## One repo: the project template retired, the skill scaffolds
+
+Decided September 2026. Projects used to start from a separate GitHub
+template repository whose files had been instantiated from the skill's
+`assets/` templates. The separation was justified as "refine the
+methodology in one place, once" — but the template was a second copy,
+and nobody re-synced it. Measured on the day the decision was made,
+with the template's content last touched on 22 August and the assets
+changed through 9 September:
+
+| Template file | Skill asset | Differing lines |
+|---|---|---|
+| `CLAUDE.md` (126 lines) | `CLAUDE-template.md` (300 lines) | 228 |
+| `specs/001/tasks.md` (72 lines) | `tasks-template.md` (148 lines) | 130 |
+| `spec.md`, `plan.md`, `design/brief.md` | their templates | 0 |
+
+A project started from the template that day would have had a
+constitution with no involvement level and no model policy, and a
+tasks file with no tier log — the sections the previous two weeks of
+work had gone into. Beyond the copies, the template added only a
+folder layout, a pull-request template, a `.gitignore`, a human
+guide, and GitHub's one-click "Use this template".
+
+The fix was to remove the second copy rather than to sync it: the
+skill's first session now scaffolds a new project from `assets/` (the
+two small files moved in there; the guide moved to the skill repo as
+`How-To-Use.md`), so there is one source and drift is impossible by
+construction. The template repo was archived with a pointer. What was
+given up: the one-click template. What was gained: one install instead
+of two, and every project starting from the current templates.
+
+Two consequences followed. **Project start moved into Claude Code.**
+The idea, constitution, and first spec had happened in chat because
+chat was the top tier at the person's own setting and there was no
+repo yet; the scaffold has to be written somewhere with a filesystem,
+and a spec session in Claude Code is switched to the top tier anyway,
+so the first session is simply the first spec session. Chat stays
+available for people who prefer to think an idea through there first;
+the documents are the interface either way. **The first spec's plan
+joined the planner's path.** It had been the one plan drafted in the
+design conversation, on the argument that the conversation held all
+the context. But the planner sees only the documents, and so does
+every later session — a first plan that can't be drafted from
+`spec.md` and `CLAUDE.md` alone means a decision still lives only in
+the conversation, and the fix is writing it down. The planner's
+definition already accepted the skill's templates as the pattern when
+there is no previous plan, so this cost nothing to enable.
