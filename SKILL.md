@@ -1,12 +1,13 @@
 ---
 name: spec-driven-development
-description: Guidance for running spec-driven development (SDD) on a software project using Claude, Claude Code, and (if the project has a UI) Claude Design together — writing a constitution and specs before code exists, translating design references into implementation, and running a disciplined build-and-review loop. Use this whenever starting a new app, website, or software project from scratch with Claude Code as the implementer; when the user mentions "spec-driven development," "SDD," writing a CLAUDE.md/constitution, or wants a structured spec → plan → tasks → implement workflow; or when picking up an existing SDD project and needing to know how the pieces fit together. Also use when the user is deciding how to divide work between a chat-based planning conversation, Claude Design, and Claude Code, or asking how to review AI-written code without becoming a bottleneck.
+description: Solowright — a spec-driven development (SDD) system for a solo builder — run on a software project using Claude, Claude Code, and (if the project has a UI) Claude Design together — writing a constitution and specs before code exists, translating design references into implementation, and running a disciplined build-and-review loop. Use this whenever starting a new app, website, or software project from scratch with Claude Code as the implementer; when the user mentions "Solowright," "spec-driven development," "SDD," writing a CLAUDE.md/constitution, or wants a structured spec → plan → tasks → implement workflow; or when picking up an existing SDD project and needing to know how the pieces fit together. Also use when the user is deciding how to divide work between a chat-based planning conversation, Claude Design, and Claude Code, or asking how to review AI-written code without becoming a bottleneck.
 ---
 
-# Spec-Driven Development with Claude
+# Solowright: Spec-Driven Development with Claude
 
-A methodology for building real software with Claude as the planning
-partner and Claude Code as the implementer. This file is the process;
+A spec-driven development system for a solo builder, with Claude as the
+planning partner and Claude Code as the implementer. This file is the
+process;
 the reasoning behind its less obvious choices, and the history of how
 they were reached, is in `references/design-record.md`.
 
