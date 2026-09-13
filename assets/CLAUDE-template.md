@@ -148,8 +148,9 @@ names as models change; the roles don't. -->
   states its model and effort first (`/effort status`) and asks the
   person to raise effort to high for this session (`/effort high`)
   before continuing. The next session opens at medium again from
-  `.claude/settings.json`. (The project's very first spec, with no
-  codebase yet, happened in chat.)
+  `.claude/settings.json`. (The project's first session is a spec
+  session too: it scaffolds the repo from the skill's templates, then
+  hosts the idea, the constitution, and the first spec.)
 - **The `skeptical-reviewer` runs at the implementation tier by
   default** (its definition says `opus`) for per-phase reviews, the
   per-task reviews the planner marks, and the pre-merge sweep. Each
@@ -224,11 +225,11 @@ the involvement level above. Artifacts live in `specs/<NNN>-<slug>/`:
 - `plan.md` — technical design: types, data flow, what changes where.
 - `tasks.md` — ordered, small, independently verifiable tasks.
 
-Authorship: `spec.md` is written in the chat design conversation.
-Until this project has shipped code, `plan.md` and `tasks.md` are too;
-once shipped code is what plans extend, the `sdd-planner` subagent
-drafts them instead — at the top tier, from a planning bundle, against
-the actual codebase — and the orchestrator commits them to the spec
+Authorship: `spec.md` is written with the person in a spec session.
+`plan.md` and `tasks.md` are drafted by the `sdd-planner` subagent —
+at the top tier, from a planning bundle, against the actual codebase
+(or, for the first spec, against the constitution, the spec, and the
+skill's templates) — and the orchestrator commits them to the spec
 branch with the PR still in draft. Both are signed off before any
 implementation task starts: at the product-owner level by the
 `skeptical-reviewer` (blocking findings fixed and re-reviewed), with

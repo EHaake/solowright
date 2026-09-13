@@ -13,8 +13,8 @@ they were reached, is in `references/design-record.md`.
 
 ## The core idea
 
-The chat conversation where a spec gets written and the Claude Code
-session where it gets built don't share memory. **The repo is the only
+The session where a spec gets written and the session where it gets
+built don't share memory. **The repo is the only
 real interface between them.** Every decision that needs to survive past
 one conversation has to end up in a file, or it's gone the moment either
 session ends. This one fact drives almost everything else in this skill:
@@ -25,28 +25,32 @@ resume cold than one that doesn't.
 
 ## The three-tool division of labor
 
-- **Claude (chat)** hosts a project's start — the idea conversation,
-  the constitution, the first `spec.md`, and the first `plan.md` and
-  `tasks.md` — none of which has a codebase to look at yet. Once the
-  first spec ships, chat's part is over: every later spec conversation
-  happens in Claude Code (see "Spec conversations" under "Model
-  tiering"), and plan and task drafting moves to the `sdd-planner`
-  subagent (see "Who authors plan.md and tasks.md").
+- **Claude Code** hosts the whole flow, a project's first day included.
+  The first session scaffolds the repo from the skill's templates and
+  then hosts the idea, constitution, and first-spec conversations (see
+  "Starting a project"); every later spec is a conversation in a spec
+  session of its own (see "Spec conversations" under "Model tiering").
+  Plans and task lists are drafted by the `sdd-planner` subagent, one
+  dispatch per spec (see "Who authors plan.md and tasks.md").
 - **Claude Design** (if the project has a UI) produces visual references
   — screens, a token system, a written brief — not literal source code
   for a native app. Its output is HTML/CSS underneath. For a web app that
   might be directly usable; for anything else (iOS, desktop, etc.) treat
   it as what a designer's mockups would be for a native team: the target
   to translate toward, not something to import.
-- **Claude Code** implements, tests, and verifies against the documents
+- **Claude Code, at implementation time,** builds against the documents
   as ground truth — reading `CLAUDE.md` at the start of every session
-  and treating `spec.md`/`plan.md`/`tasks.md` as the source of truth for
-  what's being built, not the chat history. Once shipped code exists it
-  also drafts `plan.md` and `tasks.md`, through the `sdd-planner`, one
-  dispatch per spec. During implementation it orchestrates rather than
-  types: each routine task goes to the `sdd-implementer` subagent at
+  and treating `spec.md`/`plan.md`/`tasks.md` as the source of truth
+  for what's being built, not any conversation. It orchestrates rather
+  than types: each routine task goes to the `sdd-implementer` subagent at
   the implementation tier, and the session triages, verifies, and
   commits (see "Model tiering").
+- **Claude (chat) is optional.** Some people prefer to think an idea
+  through in chat before there is a repo. That's fine: have the idea
+  conversation there (the skill can be installed in claude.ai too) and
+  bring its conclusions to the project's first session, which writes
+  them into the scaffold. The documents are the interface either way;
+  nothing in the workflow depends on chat.
 
 ## Involvement level: decide it once, at the start
 
@@ -412,20 +416,18 @@ review, a stale `tasks.md` edit, a task done by hand — raise its
 effort to high, one line in the settings file, before changing its
 model.
 
-**Spec conversations: chat at the project's start, Claude Code
-after.** The idea conversation, the constitution, and the first spec
-happen in chat — there is no codebase yet, and chat is the top tier at
-the person's own setting. Every later spec conversation happens in
-Claude Code, in a spec session of its own — never inside the
-implementation session, whose context is the cost the tiering exists
-to contain. A session opens at the settings default — under
-experiment 1, the top tier's model at medium effort — so a spec
-session opens by stating its model and effort (`/effort status` is
-the authoritative check) and asks the person to raise effort to high
-for this session only (`/effort high`). That is the single manual
-choice in the whole workflow; it's a choice about how hard the
-person's own thinking seat reasons, which is why it's the one left to
-them. The spec session also runs planning: once `spec.md` is approved it assembles
+**Spec conversations happen in Claude Code, in a spec session of its
+own** — the project's first session included, which scaffolds the repo
+and then hosts the idea, constitution, and first-spec conversations
+(see "Starting a project"). Never inside the implementation session,
+whose context is the cost the tiering exists to contain. A session
+opens at the settings default — under experiment 1, the top tier's
+model at medium effort — so a spec session opens by stating its model
+and effort (`/effort status` is the authoritative check) and asks the
+person to raise effort to high for this session only (`/effort high`).
+That is the single manual choice in the whole workflow; it's a choice
+about how hard the person's own thinking seat reasons, which is why
+it's the one left to them. The spec session also runs planning: once `spec.md` is approved it assembles
 the planning bundle, dispatches the `sdd-planner`, then the sign-off,
 then writes the spec-conformance summary — everything the top tier
 does for a spec, with the person who just wrote the spec still there
@@ -470,16 +472,16 @@ Everything above, laid out as the sequence a spec actually follows.
 Fable at medium and the top tier is Fable at high; the roles are
 what's fixed, the names change as models do.
 
-**A brand-new project, once.** Nothing has a codebase yet, so nothing
-needs Claude Code until implementation:
+**A brand-new project, once.** The person creates an empty repository
+and opens Claude Code in it; the first session is a spec session:
 
 | Step | Where | Model | Who's talking |
 |---|---|---|---|
-| Idea conversation | Chat | Fable | the person and Claude |
-| Constitution → `CLAUDE.md` + `.claude/settings.json` | Chat, then committed | Fable | the person and Claude |
-| First spec → `spec.md` | Chat | Fable | the person and Claude |
-| First plan and tasks | Chat | Fable | Claude drafts; sign-off per involvement level |
-| Implementation | Claude Code | Fable session at medium; Opus implementers | orchestrator |
+| "Start a new Solowright project" → scaffold from `assets/`, committed | Claude Code, **the first spec session** | opens at medium; the person raises effort to high as for any spec session | the person and the session |
+| Idea conversation | same session | Fable, high | the person and Claude |
+| Constitution → `CLAUDE.md` filled in | same session, committed | Fable, high | the person and Claude |
+| First spec → `spec.md` | same session | Fable, high | the person and Claude |
+| Plan and tasks onward | exactly as below, from "Plan and tasks drafted" | | |
 
 **Every spec after that.** The project's `.claude/settings.json` opens
 every Claude Code session on Fable 5.1 at medium effort; the agent
@@ -662,7 +664,7 @@ resolves inside Claude Code. This tiering follows the same risk-based
 logic as review cadence above, applied to *which surface a decision
 happens on*.
 
-## A realistic first sequence for a new project
+## Starting a project: a realistic first sequence
 
 Not every step below deserves equal engagement. For a solo or personal
 project specifically, the natural weighting is uneven: the idea itself,
@@ -674,77 +676,92 @@ universal rule — say so explicitly if a given project actually wants
 more rigor upfront on the technical side (real infra stakes, a team
 involved), and follow that instead.
 
-0. **Idea conversation, before any technical decision.** Audience,
+0. **Scaffold, from the skill's own templates.** The person creates an
+   empty repository, opens Claude Code in it, and says "Start a new
+   Solowright project." This first session is a spec session — it
+   opens at medium and asks for high effort like any other — and
+   before any conversation it writes the project's skeleton
+   from `assets/`, nothing copied by hand: `CLAUDE.md` from
+   `CLAUDE-template.md`; `.claude/settings.json` from
+   `settings-template.json`; `.github/PULL_REQUEST_TEMPLATE.md` from
+   `pull-request-template.md`; `.gitignore` from `gitignore-template`;
+   and, once the idea conversation has named the first feature,
+   `specs/001-<slug>/` with `spec.md`, `plan.md`, and `tasks.md` from
+   their templates, plus `design/brief.md` from
+   `design-brief-template.md` if the project has a UI. One commit:
+   "Scaffold the project." There is no project template to clone —
+   the templates live in the skill so that every new project gets the
+   current ones, and there is exactly one copy to maintain. The
+   orchestrator recreates `.claude/settings.json` from the template if
+   it's ever missing; nobody creates it by hand.
+1. **Idea conversation, before any technical decision.** Audience,
    purpose, what makes this distinctive, the core loop or the point of
    the thing. Reaching for a framework choice before the idea itself is
    settled is working backwards — technical decisions usually clarify
-   naturally once the idea is clear, not the other way around.
-1. **Constitution conversation.** Platform/language/architecture choices,
+   naturally once the idea is clear, not the other way around. Someone
+   who prefers to think this through in chat first can, and brings the
+   conclusions here.
+2. **Constitution conversation.** Platform/language/architecture choices,
    testing philosophy, dependency policy, and the person's involvement
-   level (ask once, directly, and default to product owner) — write
-   `CLAUDE.md` before any code exists, so the first thing Claude Code
-   reads when it scaffolds the project is the constitution, not its own
-   defaults. The same step writes `.claude/settings.json` from
-   `assets/settings-template.json` — the session model and effort the
-   model policy relies on — and commits it with the constitution. The
-   person never creates this by hand; it's part of scaffolding, and the
-   orchestrator recreates it if it's ever missing. Move through this
-   efficiently once the idea is settled: when someone doesn't have a
-   strong preference on a technical choice, recommend a sensible
-   default and explain briefly why. "No preference" is a signal to move
-   quickly, not an invitation to generate a longer list of options. If
-   asked to help explore an option (hosting, for instance), give a
-   genuine, opinionated recommendation grounded in what's already been
-   decided — not a neutral menu that hands the decision back.
-2. **First spec.** Accept that it'll be larger than specs after it (see
+   level (ask once, directly, and default to product owner) — fill in
+   `CLAUDE.md` before any code exists, so the first thing an
+   implementation session reads is the constitution, not its own
+   defaults, and commit it. Move through this efficiently once the idea
+   is settled: when someone doesn't have a strong preference on a
+   technical choice, recommend a sensible default and explain briefly
+   why. "No preference" is a signal to move quickly, not an invitation
+   to generate a longer list of options. If asked to help explore an
+   option (hosting, for instance), give a genuine, opinionated
+   recommendation grounded in what's already been decided — not a
+   neutral menu that hands the decision back.
+3. **First spec.** Accept that it'll be larger than specs after it (see
    "The first-spec exception"). Push on ambiguity now — it's nearly free
    to resolve in conversation and expensive to resolve after code exists.
-3. **Plan.** Translate the spec into real technical design — actual
-   types, actual data flow, actual file structure. This is where
-   "someone should double-check this claim" moments should be written
-   down as things to verify, not assumed correct.
+   The planner will see only the documents, not this conversation, so a
+   decision that lives only in the conversation isn't made yet.
 4. **Design exploration**, if the project has a UI — see "Design
    exploration, when the project has a UI" above for what actually needs
    to be in the brief and why. The deliverables are screens exported as
    images plus a tokens document, both becoming implementation
    references for whoever builds from them.
-5. **Tasks.** Ordered, small, independently verifiable — and tiered by
-   risk for review cadence, per above.
-6. **Implement**, with the review discipline actually followed, not just
-   agreed to in principle. The first phase or two is where the pattern
-   either sticks or doesn't — it's worth being strict early even if it
-   feels like overkill, because that's also when a mistake is cheapest
-   to catch.
+5. **Plan and tasks**, the same way as for every later spec: the spec
+   session dispatches the `sdd-planner` on a planning bundle — here
+   the spec, the constitution, and the skill's templates as the
+   pattern, since there is no previous plan — then the sign-off, then
+   the spec-conformance summary. The plan should write down "someone
+   should double-check this claim" moments as things to verify, not
+   assume them correct; tasks are ordered, small, independently
+   verifiable, and tiered by risk for review cadence.
+6. **Implement**, in a new session, with the review discipline actually
+   followed, not just agreed to in principle. The first phase or two is
+   where the pattern either sticks or doesn't — it's worth being strict
+   early even if it feels like overkill, because that's also when a
+   mistake is cheapest to catch.
 
-**For every spec after the first, this same sequence applies minus step
-1** — the constitution already exists and stays in force unless this
-particular feature genuinely requires amending it, per `CLAUDE.md`'s own
-rule (amend explicitly, in its own commit, before the spec proceeds).
-Steps 0 and 2 still happen as a conversation with the person — in
-Claude Code now, in a spec session of its own at the top tier — a
-second or tenth spec doesn't skip the idea-and-design phase just
-because the project already has a working codebase. Steps 3 and 5
-change hands once the project has shipped code — see the next section.
+**For every spec after the first, this same sequence applies minus
+steps 0 and 2** — the scaffold exists, and the constitution stays in
+force unless this particular feature genuinely requires amending it,
+per `CLAUDE.md`'s own rule (amend explicitly, in its own commit, before
+the spec proceeds). Steps 1 and 3 still happen as a conversation with
+the person, in a spec session of its own at the top tier — a second or
+tenth spec doesn't skip the idea-and-design phase just because the
+project already has a working codebase.
 
-## Who authors plan.md and tasks.md: a phase transition
+## Who authors plan.md and tasks.md
 
-Authorship of `plan.md` and `tasks.md` splits along the what/how
-boundary, and which tool holds the pen for the *how* depends on whether
-there's a codebase yet.
+Authorship splits along the what/how boundary. `spec.md` is a
+conversation with the person; `plan.md` and `tasks.md` are drafted by
+the `sdd-planner`, once per spec, first spec included.
 
-**Until the project has shipped code, plan in chat.** A first spec's
-plan *invents* the architecture rather than extending one — there is
-nothing to inspect, and the design conversation holds all the relevant
-context.
-
-**Once shipped code is what plans extend, plan in Claude Code.** A plan
-against a real codebase needs the actual model definitions, the actual
-view structure, the actual dependency-injection shape — ground truth
-chat can't see. Once `spec.md` is approved, the spec session
-assembles a planning bundle with shell — the spec, the previous spec's
-`plan.md` and `tasks.md` as the pattern, a file listing — and
-dispatches the `sdd-planner` subagent (`assets/sdd-planner.md`) on it,
-once, at the top tier. The planner reads the code the spec touches,
+**Plans are drafted in a dispatch, against the repo.** A plan against a
+real codebase needs the actual model definitions, the actual view
+structure, the actual dependency-injection shape — ground truth only a
+context with the files open can see. Once `spec.md` is approved, the
+spec session assembles a planning bundle with shell — the spec, the
+previous spec's `plan.md` and `tasks.md` as the pattern (or the skill's
+templates, for a first spec), a file listing — and dispatches the
+`sdd-planner` subagent (`assets/sdd-planner.md`) on it, once, at the
+top tier. The planner reads the code the spec touches,
 writes both files marked Draft, and returns a summary with its token
 usage for the tier log. The orchestrator commits the drafts to the spec
 branch with the PR still in draft, and the skeptical-reviewer signs
@@ -752,16 +769,26 @@ off. The exploration a plan needs is the expensive part of planning,
 and this puts it in a discardable context, bounded by the bundle,
 instead of in the spec session's own context.
 
-**`spec.md` stays a conversation with the person in both phases** —
-in chat for the first spec, in a dedicated Claude Code spec session
-after. It captures product intent, user-facing behavior, and decisions,
-and the model writing it should be reasoning about the product, not
-reading the code.
+**A first spec goes the same way, and that is a feature.** Its plan
+invents an architecture rather than extending one, and the temptation
+is to draft it inside the design conversation, which holds all the
+context. But the planner sees only the documents, and so will every
+implementation session after it — the repo is the only interface. A
+first plan the planner can't draft from `spec.md` and `CLAUDE.md`
+alone is a sign that a decision still lives only in the conversation,
+and the fix is to write it down, not to hand the planner the
+conversation.
+
+**`spec.md` stays a conversation with the person**, in a dedicated
+Claude Code spec session — the project's first session for the first
+spec, a fresh one for each after. It captures product intent,
+user-facing behavior, and decisions, and the model writing it should
+be reasoning about the product, not reading the code.
 
 **Who signs off depends on involvement level, and this is the one place
 the levels differ materially.** At the technical-lead level, the person
 reads and approves `plan.md` and `tasks.md` before any implementation
-task starts, in either authorship phase. At the product-owner level,
+task starts. At the product-owner level,
 the planner's draft plus the skeptical-reviewer's sign-off is the gate:
 the reviewer checks the draft against `spec.md` and `CLAUDE.md`,
 blocking findings go back to the orchestrator to be fixed and

@@ -183,9 +183,9 @@ orchestrator directly and logged, not sent around a third time. Then
 the spec-conformance summary to the person (product-owner level), or
 the drafts themselves (technical lead).
 
-A first spec, with no code to plan against, has no planner: the plan is
-drafted in chat along with the spec, per the authorship phase
-transition.
+A first spec, with no code to plan against, still goes through the
+planner: its bundle is the spec, the constitution, and the skill's
+templates as the pattern, and the sign-off is the same.
 
 ## The dispatch loop: who does the typing
 
