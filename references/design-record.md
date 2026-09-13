@@ -372,3 +372,36 @@ standing rule sends it back to the person). `spec.md` stayed a
 conversation with the person in both phases — moved to a dedicated
 Claude Code session, at the top tier, once chat's reason to exist
 (no codebase) was gone.
+
+## The name: Solowright, and why "system" rather than "skill" or "operating system"
+
+Decided September 2026. The project had outgrown "a Claude Skill": by
+then it was the skill, three subagent roles, a document set with
+templates, a model policy with settings, a measured cost model, a
+design record with rollback conditions, and a project-template repo.
+Several coordinated parts that turn a spec into reviewed software is a
+*system*. Comparable projects were calling themselves an "operating
+system for AI-assisted development"; that was judged an overstatement
+— an operating system would manage any kind of AI work generally, and
+this is one workflow, with roles, for one kind of work — and the
+positioning was set to be accurate rather than loud.
+
+Two things go in the first sentence wherever the project is
+introduced: it is built for a **solo builder**, not a team or an
+enterprise, and the person is a **product owner** who writes the spec
+and tries the result rather than reading code. Those are what set it
+apart from the crowded spec-driven-development space, so they lead.
+
+The name came from a brainstorm across three rounds, each checked
+against GitHub for collisions. The first choice, Specwright, was
+already used by two other spec-driven-development plugins for Claude
+Code; every "spec + craft word" combination (Specsmith, SpecForge,
+SpecLoom, SpecFoundry, Planwright, Buildwright) and every classic
+trade name (Shipwright, Millwright, Wheelwright) was taken too, most
+in this niche. Solowright — a *wright* for the *solo* builder — was
+clean and says the audience in the name. Runners-up, also clean:
+Ownwright (owner, "in your own right", wright), Truewrought, and
+Wellwrought. The skill's installed name stays
+`spec-driven-development` for now, since that is the tooling name
+Claude Code triggers on and renaming it would mean a reinstall on
+every machine.
