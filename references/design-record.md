@@ -506,7 +506,7 @@ The project should have a fast, reliable automated verification
 command, so that quality is measured by the checker and not by a
 device pass — kaazap fits; Trove's simulator passes would confound.
 
-1. Install `assets/sdd-implementer-fable.md` into `~/.claude/agents/`
+1. Install `agents/sdd-implementer-fable.md` into `~/.claude/agents/`
    alongside the existing three. Run the project prompt below in a
    fresh session in the project.
 2. Run the spec as this branch's `SKILL.md` says. Every implementer
@@ -534,7 +534,7 @@ file in place:
 
 > Experiment 2 setup for this project. In `CLAUDE.md`, replace the
 > "Model policy" section with the one in the installed skill's
-> `assets/CLAUDE-template.md`, keeping this project's involvement level
+> `project/CLAUDE.md`, keeping this project's involvement level
 > and anything project-specific the old section carried; the change is
 > that tasks now dispatch `sdd-implementer-fable` (Fable 5.1 at
 > medium), with `sdd-implementer` (opus, high) as the fallback. Confirm
@@ -569,6 +569,24 @@ profiles is one commit (the names and the settings file), and the
 tier log shows from which spec. A third, cheaper notch — a Sonnet
 implementer per marked task — already exists as the lighter-implementer
 lever and was left as it was.
+
+## Repo layout: agents/, project/, references/
+
+Changed September 2026. `assets/` had held three things with different
+lives — agent definitions that install to `~/.claude/agents/` and are
+never read from the skill folder, document skeletons a new project is
+scaffolded from, and settings files for the same — and the README
+needed a comment on every line to say where each went. The agents got
+their own folder. The templates became `project/`, a literal skeleton
+laid out exactly as it lands in a new repo (`CLAUDE.md`,
+`.claude/settings.json`, `.github/`, `.gitignore`, `specs/001-spec-name/`,
+`design/brief.md`), so the scaffold step is "copy the folder, rename
+the spec directory, keep one settings file" instead of a list of
+source-to-destination pairs, and the `-template` suffixes went away
+because the folder says what the files are. A `CLAUDE.md` inside the
+installed skill folder is not read by Claude Code, which loads
+constitutions from the working directory upward only. Historical
+sections above keep the old paths as they were at the time.
 
 ## Tiering by role at execution time, not by a table written in advance
 

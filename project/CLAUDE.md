@@ -86,7 +86,7 @@ experiment 2 (the `sdd-implementer-fable` definition; the plain
 tier `fable` at medium effort (the top and session tiers are the same model
 at different effort; the fallback session model is `claude-opus-4-8`,
 the full ID, since a previous-generation model has no short alias).
-Settings from the skill's `assets/settings-template.json`.
+Settings from the skill's `project/.claude/settings.json`.
 
 **Economy profile** (a small or personal project, or one that should
 leave the top tier's separate allowance to other projects). One model
@@ -94,7 +94,7 @@ family throughout: top tier `opus`; implementation tier `opus`;
 session tier `claude-opus-4-8` at medium effort. Nothing runs on
 Fable: the planner and sign-off dispatches carry no override, and the
 top-tier fallback below never applies. Settings from the skill's
-`assets/settings-template-economy.json`. Move to the standard profile
+`project/.claude/settings.economy.json`. Move to the standard profile
 when a spec's plan is the kind a stronger planner would change — a
 sign-off that keeps finding blocking problems is the signal.
 
@@ -103,7 +103,7 @@ below refers to the roles.
 
 - **The session runs at the session tier, at medium effort**, set in
   this repo's `.claude/settings.json` — written at project setup from
-  the profile's settings template in the skill's `assets/` (`"model"`
+  the profile's settings file in the skill's `project/.claude/` (`"model"`
   set to the session tier's full ID, `"effortLevel": "medium"`, and a
   level under `"modelSettings"` for each tier's full model ID). If that file is missing or lacks these
   keys, recreate it from the template and commit it before dispatching
