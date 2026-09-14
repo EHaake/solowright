@@ -40,6 +40,9 @@ assets/                         Everything a new project is scaffolded
   design-brief-template.md      brief.md skeleton, for projects with a UI
   settings-template.json        .claude/settings.json a project gets at
                                  setup: session model and effort
+                                 (standard profile)
+  settings-template-economy.json  The same for the economy profile:
+                                 one model family, nothing on Fable
   pull-request-template.md      .github/PULL_REQUEST_TEMPLATE.md
   gitignore-template            .gitignore starting point
   skeptical-reviewer.md         Source copy of the reviewer subagent —

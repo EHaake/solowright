@@ -72,24 +72,40 @@ after every task the planner marked `review: per-task`.
 
 ## Model policy
 
-<!-- Decided once, alongside the involvement level. Adjust the tier
-names as models change; the roles don't. -->
+<!-- Decided once, alongside the involvement level: pick one profile
+and delete the other. Adjust the tier names as models change; the
+roles don't. A project can move between profiles later — change the
+names here and swap the settings file, one commit — and the tier log
+shows from which spec. -->
 
-- **Tiers by name**: top tier `fable`; implementation tier `opus` for
-  the reviewer, with the implementer on `fable` at medium effort under
-  experiment 2 (the `sdd-implementer-fable` definition; the plain
-  `sdd-implementer` on `opus` at high is the fallback dispatch);
-  session tier `fable` at medium effort (the top and session tiers
-  are the same model at different effort; the fallback session model
-  is `claude-opus-4-8`, the full ID, since a
-  previous-generation model has no short alias). These names are the
-  only place a model is spelled out; everything below refers to the
-  roles.
+**Standard profile** (the default; measured on the projects the skill
+came from). Top tier `fable`; implementation tier `opus` for the
+reviewer, with the implementer on `fable` at medium effort under
+experiment 2 (the `sdd-implementer-fable` definition; the plain
+`sdd-implementer` on `opus` at high is the fallback dispatch); session
+tier `fable` at medium effort (the top and session tiers are the same model
+at different effort; the fallback session model is `claude-opus-4-8`,
+the full ID, since a previous-generation model has no short alias).
+Settings from the skill's `assets/settings-template.json`.
+
+**Economy profile** (a small or personal project, or one that should
+leave the top tier's separate allowance to other projects). One model
+family throughout: top tier `opus`; implementation tier `opus`;
+session tier `claude-opus-4-8` at medium effort. Nothing runs on
+Fable: the planner and sign-off dispatches carry no override, and the
+top-tier fallback below never applies. Settings from the skill's
+`assets/settings-template-economy.json`. Move to the standard profile
+when a spec's plan is the kind a stronger planner would change — a
+sign-off that keeps finding blocking problems is the signal.
+
+These names are the only place a model is spelled out; everything
+below refers to the roles.
+
 - **The session runs at the session tier, at medium effort**, set in
   this repo's `.claude/settings.json` — written at project setup from
-  the skill's `assets/settings-template.json` (`"model":
-  "claude-fable-5-1"`, `"effortLevel": "medium"`, and a level under
-  `"modelSettings"` for each tier's full model ID). If that file is missing or lacks these
+  the profile's settings template in the skill's `assets/` (`"model"`
+  set to the session tier's full ID, `"effortLevel": "medium"`, and a
+  level under `"modelSettings"` for each tier's full model ID). If that file is missing or lacks these
   keys, recreate it from the template and commit it before dispatching
   anything; nobody creates it by hand. Project settings outrank user
   settings, so a model picked in the app's picker only affects the
@@ -100,10 +116,12 @@ names as models change; the roles don't. -->
   bookkeeping turns and re-sends its whole context on each one — the
   dominant cost of the workflow — and it makes no design decisions: it
   assembles bundles, dispatches, verifies, commits, and reports. The
-  role never needs the top tier; it sits on the top tier's model
-  because, measured, Fable 5.1 at medium in this seat cost about a
-  third per task of Opus 4.8 and its allowance held (the skill's
-  design record has the numbers).
+  role never needs the top tier. Under the standard profile it sits
+  on the top tier's model because, measured, Fable 5.1 at medium in
+  this seat cost about a third per task of Opus 4.8 and its allowance
+  held (the skill's design record has the numbers); under the economy
+  profile it sits on Opus 4.8, the model whose reports read most
+  clearly to the person, and the same discipline about turns applies.
   If it drops the protocol (a skipped review, a stale `tasks.md`
   edit, a task done by hand), the first fix is high effort, one line
   in the same file.
@@ -147,7 +165,7 @@ names as models change; the roles don't. -->
   ends when `plan.md` and `tasks.md` are final, with a new session
   (not `/clear`, which keeps the model) whose opening prompt is the
   spec session's last message. A session in this repo opens at the
-  session tier — the top tier's model at medium — so a spec session
+  session tier at medium, so a spec session
   states its model and effort first (`/effort status`) and asks the
   person to raise effort to high for this session (`/effort high`)
   before continuing. The next session opens at medium again from
@@ -197,7 +215,7 @@ names as models change; the roles don't. -->
 - **Batch the bookkeeping**: commit, checkbox, and tier-log row in one
   shell command; bundle assembly and dispatch back to back. Every turn
   saved is one fewer re-send of the whole context.
-- **Fallback**: if the top tier's usage budget runs out, dispatch the
+- **Fallback** (standard profile): if the top tier's usage budget runs out, dispatch the
   planner and sign-off at the implementation tier for the rest of the
   window (drop the override; both definitions default to `opus`), and
   switch the session itself to `claude-opus-4-8` mid-session

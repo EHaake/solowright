@@ -404,13 +404,25 @@ what it replaces; if a spec measured under it still loses to the
 single-session regime on the top tier's budget, roll the implementer
 layer back and keep the reviewer changes.
 
-**Three names, one place.** The constitution's model policy names the
-top, implementation, and session tiers once; everything else refers
-to the roles. The session's model and effort live in the project's
-`.claude/settings.json`, written at setup from
-`assets/settings-template.json` and recreated by the orchestrator if
-missing — project settings outrank the app's picker for new sessions,
-so they hold without anyone remembering. Two fallbacks: when the top
+**Three names, one place, two profiles.** The constitution's model
+policy names the top, implementation, and session tiers once;
+everything else refers to the roles. Two named profiles fill the
+names. **Standard** (the measured default): top `fable`,
+implementation `opus`, session `claude-fable-5-1` at medium.
+**Economy**, for a small or personal project, or one that should leave
+the top tier's separate allowance to other projects: one model family
+throughout — top and implementation `opus`, session `claude-opus-4-8`
+at medium — so the planner and sign-off run at their definitions'
+default with no override and nothing draws on Fable. The choice is
+made in the constitution conversation and can change later: edit the
+names, swap the settings file, one commit; the tier log shows from
+which spec. The session's model and effort live in the project's
+`.claude/settings.json`, written at setup from the profile's template
+(`assets/settings-template.json` or
+`assets/settings-template-economy.json`) and recreated by the
+orchestrator if missing — project settings outrank the app's picker
+for new sessions, so they hold without anyone remembering. Two
+fallbacks, both under the standard profile: when the top
 tier's budget is exhausted, drop the override on the planner and
 sign-off dispatches for the rest of the window (both definitions
 default to the implementation tier), switch the session itself to the
@@ -705,8 +717,12 @@ involved), and follow that instead.
    who prefers to think this through in chat first can, and brings the
    conclusions here.
 2. **Constitution conversation.** Platform/language/architecture choices,
-   testing philosophy, dependency policy, and the person's involvement
-   level (ask once, directly, and default to product owner) — fill in
+   testing philosophy, dependency policy, the person's involvement
+   level (ask once, directly, and default to product owner), and the
+   model profile (standard by default; economy for a small or personal
+   project, or one that should leave the top tier's allowance to other
+   projects — see "Three names, one place, two profiles"; if economy,
+   swap `.claude/settings.json` for the economy template) — fill in
    `CLAUDE.md` before any code exists, so the first thing an
    implementation session reads is the constitution, not its own
    defaults, and commit it. Move through this efficiently once the idea
@@ -882,8 +898,9 @@ work-that-isn't-a-spec in mind.
 `assets/` has starting points for the four core documents —
 `CLAUDE-template.md`, `spec-template.md`, `plan-template.md`, and
 `tasks-template.md` — plus `design-brief-template.md` for projects with
-a UI, `settings-template.json` (the project's `.claude/settings.json`,
-written at setup), and three ready-to-use Claude Code subagent
+a UI, `settings-template.json` and `settings-template-economy.json`
+(the project's `.claude/settings.json`, one per model profile, written
+at setup), and three ready-to-use Claude Code subagent
 definitions: `skeptical-reviewer.md`, `sdd-implementer.md`, and
 `sdd-planner.md`. The document templates are skeletons with
 placeholders and inline guidance comments, not fill-in-the-blank forms
