@@ -447,6 +447,30 @@ session's opening message should state its model and effort, since
 the per-model effort pin was silently ignored for `claude-opus-4-8`
 and nobody noticed for a week.
 
+## Two model profiles: the names are tunable per project
+
+Added September 2026, at the person's request, after experiment 1.
+The constitution had always named the three tiers once, so a project
+could in principle run on any models; but the skill offered one set of
+names, and a small project had no sanctioned way to say "not Fable,
+anywhere". The economy profile is that way: one model family
+throughout — Opus for the planner, sign-off, implementer, and
+reviewer, Opus 4.8 in the session seat — which is exactly the
+standard profile's fallback clause made the standing policy. It exists
+for two reasons: a small or personal project whose plans a stronger
+planner would not change, and the top tier's separate allowance,
+which three concurrent projects were drawing at a rate that would
+exhaust it in about a week; a project on the economy profile leaves
+that allowance to the others. The session seat stays on Opus 4.8
+rather than the current Opus for the reason recorded above — the
+person reads its reports most easily — and with the same caveat: the
+per-model effort pin was seen to be ignored for that model, so a
+session should state its effort when it opens. Moving between
+profiles is one commit (the names and the settings file), and the
+tier log shows from which spec. A third, cheaper notch — a Sonnet
+implementer per marked task — already exists as the lighter-implementer
+lever and was left as it was.
+
 ## Tiering by role at execution time, not by a table written in advance
 
 The reference project's first attempt at model tiering assigned a model
