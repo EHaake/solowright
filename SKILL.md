@@ -245,12 +245,16 @@ effort — decided by experiment 1, see `references/design-record.md`:
   skeptical-reviewer on sign-off and on decision reviews — and
   nothing else. It reaches the agents only through explicit per-call
   overrides on those dispatches.
-- **The implementation tier builds and checks.** The `sdd-implementer`
-  (`assets/sdd-implementer.md`), one task per dispatch — the edit,
-  build, test loop that accounts for most of a spec's tokens — and the
-  skeptical-reviewer's per-phase and marked per-task checks, which
-  run on the same tier as the work they check. Both definitions pin
-  this tier by name, so it doesn't follow the session's model.
+- **The implementation tier builds and checks.** The implementer, one
+  task per dispatch — the edit, build, test loop that accounts for
+  most of a spec's tokens — and the skeptical-reviewer's per-phase and
+  marked per-task checks. Both definitions pin their model by name, so
+  neither follows the session's. On this branch — experiment 2, see
+  `references/design-record.md` — the builder and the checker are on
+  different models: the project dispatches `sdd-implementer-fable`
+  (`assets/sdd-implementer-fable.md`, Fable 5.1 at medium) for tasks,
+  while the reviewer stays on Opus at high. The plain
+  `sdd-implementer` (Opus, high) is the fallback dispatch.
 - **The session tier orchestrates**, at medium effort. The
   orchestrating session takes many bookkeeping turns and re-sends its
   whole context on each, which makes it the dominant cost of the
@@ -263,8 +267,10 @@ effort — decided by experiment 1, see `references/design-record.md`:
   allowance at a rate three concurrent projects could sustain (the
   design record has the numbers).
 
-The agent definitions carry `effort: high`, so reasoning stays
-full-strength inside them regardless of the session's setting.
+The planner and reviewer definitions carry `effort: high`, so
+reasoning stays full-strength inside them regardless of the session's
+setting; the experiment-2 implementer carries `effort: medium`, which
+is the variable under test.
 
 The split is by *role*, decided per task at execution time — not a
 per-task model table written in advance. Three things catch a lighter
@@ -492,11 +498,11 @@ definitions and the orchestrator's overrides do the rest:
 | Spec-conformance summary | same session | Fable | orchestrator → the person |
 | Plan and tasks final | **new session** — the spec session ends with the prompt to paste there; the new session opens at medium from settings | — | — |
 | Non-routine task | the implementation session | `skeptical-reviewer` at **Fable, high**, on a decision bundle; the session transcribes the recommendation | orchestrator → reviewer |
-| Implementation, per task | same session | `sdd-implementer` at **Opus, high**, on a task bundle | orchestrator → implementer |
+| Implementation, per task | same session | `sdd-implementer-fable` at **Fable, medium**, on a task bundle (experiment 2; fallback `sdd-implementer` at Opus, high) | orchestrator → implementer |
 | Marked per-task review | same session | `skeptical-reviewer` at **Opus, high** | orchestrator → reviewer |
 | Phase review | same session | `skeptical-reviewer` at **Opus, high**, on a phase bundle | orchestrator → reviewer |
 | Phase pause report | same session | Fable, medium | orchestrator → the person, who attests by using the app and says continue; the session stays open |
-| Walkthrough finding | same session | `sdd-implementer` at **Opus, high**, on a diagnosis bundle; a decision review at **Fable** if it returns options | the person → orchestrator → implementer |
+| Walkthrough finding | same session | `sdd-implementer-fable` at **Fable, medium**, on a diagnosis bundle; a decision review at **Fable** if it returns options | the person → orchestrator → implementer |
 | Pre-merge sweep | same session | `skeptical-reviewer` at **Opus, high**, documents + spec diff | orchestrator → reviewer |
 | Close-out and merge | same session | Fable, medium | orchestrator; ends with the prompt for the next spec session, if `ROADMAP.md` has one |
 | Spec merged | **new session** for the next spec, which opens at medium and asks for high effort | — | — |
@@ -515,9 +521,11 @@ session's opening prompt. `/clear` has no place in the workflow;
 **Fable's footprint per spec** is the spec session (the conversation
 and the handful of turns that dispatch planning), one planner run,
 one sign-off (plus at most one re-review), any decision reviews — and
-the whole implementation session, at medium. Everything that edits
-code runs on Opus. Measured, the implementation session is 15–35% of
-a spec's cost, and the planner plus sign-off about as much again.
+the whole implementation session, at medium — and, under experiment
+2, every implementer dispatch, at medium. The reviewer's phase and
+per-task checks and the sweep still run on Opus. Nearly the whole
+spec now draws on Fable's allowance; that draw is one of the things
+the experiment measures.
 
 ## Principles worth generalizing
 

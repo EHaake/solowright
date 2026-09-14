@@ -75,7 +75,10 @@ after every task the planner marked `review: per-task`.
 <!-- Decided once, alongside the involvement level. Adjust the tier
 names as models change; the roles don't. -->
 
-- **Tiers by name**: top tier `fable`; implementation tier `opus`;
+- **Tiers by name**: top tier `fable`; implementation tier `opus` for
+  the reviewer, with the implementer on `fable` at medium effort under
+  experiment 2 (the `sdd-implementer-fable` definition; the plain
+  `sdd-implementer` on `opus` at high is the fallback dispatch);
   session tier `fable` at medium effort (the top and session tiers
   are the same model at different effort; the fallback session model
   is `claude-opus-4-8`, the full ID, since a
@@ -163,9 +166,9 @@ names as models change; the roles don't. -->
   means it would fail an acceptance criterion or a test, or contradicts
   `plan.md` or `CLAUDE.md`; nothing else blocks. Anything open after
   the re-review goes to the tier log and the sweep.
-- **Implementation runs at the implementation tier**, in the
-  `sdd-implementer` subagent (its definition says `opus`), one task
-  per dispatch, sequentially. The orchestrating
+- **Implementation runs in the `sdd-implementer-fable` subagent**
+  (experiment 2 — its definition says `fable` at medium; the reviewer
+  stays on `opus` at high), one task per dispatch, sequentially. The orchestrating
   session triages each task, dispatches routine ones on a task bundle
   assembled with shell (task line, plan section, acceptance criteria,
   files, the pattern file to copy), and on return verifies with the
@@ -198,9 +201,11 @@ names as models change; the roles don't. -->
   planner and sign-off at the implementation tier for the rest of the
   window (drop the override; both definitions default to `opus`), and
   switch the session itself to `claude-opus-4-8` mid-session
-  (`/model claude-opus-4-8` — one cache re-write, then continue).
-  Nothing else changes; the tier log records what ran and when the
-  switch happened.
+  (`/model claude-opus-4-8` — one cache re-write, then continue), and
+  dispatch the plain `sdd-implementer` (opus, high) for tasks instead
+  of `sdd-implementer-fable`. Nothing else changes; the tier log
+  records what ran and when the switch happened — under experiment 2,
+  needing the fallback is itself a result.
 - **Escape hatch**: two failed verifications on one task, or a "stopped
   on a judgment call" the orchestrator considers well-specified, and
   the orchestrator does that task itself, noting the

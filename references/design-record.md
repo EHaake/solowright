@@ -447,6 +447,105 @@ session's opening message should state its model and effort, since
 the per-model effort pin was silently ignored for `claude-opus-4-8`
 and nobody noticed for a week.
 
+### Experiment 2: the implementer on Fable 5.1 at medium
+
+**Premise.** The implementer is the bulk of a spec's tokens now that
+the seat is cheap: on the experiment-1 specs, Opus implementer
+dispatches were 45–65% of spec cost. Its context is short and fresh,
+so its cost is input, output, and thinking, not cache reads — the one
+place Fable's per-token premium (2× Opus on input and output) bites
+directly. Medium effort roughly halves the thinking, so a Fable
+dispatch at medium should cost about what an Opus dispatch at high
+does; the dollar case rests on *fewer dispatches per completed task* —
+fewer iterations, fewer review rounds, fewer follow-up tasks — not on
+a cheaper dispatch. Anthropic's own measurements point that way
+(medium on the newest models matching prior-generation high; a
+coding-benchmark trade of about two points of pass rate for half the
+cost at medium on Opus 5), and the person's reading of the Fable 5.1
+documentation says the same; but those are benchmarks, and the
+implementer's work is bounded, well-specified transcription with a
+verification command, which is exactly the kind of task where a
+stronger model at lower effort may or may not show.
+
+**What changes, and how it is isolated.** One variable: the model and
+effort of the implementer dispatch. Because agent definitions install
+machine-wide, a per-project experiment can't edit `sdd-implementer.md`
+itself; the branch adds a second definition,
+`sdd-implementer-fable.md` — identical body, frontmatter `model:
+fable`, `effort: medium` — and the experiment project's `CLAUDE.md`
+names it as the dispatch. The plain `sdd-implementer` (Opus, high)
+stays installed and is the fallback, so a fallback changes one thing
+back rather than two. The copy is temporary: if the experiment holds,
+`sdd-implementer.md` itself changes and the copy is deleted.
+
+**What stays fixed, and the one tension.** The reviewer stays on Opus
+at high for phase and per-task checks and the sweep. That puts the
+checker on a lower tier than the builder for the first time, against
+the rule this record has kept ("the reviewer never weaker than the
+builder"). It is kept deliberately as the second thing to watch: if
+blocking findings per task fall, the verification command, the sweep,
+and the person's walkthrough are what distinguish cleaner work from a
+reviewer that has stopped seeing. Moving the reviewer up too would
+double the Fable draw and make the result unattributable.
+
+**Hypotheses.** (1) Cost per completed task — implementer dispatches
+plus the review rounds and follow-up tasks they cause — is at or below
+the experiment-1 specs on Opus at high (kaazap 021 $5.7, 022 $5.3,
+photo-pieces 012 $4.7 per task, all-in). (2) Quality proxies are no
+worse: first-try rate, iterations on tuning tasks, escape hatches,
+blocking findings at phase review and sweep. (3) The allowance
+sustains one project's full spec without the fallback; the draw per
+spec is recorded, since the implementer moving to Fable roughly
+doubles Fable's share of a spec. (4) Bundle-assembly misses do not
+rise (they are the session's, not the implementer's, and should be
+unaffected — a rise would mean the session is doing something
+different).
+
+**Protocol.** One project, one spec, then decide whether to widen.
+The project should have a fast, reliable automated verification
+command, so that quality is measured by the checker and not by a
+device pass — kaazap fits; Trove's simulator passes would confound.
+
+1. Install `assets/sdd-implementer-fable.md` into `~/.claude/agents/`
+   alongside the existing three. Run the project prompt below in a
+   fresh session in the project.
+2. Run the spec as this branch's `SKILL.md` says. Every implementer
+   row in the tier log records `fable` (medium) or, after a fallback,
+   `opus`; the return's token usage is logged as usual.
+3. At the merge: allowance reading, `ccusage`, and the per-task
+   counts — dispatches per task, first-try rate, blocking findings per
+   phase — against the same project's previous spec.
+4. The session logs give the exact split (orchestrator, Fable
+   implementer, Opus reviewer) the way experiment 1's analysis did.
+
+**Decision rule.** All four hold: `sdd-implementer.md` becomes `fable`
+at medium, the copy is deleted, and the reviewer question is
+re-opened (Fable reviewer at medium against Opus at high, one spec).
+Cost per completed task higher: keep Opus, note the finding; the
+Fable implementer remains available as a per-call override for tasks
+the planner marks as hard. Allowance the constraint: keep Opus as the
+default and use the Fable implementer only on marked tasks. Quality
+proxies worse: keep Opus; the "stronger model at lower effort" claim
+did not transfer to bounded transcription work.
+
+**Applying it to a project.** Paste into a fresh session in the
+project, with this branch installed as the skill and the new agent
+file in place:
+
+> Experiment 2 setup for this project. In `CLAUDE.md`, replace the
+> "Model policy" section with the one in the installed skill's
+> `assets/CLAUDE-template.md`, keeping this project's involvement level
+> and anything project-specific the old section carried; the change is
+> that tasks now dispatch `sdd-implementer-fable` (Fable 5.1 at
+> medium), with `sdd-implementer` (opus, high) as the fallback. Confirm
+> `~/.claude/agents/sdd-implementer-fable.md` exists and report if it
+> doesn't. Add a header row to the next spec's tier log: experiment 2,
+> implementer `claude-fable-5-1` at medium, today's date, and the Fable
+> allowance reading I give you. Commit in one commit with a message
+> that says which experiment and which branch of the skill this
+> project now follows. Then stop; don't start any spec work in this
+> session.
+
 ## Tiering by role at execution time, not by a table written in advance
 
 The reference project's first attempt at model tiering assigned a model
