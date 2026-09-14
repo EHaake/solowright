@@ -231,8 +231,9 @@ Absent one of those, the choice stands.
 Decided September 2026, after two measured specs on the top tier and
 none yet on any session tier below it. Cost side measured; quality
 side untested. The next spec's tier log is the first evidence either
-way. Superseded for one spec by experiment 1, below, which tests a
-cost premise this section took for granted.
+way. Revisited by experiment 1, below, which tested a cost premise
+this section took for granted and moved the session to the top tier's
+model.
 
 ### Experiment 1: the session on the top tier's model, at medium
 
@@ -438,6 +439,13 @@ three concurrent projects — and carry two follow-ups: a control spec
 to separate model from effort, and the bundle-assembly misses as the
 number to watch, with the session at high as the recorded first fix
 if they persist.
+
+**Decision, 2026-09-14.** Merged. The session tier is Fable 5.1 at
+medium; the policy text no longer calls it an experiment. The two
+follow-ups stand, and one more was added from the confound: a
+session's opening message should state its model and effort, since
+the per-model effort pin was silently ignored for `claude-opus-4-8`
+and nobody noticed for a week.
 
 ## Tiering by role at execution time, not by a table written in advance
 

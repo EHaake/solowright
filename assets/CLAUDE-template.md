@@ -76,9 +76,9 @@ after every task the planner marked `review: per-task`.
 names as models change; the roles don't. -->
 
 - **Tiers by name**: top tier `fable`; implementation tier `opus`;
-  session tier `fable` at medium effort (experiment 1 — the top and
-  session tiers are the same model at different effort; the fallback
-  session model is `claude-opus-4-8`, the full ID, since a
+  session tier `fable` at medium effort (the top and session tiers
+  are the same model at different effort; the fallback session model
+  is `claude-opus-4-8`, the full ID, since a
   previous-generation model has no short alias). These names are the
   only place a model is spelled out; everything below refers to the
   roles.
@@ -98,9 +98,9 @@ names as models change; the roles don't. -->
   dominant cost of the workflow — and it makes no design decisions: it
   assembles bundles, dispatches, verifies, commits, and reports. The
   role never needs the top tier; it sits on the top tier's model
-  under experiment 1 because Fable 5.1's cache-read rate makes the
-  seat's re-sends cost about what they would on Opus, and this spec
-  measures the allowance draw and the readability of the reports.
+  because, measured, Fable 5.1 at medium in this seat cost about a
+  third per task of Opus 4.8 and its allowance held (the skill's
+  design record has the numbers).
   If it drops the protocol (a skipped review, a stale `tasks.md`
   edit, a task done by hand), the first fix is high effort, one line
   in the same file.
@@ -200,7 +200,7 @@ names as models change; the roles don't. -->
   switch the session itself to `claude-opus-4-8` mid-session
   (`/model claude-opus-4-8` — one cache re-write, then continue).
   Nothing else changes; the tier log records what ran and when the
-  switch happened, which is a result of experiment 1 in itself.
+  switch happened.
 - **Escape hatch**: two failed verifications on one task, or a "stopped
   on a judgment call" the orchestrator considers well-specified, and
   the orchestrator does that task itself, noting the

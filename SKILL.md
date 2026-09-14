@@ -237,8 +237,8 @@ whole-codebase read; see "Keeping reviews cheap" in
 ## Model tiering: three roles, three tiers
 
 Three roles, three tiers, named once in the constitution's model
-policy. On this branch — experiment 1, see `references/design-record.md`
-— the top and session tiers are the same model at different effort:
+policy. The top and session tiers are the same model at different
+effort — decided by experiment 1, see `references/design-record.md`:
 
 - **The top tier decides.** The spec conversation, plan and task
   drafting (the `sdd-planner`, one dispatch per spec), and the
@@ -258,10 +258,10 @@ policy. On this branch — experiment 1, see `references/design-record.md`
   role needs the top tier. What decides which model sits there is the
   price of a cache read, since re-sends are almost all of the seat's
   tokens, and the prose of the pause report, the one output a person
-  reads. Under experiment 1 the seat runs Fable 5.1 at medium: its
-  cache reads bill at half the implementation tier's rate, so the
-  per-token cost is about a wash and the open questions are the draw
-  on Fable's separate allowance and how its reports read.
+  reads. The seat runs Fable 5.1 at medium: measured against Opus 4.8
+  in the same seat, it cost about a third per task and drew on Fable's
+  allowance at a rate three concurrent projects could sustain (the
+  design record has the numbers).
 
 The agent definitions carry `effort: high`, so reasoning stays
 full-strength inside them regardless of the session's setting.
@@ -410,8 +410,7 @@ sign-off dispatches for the rest of the window (both definitions
 default to the implementation tier), switch the session itself to the
 implementation tier's previous generation (`/model claude-opus-4-8`,
 mid-session — one cache re-write, then business as usual) and log
-both in the tier log, since under experiment 1 the session shares
-that budget; and if the session drops the protocol — a skipped
+both in the tier log, since the session shares that budget; and if the session drops the protocol — a skipped
 review, a stale `tasks.md` edit, a task done by hand — raise its
 effort to high, one line in the settings file, before changing its
 model.
@@ -421,8 +420,8 @@ own** — the project's first session included, which scaffolds the repo
 and then hosts the idea, constitution, and first-spec conversations
 (see "Starting a project"). Never inside the implementation session,
 whose context is the cost the tiering exists to contain. A session
-opens at the settings default — under experiment 1, the top tier's
-model at medium effort — so a spec session opens by stating its model
+opens at the settings default — the top tier's model at medium effort
+— so a spec session opens by stating its model
 and effort (`/effort status` is the authoritative check) and asks the
 person to raise effort to high for this session only (`/effort high`).
 That is the single manual choice in the whole workflow; it's a choice
@@ -435,25 +434,23 @@ for any product question the planner or reviewer returns. When
 `plan.md` and `tasks.md` are final, the session ends with the
 continuation prompt that starts implementation in a new session.
 
-**Why the session runs on the top tier's model, at medium effort —
-experiment 1.** The routing above is unchanged: the policy still
-sends every judgment call away from the session — design to the
-planner, the sign-off, and the decision review, correctness to the
-verification command and the reviewer, product questions to the
-person — and what's left is procedure. The session used to sit one
-tier down because the top tier was assumed to charge a premium on
-every re-send of the longest-lived context. Fable 5.1 broke that
-assumption: its cache reads bill at $0.25 per million tokens, half
-the Opus rate, and re-sends are about 97% of the seat's tokens, so
-the per-token cost of the two seats is about equal. This branch runs
-one spec with the session on Fable 5.1 at medium and nothing else
-changed, to measure the two things price doesn't settle: the draw on
-Fable's separate allowance, and whether its pause reports read well.
-Medium effort stays for the same behavioral reason as before: high
+**Why the session runs on the top tier's model, at medium effort.**
+The routing above does the real work: the policy sends every judgment
+call away from the session — design to the planner, the sign-off, and
+the decision review, correctness to the verification command and the
+reviewer, product questions to the person — and what's left is
+procedure. The session used to sit one tier down because the top tier
+was assumed to charge a premium on every re-send of the longest-lived
+context. Fable 5.1 broke that assumption: its cache reads bill at
+$0.25 per million tokens, half the Opus rate. Measured across five
+specs on three projects, the seat on Fable 5.1 at medium cost about a
+third per task of the same seat on Opus 4.8 — mostly because it took
+a quarter of the turns — and the allowance held with three projects
+drawing at once. Medium effort stays for the behavioral reason: high
 effort makes a session investigate before acting, and everything a
 hands-off orchestrator reads inflates every later re-send.
-`references/design-record.md` has the premise, the protocol, and the
-decision rule.
+`references/design-record.md` has the experiment, its confound (the
+baseline turned out to run at high effort), and the follow-ups.
 
 The policy is written into each project's `CLAUDE.md` (see the
 constitution template's "Model policy" section), next to the
@@ -468,9 +465,9 @@ every implementer dispatch — from reading the codebase at all.
 
 Everything above, laid out as the sequence a spec actually follows.
 "Fable" and "Opus" here stand for the tiers named in the project's
-`CLAUDE.md` model policy — under experiment 1 the session tier is
-Fable at medium and the top tier is Fable at high; the roles are
-what's fixed, the names change as models do.
+`CLAUDE.md` model policy — the session tier is Fable at medium and
+the top tier is Fable at high; the roles are what's fixed, the names
+change as models do.
 
 **A brand-new project, once.** The person creates an empty repository
 and opens Claude Code in it; the first session is a spec session:
@@ -515,14 +512,12 @@ high effort after the spec session, and would skip the next spec
 session's opening prompt. `/clear` has no place in the workflow;
 `/compact` is the tool for an implementation session that grows long.
 
-**Fable's footprint per spec**, under experiment 1, is the spec
-session (the conversation and the handful of turns that dispatch
-planning), one planner run, one sign-off (plus at most one
-re-review), any decision reviews — and the whole implementation
-session, at medium. Everything that edits code runs on Opus. The
-implementation session is the part the experiment measures: it is
-where the turns are, and on Fable 5.1 those re-sends bill at the
-cache-read rate.
+**Fable's footprint per spec** is the spec session (the conversation
+and the handful of turns that dispatch planning), one planner run,
+one sign-off (plus at most one re-review), any decision reviews — and
+the whole implementation session, at medium. Everything that edits
+code runs on Opus. Measured, the implementation session is 15–35% of
+a spec's cost, and the planner plus sign-off about as much again.
 
 ## Principles worth generalizing
 

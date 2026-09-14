@@ -79,12 +79,12 @@ phase, and ending at the merge. Two session boundaries per spec. The full table 
 runs, on which model, who's talking — is "The flow at a glance" in
 `SKILL.md`.
 
-## Model tiers, and the experiment on the orchestrator's seat
+## Model tiers, and why the orchestrator sits on the top tier's model
 
 Three roles, three tiers. The names are the current models; the roles
 are what the skill actually fixes, and a project's `CLAUDE.md` names
-the models once. This branch is experiment 1: the session tier runs
-the top tier's model at medium effort.
+the models once. The session tier runs the top tier's model at medium
+effort; the reasoning and the measurement are below.
 
 ```mermaid
 flowchart LR
@@ -147,11 +147,11 @@ Which model fills the session seat used to be constrained to "not
 the top tier", on the assumption that the top tier charged a premium
 on every re-send. Fable 5.1's cache reads bill at half the Opus rate,
 which makes the seat's per-token cost about equal on either model.
-Experiment 1, this branch, runs the session on Fable 5.1 at medium
-for one spec to measure what price doesn't settle: the draw on
-Fable's separate allowance, and whether its pause reports — the one
-seat whose prose the person reads — read as clearly as Opus 4.8's
-did. The skill pairs that with a plain-language rule for everything
+Measured over five specs on three projects, the session on Fable 5.1
+at medium cost about a third per task of the same seat on Opus 4.8,
+and Fable's separate allowance held with three projects drawing at
+once; the pause reports — the one seat whose prose the person reads —
+read at least as well. The skill pairs that with a plain-language rule for everything
 the person sees, under any model, and with a continuation prompt at
 every session-ending pause, so that each session boundary costs a
 paste rather than a reconstruction.
