@@ -333,6 +333,112 @@ session in the project, with this branch installed as the skill.
 > skill this project now follows. Then stop and show me `/effort
 > status`; don't start any spec work in this session.
 
+### Experiment 1: results, 2026-09-14
+
+**Data.** The raw session logs under `~/.claude/projects/` for the
+three projects that ran the branch (a Rust game, a static photo site,
+an iOS app), parsed per session with the orchestrator's own usage
+separated from its subagents' — the `ccusage` summary can't make that
+split, and it turned out to be the whole story — and priced at the
+table above. Plus eleven specs' tier logs and the allowance readings
+they recorded. Baseline: the specs each project ran just before the
+switch on 2026-09-11, all with an Opus 4.8 orchestrator. Experiment:
+the specs after it. Sizes differ, so the comparison is per task.
+
+| Spec | Tasks | Orchestrator | Orch. $ | Subagents $ | Orch. $/task | Turns/task | Cache reads |
+|---|---|---|---|---|---|---|---|
+| kaazap 017 | 12 | Opus 4.8, high | 47 | 10 | 3.9 | 21 | 66M |
+| kaazap 018 | 8 | Opus 4.8, high | 26 | 15 | 3.3 | 29 | 35M |
+| kaazap 020 | 7 | Opus 4.8, high | 47 | 13 | 6.8 | 39 | 70M |
+| photo-pieces 011 | 8 | Opus 4.8, high | 123 | 8 | 15.3 | 58 | 179M |
+| Trove 004 | 9 | Opus 4.8, high | 67 | 29 | 7.5 | 48 | 99M |
+| Trove 005, phases 1–3 | ~14 | Opus 4.8, high | 82 | 33 | 5.9 | 28 | 106M |
+| **kaazap 021** | 7 | Fable 5.1, medium* | 22 | 17 | 3.1 | 22 | 21M |
+| **kaazap 022** | 15 | Fable 5.1, medium | 27 | 51 | 1.8 | 8 | 27M |
+| **photo-pieces 012** | 6 | Fable 5.1, medium | 12 | 16 | 2.0 | 12 | 9M |
+| **Trove 005, phases 4–6** | ~6 | Fable 5.1, medium | 13 | 59 | 2.1 | 15 | 14M |
+| **Trove 006** (9 of 22 done) | 9 | Fable 5.1, medium | 15 | 46 | 1.6 | 13 | 18M |
+
+\* 021's first implementation session ran at high by accident; see
+finding 3.
+
+**1. The seat got about three times cheaper per task, and the reason
+was turns, not price.** Orchestrator cost per task fell from $3–15
+(median about $6) to $1.6–3.1 (median about $2), and total spec cost
+per task from $5–16 to $4.7–5.7. The seat is now 15–35% of a spec's
+cost (Trove measured a tenth on 005's tail), down from 60–95%. The
+mechanism: turns per task fell from 21–58 to 8–22 and cache reads per
+spec from 35–179 M to 8–27 M. The cache-read *rate* argument this
+experiment was built on turned out to be the smaller effect; the
+volume of re-sends fell by a factor of four to ten.
+
+**2. The baseline ran at high effort, not medium.** Every project's
+settings pinned `claude-opus-4-8` at medium from 2026-09-09, but the
+request logs record `effort: high` on every Opus 4.8 orchestrator
+turn, while the Fable sessions record `medium` as pinned. The per-model
+pin evidently did not take effect for the previous-generation model,
+and nobody ran `/effort status`. So the experiment changed model and
+effort together, and finding 1 cannot be attributed to the model. One
+accidental data point: kaazap 021's first implementation session ran
+Fable at high and took 22 turns per task, against 8–15 for the Fable
+sessions at medium — consistent with effort driving the turn count.
+Attribution needs one control spec each way: Opus 4.8 at a verified
+medium, and Fable at high.
+
+**3. The allowance held, with a concurrency caveat.** 93% on 09-11 to
+52% on the evening of 09-13 — about 41 points in two and a half days
+with three projects drawing at once; the fallback was never needed.
+The orchestrator's share of Fable dollars was 37–69% by project (the
+rest is the planner and sign-off, $17–35 per spec — on par with the
+whole seat). At that pace three concurrent projects would exhaust a
+weekly allowance in about six days; one or two would not. For scale:
+before the experiment, one Fable orchestrator at high (Trove 002,
+09-04 to 09-06) spent $124 on the seat alone and exhausted the
+allowance, which is why five of the six baseline specs ran their
+planner and sign-off on the Opus fallback. Hypothesis 2 holds.
+
+**4. Readability.** The person found Fable's reports easier to read
+and interact with than Opus 5's; the baseline seat was Opus 4.8, so
+the comparison the hypothesis named was not strictly made, but no
+report was judged worse. Hypothesis 3 holds on the person's judgment.
+
+**5. Procedural misses: comparable in count, different in kind.** The
+experiment specs logged five orchestrator misses across four specs,
+all in bundle assembly — a file misnamed, a task excerpt cut by line
+number after the file shifted, a plan rule left out (Trove 006, three
+of them); a review bundle that paraphrased the verification tail
+instead of quoting it, and a constitution not amended before
+implementation (kaazap 021). The baseline logged three across five
+specs — misjudging that the Fable budget had recovered and dispatching
+to it twice (018), an untracked test file omitted from a review diff
+(005), an escape hatch on a well-specified fork (005). The
+experiment's misses are the kind medium effort predicts: less checking
+before dispatch. Hypothesis 4 is marginal, not clearly holding; the
+record's stated first fix — the session at high — costs about double
+the turns on the 021 data point.
+
+**Side observations.** Sign-off blocking findings went from zero on
+every baseline spec (sign-offs on Opus under the fallback) to three
+per spec with a Fable reviewer on a Fable planner (021, 022, 012);
+either the reviewer is stricter or the planner's drafts need more
+fixing, and it is not attributable to the seat. The `sdd-implementer`
+has no simulator tools, so Trove's device passes ran in a
+general-purpose agent, which inherits the session's medium effort —
+455 of that session's 713 Opus subagent calls were at medium for that
+reason; the definitions should say where a device pass runs. And the
+logs settle the earlier question about effort precedence: agent
+frontmatter `effort: high` does apply, with subagents at high inside
+medium sessions on every experiment spec.
+
+**Verdict against the decision rule.** Hypothesis 1 holds by a wide
+margin, 2 holds with the concurrency caveat, 3 holds on the person's
+judgment, 4 is marginal. Recommendation: merge — on every cost
+measure the configuration is better and the allowance held under
+three concurrent projects — and carry two follow-ups: a control spec
+to separate model from effort, and the bundle-assembly misses as the
+number to watch, with the session at high as the recorded first fix
+if they persist.
+
 ## Tiering by role at execution time, not by a table written in advance
 
 The reference project's first attempt at model tiering assigned a model
