@@ -507,8 +507,11 @@ command, so that quality is measured by the checker and not by a
 device pass — kaazap fits; Trove's simulator passes would confound.
 
 1. Install `agents/sdd-implementer-fable.md` into `~/.claude/agents/`
-   alongside the existing three. Run the project prompt below in a
-   fresh session in the project.
+   alongside the existing three. The skill itself stays on `main` —
+   it is machine-wide, and the constitution is what names the
+   implementer a project dispatches, so the branch's `SKILL.md` is
+   documentation of the experiment, not something to install. Run the
+   project prompt below in a fresh session in the project.
 2. Run the spec as this branch's `SKILL.md` says. Every implementer
    row in the tier log records `fable` (medium) or, after a fallback,
    `opus`; the return's token usage is logged as usual.
@@ -529,22 +532,26 @@ proxies worse: keep Opus; the "stronger model at lower effort" claim
 did not transfer to bounded transcription work.
 
 **Applying it to a project.** Paste into a fresh session in the
-project, with this branch installed as the skill and the new agent
-file in place:
+project, with the new agent file in place and the skill on `main`:
 
-> Experiment 2 setup for this project. In `CLAUDE.md`, replace the
-> "Model policy" section with the one in the installed skill's
-> `project/CLAUDE.md`, keeping this project's involvement level
-> and anything project-specific the old section carried; the change is
-> that tasks now dispatch `sdd-implementer-fable` (Fable 5.1 at
-> medium), with `sdd-implementer` (opus, high) as the fallback. Confirm
+> Experiment 2 setup for this project. Confirm
 > `~/.claude/agents/sdd-implementer-fable.md` exists and report if it
-> doesn't. Add a header row to the next spec's tier log: experiment 2,
-> implementer `claude-fable-5-1` at medium, today's date, and the Fable
-> allowance reading I give you. Commit in one commit with a message
-> that says which experiment and which branch of the skill this
-> project now follows. Then stop; don't start any spec work in this
-> session.
+> doesn't. In `CLAUDE.md`'s "Model policy" section, make these edits
+> in place, changing nothing else: (1) in the profile paragraph, the
+> implementation tier is `opus` for the reviewer, and the implementer
+> is dispatched as `sdd-implementer-fable` (Fable 5.1 at medium) under
+> experiment 2, with the plain `sdd-implementer` (opus, high) as the
+> fallback dispatch; (2) the "Implementation runs at the implementation
+> tier" bullet names `sdd-implementer-fable` as the dispatch and
+> `sdd-implementer` as the fallback; (3) the Fallback bullet adds that
+> the implementer falls back to `sdd-implementer` when Fable's
+> allowance runs out, and that needing it is itself a result. Add a
+> header row to the next spec's tier log: experiment 2, implementer
+> `claude-fable-5-1` at medium, today's date, and the Fable allowance
+> reading I give you. Commit in one commit with a message that says
+> this project now runs experiment 2 from the skill's
+> `exp-2-implementer-fable-medium` branch. Then stop; don't start any
+> spec work in this session.
 
 ## Two model profiles: the names are tunable per project
 
