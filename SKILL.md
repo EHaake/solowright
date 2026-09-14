@@ -121,8 +121,8 @@ one — worse than no gate.
 
 ## Design exploration, when the project has a UI
 
-A written design brief precedes any actual screen design — `assets/
-design-brief-template.md` is the starting shape, deliberately empty of
+A written design brief precedes any actual screen design —
+`project/design/brief.md` is the starting shape, deliberately empty of
 any specific project's actual answers (see the note at the top of that
 file for why copying a previous project's palette or signature element
 forward defeats the point). Four principles are worth stating here
@@ -246,7 +246,7 @@ effort — decided by experiment 1, see `references/design-record.md`:
   nothing else. It reaches the agents only through explicit per-call
   overrides on those dispatches.
 - **The implementation tier builds and checks.** The `sdd-implementer`
-  (`assets/sdd-implementer.md`), one task per dispatch — the edit,
+  (`agents/sdd-implementer.md`), one task per dispatch — the edit,
   build, test loop that accounts for most of a spec's tokens — and the
   skeptical-reviewer's per-phase and marked per-task checks, which
   run on the same tier as the work they check. Both definitions pin
@@ -412,8 +412,8 @@ made in the constitution conversation and can change later: edit the
 names, swap the settings file, one commit; the tier log shows from
 which spec. The session's model and effort live in the project's
 `.claude/settings.json`, written at setup from the profile's template
-(`assets/settings-template.json` or
-`assets/settings-template-economy.json`) and recreated by the
+(`project/.claude/settings.json` or
+`project/.claude/settings.economy.json`) and recreated by the
 orchestrator if missing — project settings outrank the app's picker
 for new sessions, so they hold without anyone remembering. Two
 fallbacks, both under the standard profile: when the top
@@ -486,7 +486,7 @@ and opens Claude Code in it; the first session is a spec session:
 
 | Step | Where | Model | Who's talking |
 |---|---|---|---|
-| "Start a new Solowright project" → scaffold from `assets/`, committed | Claude Code, **the first spec session** | opens at medium; the person raises effort to high as for any spec session | the person and the session |
+| "Start a new Solowright project" → scaffold from `project/`, committed | Claude Code, **the first spec session** | opens at medium; the person raises effort to high as for any spec session | the person and the session |
 | Idea conversation | same session | Fable, high | the person and Claude |
 | Constitution → `CLAUDE.md` filled in | same session, committed | Fable, high | the person and Claude |
 | First spec → `spec.md` | same session | Fable, high | the person and Claude |
@@ -660,7 +660,7 @@ See `references/collaboration-workflow.md` for the full, step-by-step
 version of this. In short: **the default is to stay inside Claude Code**,
 using Plan Mode (research and propose before touching any files) for
 real decisions, and a custom reviewer subagent (see
-`assets/skeptical-reviewer.md`) for a genuinely independent second look
+`agents/skeptical-reviewer.md`) for a genuinely independent second look
 without leaving the tool. A separate conversation with the person is
 reserved for two specific triggers, not general "foundational"
 judgment: something in the design turning out infeasible or needing
@@ -687,20 +687,21 @@ involved), and follow that instead.
    empty repository, opens Claude Code in it, and says "Start a new
    Solowright project." This first session is a spec session — it
    opens at medium and asks for high effort like any other — and
-   before any conversation it writes the project's skeleton
-   from `assets/`, nothing copied by hand: `CLAUDE.md` from
-   `CLAUDE-template.md`; `.claude/settings.json` from
-   `settings-template.json`; `.github/PULL_REQUEST_TEMPLATE.md` from
-   `pull-request-template.md`; `.gitignore` from `gitignore-template`;
-   and, once the idea conversation has named the first feature,
-   `specs/001-<slug>/` with `spec.md`, `plan.md`, and `tasks.md` from
-   their templates, plus `design/brief.md` from
-   `design-brief-template.md` if the project has a UI. One commit:
-   "Scaffold the project." There is no project template to clone —
-   the templates live in the skill so that every new project gets the
-   current ones, and there is exactly one copy to maintain. The
-   orchestrator recreates `.claude/settings.json` from the template if
-   it's ever missing; nobody creates it by hand.
+   before any conversation it writes the project's skeleton by
+   copying the skill's `project/` folder into the repo as it is —
+   `CLAUDE.md`, `.claude/settings.json`, `.github/`, `.gitignore`,
+   `specs/001-spec-name/`, `design/` — nothing assembled by hand. Three
+   adjustments follow: rename `specs/001-spec-name/` to the slug the
+   idea conversation settles on; delete `design/` if the project has
+   no UI; and keep one settings file — `.claude/settings.json` is the
+   standard profile, and if the constitution conversation picks
+   economy, replace its contents with `settings.economy.json` and
+   delete that file either way, so the project carries exactly one.
+   One commit: "Scaffold the project." There is no project template to
+   clone — the skeleton lives in the skill so that every new project
+   gets the current one, and there is exactly one copy to maintain.
+   The orchestrator recreates `.claude/settings.json` from the skill's
+   copy if it's ever missing; nobody creates it by hand.
 1. **Idea conversation, before any technical decision.** Audience,
    purpose, what makes this distinctive, the core loop or the point of
    the thing. Reaching for a framework choice before the idea itself is
@@ -771,7 +772,7 @@ context with the files open can see. Once `spec.md` is approved, the
 spec session assembles a planning bundle with shell — the spec, the
 previous spec's `plan.md` and `tasks.md` as the pattern (or the skill's
 templates, for a first spec), a file listing — and dispatches the
-`sdd-planner` subagent (`assets/sdd-planner.md`) on it, once, at the
+`sdd-planner` subagent (`agents/sdd-planner.md`) on it, once, at the
 top tier. The planner reads the code the spec touches,
 writes both files marked Draft, and returns a summary with its token
 usage for the tier log. The orchestrator commits the drafts to the spec
@@ -849,7 +850,7 @@ being deliberate about, not just "break it into steps":
 6. **State the review cadence per phase, not per task** — see "Review
    cadence" above — and state the person's pause cadence separately
    from the reviewer's, per the involvement level in `CLAUDE.md`.
-   `tasks-template.md`'s handoff note is where both get stated
+   the `tasks.md` skeleton's handoff note is where both get stated
    explicitly for whoever picks up implementation, along with the shape
    of the report a pause should produce.
 
@@ -887,14 +888,14 @@ work-that-isn't-a-spec in mind.
 
 ## Using the templates
 
-`assets/` has starting points for the four core documents —
-`CLAUDE-template.md`, `spec-template.md`, `plan-template.md`, and
-`tasks-template.md` — plus `design-brief-template.md` for projects with
-a UI, `settings-template.json` and `settings-template-economy.json`
-(the project's `.claude/settings.json`, one per model profile, written
-at setup), and three ready-to-use Claude Code subagent
-definitions: `skeptical-reviewer.md`, `sdd-implementer.md`, and
-`sdd-planner.md`. The document templates are skeletons with
+`project/` is a new project's skeleton, laid out exactly as it lands
+in the repo: `CLAUDE.md`, `.claude/settings.json` (the standard
+profile) beside `settings.economy.json`, `.github/`, `.gitignore`,
+`specs/001-spec-name/` with `spec.md`, `plan.md`, and `tasks.md`, and
+`design/brief.md` for projects with a UI. `agents/` holds the three
+Claude Code subagent definitions — `skeptical-reviewer.md`,
+`sdd-implementer.md`, `sdd-planner.md` — which install to
+`~/.claude/agents/`, not into any project. The document skeletons have
 placeholders and inline guidance comments, not fill-in-the-blank forms
 — expect to restructure sections as the actual project's needs diverge
 from the template, the same way real projects always do.

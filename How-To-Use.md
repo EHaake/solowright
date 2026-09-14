@@ -3,7 +3,8 @@
 This is the human guide to running a Solowright project: how to start
 one, what the files are for, what the day-to-day flow looks like, and
 what your part of it is. The AI-facing side — `SKILL.md`, the
-templates in `assets/`, the three subagents — is installed once per
+project skeleton in `project/`, the three subagents in `agents/` — is
+installed once per
 machine (see `README.md`, "Installing"); this file is for you.
 
 ## Starting a project

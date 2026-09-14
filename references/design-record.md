@@ -471,6 +471,24 @@ tier log shows from which spec. A third, cheaper notch — a Sonnet
 implementer per marked task — already exists as the lighter-implementer
 lever and was left as it was.
 
+## Repo layout: agents/, project/, references/
+
+Changed September 2026. `assets/` had held three things with different
+lives — agent definitions that install to `~/.claude/agents/` and are
+never read from the skill folder, document skeletons a new project is
+scaffolded from, and settings files for the same — and the README
+needed a comment on every line to say where each went. The agents got
+their own folder. The templates became `project/`, a literal skeleton
+laid out exactly as it lands in a new repo (`CLAUDE.md`,
+`.claude/settings.json`, `.github/`, `.gitignore`, `specs/001-spec-name/`,
+`design/brief.md`), so the scaffold step is "copy the folder, rename
+the spec directory, keep one settings file" instead of a list of
+source-to-destination pairs, and the `-template` suffixes went away
+because the folder says what the files are. A `CLAUDE.md` inside the
+installed skill folder is not read by Claude Code, which loads
+constitutions from the working directory upward only. Historical
+sections above keep the old paths as they were at the time.
+
 ## Tiering by role at execution time, not by a table written in advance
 
 The reference project's first attempt at model tiering assigned a model

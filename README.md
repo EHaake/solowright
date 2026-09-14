@@ -31,27 +31,22 @@ SKILL.md                        AI-facing instructions — the file that
                                  actually gets loaded once installed
 How-To-Use.md                   The human guide: starting and running a
                                  project, and what your part of it is
-assets/                         Everything a new project is scaffolded
-                                 from, plus the subagent definitions
-  CLAUDE-template.md            Constitution skeleton
-  spec-template.md              spec.md skeleton
-  plan-template.md              plan.md skeleton
-  tasks-template.md             tasks.md skeleton
-  design-brief-template.md      brief.md skeleton, for projects with a UI
-  settings-template.json        .claude/settings.json a project gets at
-                                 setup: session model and effort
-                                 (standard profile)
-  settings-template-economy.json  The same for the economy profile:
-                                 one model family, nothing on Fable
-  pull-request-template.md      .github/PULL_REQUEST_TEMPLATE.md
-  gitignore-template            .gitignore starting point
-  skeptical-reviewer.md         Source copy of the reviewer subagent —
-                                 see "Installing" below for where the
-                                 active copy actually lives
-  sdd-implementer.md            Source copy of the implementer subagent
-                                 — same install location as the reviewer
-  sdd-planner.md                Source copy of the planner subagent —
-                                 same install location
+agents/                         The three subagent definitions. Installed
+                                 to ~/.claude/agents/ — see "Installing"
+  sdd-planner.md                Drafts plan.md and tasks.md, once per spec
+  sdd-implementer.md            Builds one task per dispatch
+  skeptical-reviewer.md         Sign-off, phase reviews, decision reviews,
+                                 the pre-merge sweep
+project/                        A new project's skeleton, laid out exactly
+                                 as it lands; the first session copies it
+  CLAUDE.md                     Constitution skeleton
+  .claude/settings.json         Session model and effort (standard profile)
+  .claude/settings.economy.json The economy profile's version; the
+                                 scaffold keeps one of the two
+  .github/PULL_REQUEST_TEMPLATE.md
+  .gitignore
+  specs/001-spec-name/          spec.md, plan.md, tasks.md skeletons
+  design/brief.md               Design brief skeleton, for projects with a UI
 references/
   collaboration-workflow.md     Full step-by-step version of the
                                  routine/subagent/escalate triage
@@ -61,8 +56,8 @@ references/
 ```
 
 `README.md` (this file) and `How-To-Use.md` are for humans — nothing in
-this repo besides `SKILL.md`, `assets/`, and `references/` is read by
-either tool.
+this repo besides `SKILL.md`, `project/`, `references/`, and the
+installed copies of `agents/` is read by either tool.
 
 ## The flow, in one paragraph
 
@@ -167,7 +162,7 @@ and what evidence would change each choice — is
 
 Create an empty repository, open Claude Code in it, and say "Start a
 new Solowright project." The first session scaffolds the repo from
-`assets/` and walks through the idea, the constitution, and the first
+`project/` and walks through the idea, the constitution, and the first
 spec; `How-To-Use.md` has the full sequence and what your part of it
 is. Projects used to start from a separate template repo,
 `solowright-template`; it is archived, because a copy of the templates
@@ -184,12 +179,12 @@ either automatically.
 Skills are only discovered from an exact location:
 `~/.claude/skills/spec-driven-development/` (personal, every project on
 this machine) or a project-level `.claude/skills/spec-driven-development/`
-(that one repo only). Copy `SKILL.md`, `assets/`, and `references/` there
-directly — same folder structure as this repo, just at that path instead.
+(that one repo only). Copy `SKILL.md`, `project/`, and `references/`
+there directly — same folder structure as this repo, just at that path
+instead.
 
-The three subagent definitions are a separate copy:
-`assets/skeptical-reviewer.md`, `assets/sdd-implementer.md`, and
-`assets/sdd-planner.md` go to `~/.claude/agents/` (user-level, every
+The three subagent definitions are a separate copy: everything in
+`agents/` goes to `~/.claude/agents/` (user-level, every
 project on this machine). Claude Code reads them from there, not from
 inside the skill folder.
 
@@ -202,7 +197,7 @@ Only needed if you like to think an idea through in chat before a repo
 exists; nothing in the workflow depends on it. Settings → Capabilities
 → enable "Code execution and file creation"
 (skills won't appear in the menu until this is on). Then zip `SKILL.md`,
-`assets/`, and `references/` together — the zip's root should be the
+`project/`, and `references/` together — the zip's root should be the
 `spec-driven-development` folder itself, not the loose files and not an
 extra wrapper folder around it. Settings → Customize → Skills → upload
 the zip, toggle it on.

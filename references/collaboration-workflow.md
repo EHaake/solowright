@@ -8,7 +8,7 @@ document afterward, not something to improvise around silently.
 
 ## One-time setup
 
-1. Place the three agent definitions from this skill's `assets/`
+1. Place the three agent definitions from this skill's `agents/`
    folder — `skeptical-reviewer.md`, `sdd-implementer.md`, and
    `sdd-planner.md` — in `~/.claude/agents/`, the user-level directory,
    so they're available in every project automatically, not just the
