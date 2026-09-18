@@ -531,6 +531,20 @@ default and use the Fable implementer only on marked tasks. Quality
 proxies worse: keep Opus; the "stronger model at lower effort" claim
 did not transfer to bounded transcription work.
 
+**Set up, paused, started.** Kaazap's constitution was edited on
+2026-09-14 mid-spec 023, and the experiment was paused the same day at
+74% Fable allowance with a three-day reset — specs 023, 024 and 025 ran
+the constitution's fallback (`sdd-implementer` on Opus at high), with
+the session on `claude-opus-5` rather than the profile's Fable medium.
+None of them are experiment-2 data. Spec 025 is worth keeping as a
+near-control on the other side: Opus implementer at high, Opus reviewer,
+but the session one model off the baseline. The experiment starts for
+real on 2026-09-17 with kaazap spec 026, in a fresh session on the
+standard profile, the first spec run end to end with the Fable
+implementer. The lesson for the protocol: a model experiment starts at a
+spec boundary, never mid-spec, because an allowance ceiling can stop it
+at any point and a half-and-half spec measures nothing.
+
 **Applying it to a project.** Paste into a fresh session in the
 project, with the new agent file in place and the skill on `main`:
 
