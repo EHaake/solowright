@@ -786,7 +786,42 @@ each time.
    false-passing, audit for the same *shape* elsewhere rather than
    fixing only the instance found.
 
-3. **Verify the mechanism, not a proxy for it.** When checking whether
+3. **A test that asserts on source text pins the spelling, not the
+   behavior.** The specific shape principle 2 catches most often: some
+   layer is genuinely awkward to test — SwiftUI view bodies, a
+   framework's wiring, generated code — so the test reads the source
+   file and asserts it contains a string. It passes principle 1's
+   letter, since a claim did become a test, and fails principle 2's
+   entirely: rename a parameter and it goes red with nothing broken;
+   write the same behavior a different way and it goes red; delete the
+   behavior and keep the string and it stays green. It cannot fail for
+   a behavioral reason and cannot pass for one.
+
+   These don't arrive as a decision, they accumulate — one per spec,
+   each locally reasonable, until a third of the suite is source
+   scanning. Measured in one project here: 502 of 1,547 tests, 13,000
+   lines. The rule worth setting per project, in the constitution's
+   Testing section, is narrow rather than absolute: **a source scan
+   may pin an injection point that nothing else can reach, and never a
+   behavior a unit test could reach instead.** Absolute bans lose to
+   the real problem the pattern is solving. And when one of these is
+   the only coverage of something load-bearing, the honest reading is
+   that the thing is untested.
+
+   The same root cause produces the opposite symptom, and it's worth
+   checking for both at once: **testing effort follows testability,
+   not risk.** The awkward-to-test layer either gets a fake test like
+   the above, or gets none, while some easy pure function next to it
+   accumulates exhaustive coverage. Both were found in the projects
+   this skill was measured on — one had a third of its suite scanning
+   source text, the other had 190 test lines on bounds-checking a
+   drawing primitive and zero on the render path whose resize
+   short-circuit is the only thing preventing an out-of-bounds write.
+   Coverage inverted against risk reads as discipline and isn't. The
+   check is cheap: list what would actually hurt if it broke, then see
+   where the tests are.
+
+4. **Verify the mechanism, not a proxy for it.** When checking whether
    something actually happened, instrument the thing itself — a log
    statement, a direct check — rather than inspecting a visual or
    indirect artifact that might not reliably show it. A fast or
@@ -800,13 +835,13 @@ each time.
    "this doesn't work" conclusion against real documentation before
    accepting it.
 
-4. **One source of truth, not two things that could silently drift.**
+5. **One source of truth, not two things that could silently drift.**
    Any time the same fact, threshold, or calculation is needed in two
    places, make one canonical and have the other reference it. Two
    independently-written versions that happen to agree today are a bug
    waiting for the day someone edits only one of them.
 
-5. **Correctness over reference-fidelity, but never silently.** When an
+6. **Correctness over reference-fidelity, but never silently.** When an
    implementation and a design reference (or a spec and an earlier
    assumption) genuinely conflict, resolve toward whichever is actually
    correct — but always surface the divergence explicitly, with
@@ -814,13 +849,13 @@ each time.
    the project should see every place execution disagreed with the plan,
    not just the places it matched.
 
-6. **Reserve real "use it yourself" time — don't review only diffs and
+7. **Reserve real "use it yourself" time — don't review only diffs and
    summaries.** Some of the most important catches come from someone
    actually using the running thing, not from reading what changed. A
    summary can describe a feature working correctly while the actual
    feel of it is off in a way no diff would show.
 
-7. **Own mistakes plainly, in both directions.** This applies to the AI
+8. **Own mistakes plainly, in both directions.** This applies to the AI
    and the human equally. When a wrong technical conclusion gets
    reached, say so plainly and explain what the right verification
    would have been — don't quietly correct course without naming the
