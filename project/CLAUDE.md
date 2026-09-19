@@ -11,6 +11,71 @@ explicitly, in its own commit.
 Write this once the first spec conversation has actually happened —
 don't guess at it before then. -->
 
+## Scale: what this is actually being built for
+
+<!-- Fill this in honestly and concretely — the rules below are only
+as useful as this paragraph is specific. How many people use it, on
+what machines, against what data, and what actually breaks if it goes
+wrong. A real example: "One user, me, on one Mac. State in a local
+JSON file I'd be annoyed to lose but could recreate. Nothing else
+reads it. No deployment, no uptime requirement, no other developer."
+If any of that stops being true, amend this section before the spec
+that changes it, not after. -->
+
+**Build for the scale above, and not for one this project might reach
+someday.** The characteristic failure here is not sloppy code, it is
+ceremony: an interface with a single implementation, a configuration
+value that never varies, a strategy pattern for two branches, a
+repository layer over the one database this will ever use. Each is
+defensible in the abstract, each is free to add, and each is a
+permanent tax on every future reader — who is one person, working
+alone, months removed from the reasoning.
+
+Five tests, applied when the plan is drafted and again at review.
+They're written as tests rather than as advice because "don't
+over-engineer" is not something a reader can check an actual diff
+against:
+
+1. **An abstraction earns its place at the second real caller, not
+   the first imagined one.** One caller means write it inline. Two
+   callers that genuinely share behavior means extract it.
+2. **An extension point needs a requirement that exists now.** No
+   plugin surface, no "in case we swap this out" seam. A project this
+   size swaps something by editing the one place it's used.
+3. **A layer needs a boundary that actually varies.** A layer that
+   forwards a call without transforming it is a layer that only adds
+   a file to open.
+4. **Prefer deleting to configuring.** An option nobody has asked for
+   is two code paths, one of which is never exercised and both of
+   which need to keep working.
+5. **Backward compatibility with yourself is not a constraint** —
+   except for data already on disk, which is a real constraint and
+   gets the full treatment.
+
+**What does not scale down.** Tests, error handling on failures that
+can actually happen, data integrity and migrations for anything
+persisted, care with credentials and anyone else's data, and names a
+cold reader can follow. None of these are enterprise overhead; a solo
+project needs them *more* than a team project does, because there is
+no second reader to catch what the first missed, and the person who
+comes back in six months has forgotten everything and has nobody to
+ask. Simplicity means fewer moving parts, not fewer safeguards.
+Dropping the parts that make code survivable isn't simple, it's debt
+with a shorter fuse.
+
+**When the two pull against each other, say which won and why** — in
+`plan.md` if it's a design call, or by returning the question if it's
+genuinely a fork. Don't split the difference silently; a half-built
+abstraction is worse than either choice made deliberately.
+
+**How this shows up in review.** Over-engineering contradicts this
+section, which makes it blocking — but only when it is concrete and
+nameable: an interface with one implementation, an unused extension
+point, a configuration value never varied, a pass-through layer.
+Disagreements of taste about structure are second-look notes and
+never block. A reviewer that blocks on style generates noise and
+gets ignored, which costs more than the abstraction would have.
+
 ## Platform
 
 <!-- Target platform/version, language, and any "no X unless Y" rules,

@@ -681,6 +681,54 @@ sweep run on Opus. Measured across two specs with the implementer
 allowance per task and bought nothing measurable, which is why the
 implementer default sits where it does.
 
+## Build for the scale the project actually has
+
+Solowright is for one person's projects, and the code should say so.
+The characteristic failure of a capable implementer working from a
+plan is not sloppiness, it's ceremony: an interface with a single
+implementation, a configuration value that never varies, a seam for a
+swap nobody is going to make. Every one of those is defensible in the
+abstract, free to add, and a permanent cost to the one person who has
+to read it later.
+
+So the constitution template carries a **Scale** section, filled in
+per project with the real numbers — how many users, which machines,
+what data, what breaks — followed by five tests that a reader can
+actually apply to a diff: an abstraction earns its place at the second
+real caller rather than the first imagined one; an extension point
+needs a requirement that exists now; a layer needs a boundary that
+actually varies; prefer deleting to configuring; backward
+compatibility with yourself isn't a constraint, except for data
+already on disk.
+
+Written as tests, not as advice, and deliberately. "Don't
+over-engineer" is an adjective, and an agent can't check a diff
+against an adjective — it resolves the ambiguity the safe way, which
+here means building the abstraction. The same failure mode this record
+documents for the phase-pause rule and the commit-to-main rule: a
+rule the actor can't evaluate becomes a guess, and the guess has a
+direction.
+
+The counterweight matters as much as the rule, and lives in the same
+section. Tests, error handling for failures that can happen, data
+integrity and migrations, care with credentials, and names a cold
+reader can follow do **not** scale down. A solo project needs them
+more than a team project does, because there's no second reader to
+catch what the first missed and the person returning in six months has
+forgotten everything and has nobody to ask. Simplicity is fewer moving
+parts, not fewer safeguards.
+
+Three places enforce it. The planner reads Scale before drafting,
+because that's where over-engineering enters — the implementer builds
+what the plan names, and a reviewer checking the diff against the plan
+finds it correct. The implementer builds exactly what its task asks
+for and returns anything that seems to want a larger shape. And the
+reviewer treats structure built past the stated scale as blocking, but
+only the nameable kind — an interface with one implementation, an
+unused extension point, a pass-through layer — with taste
+disagreements left as second-look notes, since a reviewer that blocks
+on style gets skimmed.
+
 ## Principles worth generalizing
 
 These aren't language-specific or platform-specific — they're patterns

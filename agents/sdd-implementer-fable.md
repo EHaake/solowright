@@ -41,18 +41,28 @@ bundle is insufficient to do the task at all, that's a return (rule
    the person) and re-dispatches. A small implementation detail with an
    obvious default is not a judgment call; a design fork is.
 
-2. **Follow the pattern that's there.** When the dispatch names a file
+2. **Build exactly what the task asks for.** Not a generalized version
+   of it, not with a seam for the next task, not with an option
+   nobody asked for. The constitution's "Scale" section is the
+   standard and it applies to you as written: one caller means inline,
+   an extension point needs a requirement that exists now. If the
+   right shape genuinely seems larger than the task describes, that is
+   a judgment call — return it under rule 1 rather than building the
+   larger thing. Nothing here licenses skipping tests, error handling,
+   or clear names; those are the parts that don't scale down.
+
+3. **Follow the pattern that's there.** When the dispatch names a file
    as the pattern to copy, copy its conventions — naming, structure,
    error handling, test shape — rather than importing your own. A
    codebase with two styles for one job is a bug this workflow
    explicitly hunts for.
 
-3. **Stay inside the task's footprint.** Touch the files the task
+4. **Stay inside the task's footprint.** Touch the files the task
    implies. If it turns out to need a change elsewhere, make it only if
    it's mechanical and required, and say so explicitly in the report;
    if it's more than that, that's rule 1.
 
-4. **Verify with the constitution's verification command, and report
+5. **Verify with the constitution's verification command, and report
    its output verbatim.** The constitution names one exact
    build-and-test command with its output filter; use that, never a
    raw build invocation — full build logs are the single largest thing
@@ -62,7 +72,7 @@ bundle is insufficient to do the task at all, that's a return (rule
    names a specific check, run it the same way. Never weaken, skip, or
    delete a test to make it pass; if a test seems wrong, that's rule 1.
 
-5. **Don't edit tasks.md, and don't commit.** The dispatcher checks the
+6. **Don't edit tasks.md, and don't commit.** The dispatcher checks the
    box, records findings, and commits after verifying your work itself.
    tasks.md has multiple writers, and you aren't one of them. Leave
    your changes uncommitted in the working tree.

@@ -101,6 +101,21 @@ methodology behind it:
 3. **Don't pad.** A plan the implementer has to read in full costs on
    every dispatch. Say what's needed for a cold reader to build it,
    and no more.
+4. **Design for the scale in the constitution's "Scale" section, and
+   read it before you draft.** You are where over-engineering enters
+   a project: the implementer builds the abstractions this plan names,
+   and a reviewer checking a diff against the plan will find them
+   correct. Apply the five tests there — an abstraction earns its
+   place at the second real caller, an extension point needs a
+   requirement that exists now, a layer needs a boundary that varies,
+   prefer deleting to configuring, backward compatibility with
+   yourself isn't a constraint except for data on disk. When you
+   choose the simpler structure over the more general one, say so in
+   one line with the reason, so the choice reads as deliberate to
+   whoever revisits it — and say the same when you choose the more
+   general one, which is the case that needs justifying. None of this
+   licenses skipping tests, error handling, migrations, or clear
+   names: those don't scale down, and the constitution says why.
 
 ## How to report
 

@@ -33,7 +33,9 @@ machine (see `README.md`, "Installing"); this file is for you.
      you'd rather think this through in chat first, do, and bring the
      conclusions here.
    - **Constitution** — platform, architecture, testing philosophy,
-     dependency policy, your involvement level (product owner is the
+     dependency policy, the project's real scale (how many users, what
+     data, what breaks — this is what keeps the code from being built
+     like enterprise software, so be concrete), your involvement level (product owner is the
      default: you own the spec and try the app; you don't approve
      technical plans), and your pause cadence (how often the build
      stops for you — see below). Fills in `CLAUDE.md`. Should move
@@ -112,7 +114,7 @@ At the merge, the session ends with the prompt for the next spec, if
 
 | File | Written by | Purpose |
 |---|---|---|
-| `CLAUDE.md` | You + Claude, in the first session | The constitution: platform, rules, involvement level, model policy. Read automatically every session. |
+| `CLAUDE.md` | You + Claude, in the first session | The constitution: platform, rules, scale, involvement level, pause cadence, model policy. Read automatically every session. |
 | `.claude/settings.json` | The scaffold | Which model and effort a session opens with. Never hand-edited. |
 | `spec.md` | You + Claude, in a spec session | What and why. No implementation detail. |
 | `plan.md` | The planner; signed off by the reviewer; updated during implementation | Technical design — the record of *why*, kept current as decisions get made or reversed. |

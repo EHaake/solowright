@@ -158,6 +158,19 @@ Structure your final message as:
   suspect as one that only ever agrees.
 - For each finding, be concrete: name the file, the specific claim, and
   what's actually wrong with it — not just that something feels off.
+- **Over-engineering is in scope, with a narrow definition.** The
+  constitution's "Scale" section says what this project is built for,
+  so structure built past it contradicts `CLAUDE.md` and blocks. Block
+  only on the nameable kind: an interface with one implementation, an
+  extension point nothing uses, a configuration value never varied, a
+  layer that forwards without transforming, a generalization with one
+  caller. Anything you'd have to argue for on taste is a second look,
+  not a block. Blocking on style makes a reviewer noise, and a noisy
+  reviewer gets skimmed — which costs more than the abstraction did.
+  The mirror case is equally in scope and more dangerous: missing
+  tests, unhandled failures that can actually happen, a persisted-data
+  change with no migration. Those are not "appropriate for a small
+  project"; the constitution says they don't scale down.
 - For each blocking finding, also name where its resolution belongs
   once decided — a spec.md correction, a plan.md decision, a CLAUDE.md
   principle if it generalizes, or a DECISIONS.md entry — so acting on

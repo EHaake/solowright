@@ -682,6 +682,58 @@ pre-assembled bundle, so it is an observation to test rather than a
 result: if the bundle is what did it, close-out bundling is a cheaper
 win than any model change measured so far.
 
+### Scale as a stated constraint on the code, 2026-09-19
+
+The README had said since the renaming that this is for a solo builder
+and not an enterprise platform, and nothing downstream acted on it.
+Positioning is not a constraint: the planner, the implementer and the
+reviewer had no instruction about how much structure a project of this
+size warrants, so they defaulted to what a capable model defaults to,
+which is the well-factored enterprise shape.
+
+Three choices are worth recording.
+
+**It went in the constitution, not into the agent definitions alone.**
+The constitution is read by every session and every subagent, and,
+more usefully, the reviewer's blocking definition already reads
+"contradicts `plan.md` or `CLAUDE.md`." Putting the rule there made it
+enforceable through machinery that already existed, with no new
+category of finding and no change to what blocking means.
+
+**It is written as five tests, not as an instruction not to
+over-engineer.** This is the third time the same lesson has produced a
+fix in this record — after the phase-pause prompt and the
+commit-to-main ban. A rule the actor cannot evaluate at the moment it
+acts becomes a default plus a guess, and the guess runs the same way
+every time. "Don't over-engineer" is an adjective; "an abstraction
+earns its place at the second real caller, not the first imagined one"
+is something a reader can hold against an actual diff. The five tests
+are deliberately mechanical for that reason, and the Scale section
+starts with a per-project fill-in, because the tests are only as
+useful as the paragraph stating how many users and what data there
+actually are.
+
+**The counterweight is in the same section, not a separate one.**
+The person's framing was explicit and correct: no quality sacrificed
+to simplicity. Tests, error handling, migrations, credential care and
+legible names do not scale down, and a solo project needs them *more*
+than a team project does — no second reader, and a six-months-later
+self with nobody to ask. Keeping that in the same section is
+protection against the rule being quoted half: "simplicity means fewer
+moving parts, not fewer safeguards" has to be as reachable as the
+tests, or the section becomes a licence for shortcuts, which is a
+worse failure than the ceremony it was written to stop.
+
+The reviewer's scope was deliberately narrowed to the nameable cases —
+an interface with one implementation, an unused extension point, a
+configuration value never varied, a pass-through layer. Structure is
+the easiest thing in the world to have opinions about, and a reviewer
+blocking on taste produces findings that get skimmed, which costs more
+than the abstraction would have. The mirror case is in scope too, and
+called out as the more dangerous one: a missing test or an unhandled
+failure justified as "appropriate for a small project" is the
+misreading this section most needs to prevent.
+
 ### Pause cadence becomes its own setting, 2026-09-19
 
 The per-phase pause was never per-task — that part of the design was
