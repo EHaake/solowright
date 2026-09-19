@@ -194,11 +194,21 @@ sized to be reviewable on its own.
   final task in `tasks.md` (see the tasks template). README changes
   describing the spec's behavior ride the spec branch; `ROADMAP.md`
   commits straight to `main` per the rule below.
-- Repo-wide files (`CLAUDE.md`, `ROADMAP.md`, `DECISIONS.md`) commit
-  straight to `main`. Spec-specific files commit to that spec's branch
-  and ride into `main` only when the spec merges. Getting this backwards
-  is an easy, low-stakes mistake — worth a standing rule so it isn't
-  re-litigated every time.
+- Spec-specific files commit to that spec's branch and ride into
+  `main` when the spec merges. **Everything that isn't a spec's
+  implementation commits straight to `main`, without asking** — a
+  roadmap edit, a decisions entry, a constitution amendment, a docs
+  fix, a design brief, whatever a conversation that didn't become a
+  spec left behind. Write the rule as that category and not as a list
+  of blessed filenames: the older wording named three repo-wide files
+  as "the exception," and sessions grooming the roadmap read the
+  headline ban, failed to match their change to the list, and stopped
+  to ask permission — a gate on the cheapest, most reversible work in
+  the repo. The test is whether the change implements part of some
+  spec's `tasks.md`. A change that wants a reviewable diff anyway — a
+  dependency bump, an unplanned refactor — gets a `fix/` or `chore/`
+  branch and a PR, decided on size and risk rather than on whether it
+  counts as a spec.
 - Keep AI co-authorship attribution on commits. It's accurate, and for a
   project meant to demonstrate this workflow, the transparency is worth
   more than a clean-looking log.
@@ -964,7 +974,11 @@ ended at merge. Handle it on a spectrum, matching its actual size:
 The per-task triage in `references/collaboration-workflow.md` already
 governs how much scrutiny any given fix needs; what this section adds
 is the git shape, since "one branch per spec" was never written with
-work-that-isn't-a-spec in mind.
+work-that-isn't-a-spec in mind. The same gap showed up at the other
+end of the scale — a roadmap paragraph is also work that isn't a spec,
+and it needs no branch at all. Both are the same correction: the
+branch shape follows the change's size and risk, not the question of
+whether it belongs to a spec.
 
 ## Using the templates
 

@@ -389,10 +389,29 @@ orchestrator re-runs the command itself before committing.
 ## Git conventions
 
 - **One branch per spec, not per task or phase.**
-- **Never commit implementation work directly to `main`.** All code
-  changes happen on a spec branch. Repo-wide docs (`CLAUDE.md`,
-  `ROADMAP.md`, `DECISIONS.md`) are the exception: they commit straight
-  to `main`, while spec-specific files ride the spec branch.
+- **A spec's implementation never goes to `main` directly.** Its code,
+  its files under `specs/<NNN>-<slug>/`, and any README change
+  describing its behavior live on that spec's branch and reach `main`
+  through its PR.
+- **Work that isn't a spec's implementation commits straight to
+  `main`, and doesn't need to ask.** Roadmap grooming, a
+  `DECISIONS.md` entry, a constitution amendment, a docs or README
+  correction unrelated to a spec in flight, a design brief, the
+  written residue of a conversation that didn't become a spec,
+  tooling or config no spec touches. None of this has a spec branch,
+  and none of it deserves one — a branch and a PR for a roadmap
+  paragraph cost more than they protect, and stopping to ask costs a
+  turn and interrupts the conversation that produced the change. The
+  test is whether the change implements part of some spec's
+  `tasks.md`, not whether the file appears on a list. If it doesn't:
+  commit it to `main`, push, and say so in the report. This line is
+  the permission; don't ask for it again.
+- **Branch anyway when the change wants a diff someone will look at** —
+  a dependency bump, a refactor with no spec behind it, anything where
+  being wrong is expensive or awkward to unwind. Use
+  `fix/<short-description>` or `chore/<short-description>`, not the
+  spec `<NNN>-<slug>` convention, and open a PR. Size and risk decide
+  this, not whether the work counts as "a spec."
 - Open the PR as a draft immediately after pushing the branch, for a
   running diff. Only mark it ready and merge once every task in the
   spec's `tasks.md` is complete and verified.

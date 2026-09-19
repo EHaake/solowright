@@ -646,6 +646,39 @@ pre-assembled bundle, so it is an observation to test rather than a
 result: if the bundle is what did it, close-out bundling is a cheaper
 win than any model change measured so far.
 
+### "Never commit to main" was stopping roadmap edits, 2026-09-19
+
+Projects were pausing mid-conversation to say they weren't allowed to
+commit a roadmap change. The permission was already there — the git
+section named `CLAUDE.md`, `ROADMAP.md` and `DECISIONS.md` as "the
+exception" and sent them straight to `main` — so this was the same
+failure as the phase-pause prompts, in a different room: a rule whose
+*form* defeated its content.
+
+Three things did it together. The headline was an absolute, bolded
+ban. The permission was an unbolded carve-out underneath it. And the
+carve-out was a list of three filenames rather than a category, so a
+session had to decide whether its change matched the list, and any
+change that didn't obviously match resolved to the ban. A roadmap
+conversation that also touches a design note, a README line, or a new
+reference document falls straight into that gap.
+
+Rewritten as a category: a spec's implementation goes on the spec
+branch, everything else commits to `main` without asking, and the test
+is whether the change implements part of some spec's `tasks.md`. A
+fourth bullet covers the other direction — a dependency bump or an
+unplanned refactor gets a `fix/` or `chore/` branch and a PR because
+of its size and risk, not because it qualifies as a spec. The rule now
+turns on what the change is, which a session can evaluate, instead of
+on whether a filename appears in a list, which it can only guess at.
+
+Worth noticing what the failure cost: a gate on the cheapest and most
+reversible work in the repo, paid every time, in the middle of the
+conversation that produced it. That is the shape to watch for — a
+prohibition whose exceptions are enumerated will be over-applied,
+because matching an enumeration is a judgment call and the safe side
+of a judgment call is always "don't."
+
 ### The role table, 2026-09-19
 
 Adding a second per-role setting exposed the shape of the problem. The
