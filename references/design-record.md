@@ -567,6 +567,85 @@ project, with the new agent file in place and the skill on `main`:
 > `exp-2-implementer-fable-medium` branch. Then stop; don't start any
 > spec work in this session.
 
+### Experiment 2: results, 2026-09-19
+
+Two specs ran it end to end in kaazap: 026 (compact layout, 6 tasks,
+started 2026-09-17) and 027 (animation pass, 9 tasks, started
+2026-09-18). No fallback fired in either. Costs below are from the
+session logs, deduplicated by (message id, request id), priced at
+Fable 5.1 $10/$50 per MTok with cache reads at $0.25 and Opus $5/$25
+with cache reads at $0.50.
+
+| Spec | Tasks | Implementer | Impl $/task | Reviewer | Planner | Session | Total $/task | Fable $ |
+|---|---|---|---|---|---|---|---|---|
+| 021 (Opus impl) | 7 | $5.13 | $0.73 | $4.30 | $3.14 | $16.45 | $4.15 | $20.39 |
+| 022 (Opus impl) | 15 | $13.52 | $0.90 | $7.57 | $8.11 | $15.42 | $2.97 | $26.94 |
+| 024 (Opus impl) | 10 | $13.05 | $1.30 | $9.77 | $9.60 | $13.98 | $4.64 | $13.98 |
+| 025 (Opus impl) | 3 | $4.40 | $1.47 | $2.34 | $1.46 | $6.96 | $5.05 | $0.00 |
+| **026 (Fable impl)** | 6 | $4.86 | **$0.81** | $5.17 | $5.43 | $10.49 | $4.33 | $23.15 |
+| **027 (Fable impl)** | 9 | $7.99 | **$0.89** | $7.16 | $11.29 | $17.49 | $4.88 | $40.26 |
+
+**Hypothesis 1 — cost per completed task: not met, and not refuted.**
+The Fable implementer at medium costs $0.81 and $0.89 per task against
+an Opus range of $0.73 to $1.47. It lands inside that range, below its
+midpoint and above its floor. Total cost per task — the number that
+actually decides — is $4.33 and $4.88 against an Opus range of $2.97 to
+$5.05. Every one of these numbers is inside the spec-to-spec noise of
+the same project. The premise was that Fable would win on *fewer
+dispatches per completed task*, not on a cheaper dispatch; dispatches
+per task were 1.0 on both sides, so there was no such gain to have.
+
+**Hypothesis 2 — quality proxies: met, with nothing to show for it.**
+Specs 026 and 027 were 6/6 and 9/9 first try, no escape hatch, no
+fallback. Spec 024 on Opus at high was 10/10 first try. The one
+judgment-call return in 027 (T004a, an impossible instruction about a
+10-character bar) is the implementer doing exactly what it should.
+Blocking findings stayed at zero through per-task and phase review in
+both specs; 026's single blocking sweep finding was in close-out prose,
+not code. The checker being a tier below the builder produced no
+visible harm — and also had nothing to catch. Bundle-assembly misses
+did not rise (hypothesis 4 met).
+
+**Hypothesis 3 — the allowance: this is where it fails.** Spec 026
+opened at 96% of the weekly Fable window remaining and spec 027 opened
+at 70%, so one six-task spec cost about 26 points of the week. Fable
+dollars per task went from $2.91 (021) and $1.80 (022) under experiment
+1 to $3.86 (026) and $4.47 (027). The implementer's own share of the
+Fable draw is about 20% in both specs. That is the whole trade: a fifth
+more of the constrained resource, spent on work that was already
+finishing first try.
+
+**Decision: keep Opus as the default implementer.** By the decision
+rule this is the "cost per completed task not lower" branch, and the
+rule's remedy was to keep the Fable implementer available as an
+override. The person's own reading at the time — that kaazap is the
+simplest of the three projects, and that Fable should be saved for the
+most complex one — points at the same place from a different direction,
+and generalizes the override from per-call to per-project. So
+`sdd-implementer.md` stays on Opus, `sdd-implementer-fable.md` stays
+installed rather than deleted, and the implementer becomes a named
+choice in the constitution's model policy the way the tiers already
+are.
+
+**What this does not settle.** Kaazap's tasks are bounded transcription
+against a fast cargo check, which is the case least likely to reward a
+stronger model — the experiment was designed that way on purpose, to
+isolate cost from device passes, and the design bought clean
+measurement at the price of a weak test of the quality claim. A spec
+whose tasks are genuinely hard is still untested, which is exactly what
+the per-project setting exists to let the person try.
+
+**Two things the split turned up that the experiment wasn't looking
+for.** Planning is now the most expensive Fable role on a spec with a
+revision: 027's planner cost $11.29 across two dispatches, more than
+its implementer and its reviewer. And Opus close-out dispatches cost
+$5.66 (024) and $3.74 (025) against $0.81 (026) and $1.31 (027) on
+Fable — a 3-5x gap, far outside everything else here. That is confounded
+by dispatch shape, since 026 and 027 handed the close-out a
+pre-assembled bundle, so it is an observation to test rather than a
+result: if the bundle is what did it, close-out bundling is a cheaper
+win than any model change measured so far.
+
 ## Two model profiles: the names are tunable per project
 
 Added September 2026, at the person's request, after experiment 1.
