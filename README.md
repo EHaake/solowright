@@ -9,7 +9,7 @@ an enterprise platform and doesn't try to be. Every design choice in it
 was measured on real projects, and the record of why is in the repo.
 
 It is one thing to install: a Claude Skill named
-`spec-driven-development` plus three subagent definitions. The skill
+`spec-driven-development` plus four subagent definitions. The skill
 carries the process, the document templates a new project is
 scaffolded from, the model policy, and the design record. There is no
 separate project template to clone — the first session of a project
@@ -31,15 +31,15 @@ SKILL.md                        AI-facing instructions — the file that
                                  actually gets loaded once installed
 How-To-Use.md                   The human guide: starting and running a
                                  project, and what your part of it is
-agents/                         The three subagent definitions. Installed
+agents/                         The four subagent definitions. Installed
                                  to ~/.claude/agents/ — see "Installing"
   sdd-planner.md                Drafts plan.md and tasks.md, once per spec
   sdd-implementer.md            Builds one task per dispatch
   skeptical-reviewer.md         Sign-off, phase reviews, decision reviews,
                                  the pre-merge sweep
-  sdd-implementer-fable.md      The optional stronger implementer and the
-                                 close-out dispatch; same body, different
-                                 frontmatter
+  sdd-implementer-fable.md      The close-out dispatch, and the optional
+                                 stronger task implementer; same body as
+                                 sdd-implementer, different frontmatter
 project/                        A new project's skeleton, laid out exactly
                                  as it lands; the first session copies it
   CLAUDE.md                     Constitution skeleton
@@ -85,16 +85,21 @@ runs, on which model, who's talking — is "The flow at a glance" in
 Three roles, three tiers. The names are the current models; the roles
 are what the skill actually fixes, and a project's `CLAUDE.md` names
 the models once. The session tier runs the top tier's model at medium
-effort; the reasoning and the measurement are below.
+effort; the reasoning and the measurement are below. Which tier each
+dispatch actually runs at is a nine-row table in that same
+`CLAUDE.md`, holding tier names rather than model IDs, so a project
+can move one role without touching the others and a profile switch
+re-points them all at once.
 
 ```mermaid
 flowchart LR
     PERSON(("The person"))
-    subgraph top["Top tier — Fable, high: decides"]
+    subgraph top["Top tier — Fable: decides, and writes prose"]
         SPEC["Spec conversation"]
         PLAN["sdd-planner"]
         SIGN["Sign-off review"]
         DEC["Decision review"]
+        CLOSE["Close-out — sdd-implementer-fable"]
     end
     subgraph impl["Implementation tier — Opus, high: builds and checks"]
         IMP["sdd-implementer"]
@@ -110,6 +115,7 @@ flowchart LR
     ORC -->|"task bundle, per task"| IMP
     ORC -->|"diagnosis bundle, walkthrough finding"| IMP
     ORC -->|"phase bundle"| REV
+    ORC -->|"close-out bundle, once per spec"| CLOSE
     ORC -->|"pause report, plain language"| PERSON
     PERSON -->|"walkthrough finding"| ORC
 ```
@@ -154,8 +160,10 @@ and Fable's separate allowance held with three projects drawing at
 once; the pause reports — the one seat whose prose the person reads —
 read at least as well. The skill pairs that with a plain-language rule for everything
 the person sees, under any model, and with a continuation prompt at
-every session-ending pause, so that each session boundary costs a
-paste rather than a reconstruction.
+each of the two session boundaries, so a boundary costs a paste rather
+than a reconstruction. A phase pause gets no prompt: it isn't a
+boundary, and offering one there invites a context clear that costs a
+full re-read.
 
 The full decision record — what was measured, what was tried first,
 and what evidence would change each choice — is
@@ -186,11 +194,12 @@ this machine) or a project-level `.claude/skills/spec-driven-development/`
 there directly — same folder structure as this repo, just at that path
 instead.
 
-The subagent definitions are a separate copy: everything in
-`agents/` — on this branch including `sdd-implementer-fable.md` — goes
-to `~/.claude/agents/` (user-level, every
-project on this machine). Claude Code reads them from there, not from
-inside the skill folder.
+The subagent definitions are a separate copy: all four files in
+`agents/` go to `~/.claude/agents/` (user-level, every project on this
+machine). Claude Code reads them from there, not from inside the skill
+folder. All four are needed even by a project that never opts into the
+stronger task implementer, because `sdd-implementer-fable` is also the
+close-out dispatch under the standard profile.
 
 Verify it's actually recognized, not just present: open Claude Code
 anywhere and ask what skills are available.

@@ -64,7 +64,9 @@ and no test fails when they go stale. -->
 - [ ] **T0XX** — Update `ROADMAP.md` (drop or annotate what this spec
   shipped; add any follow-ups it surfaced) and the repo README if
   user-facing behavior or setup changed. Then request the pre-merge
-  whole-spec sweep. *Verify: ROADMAP.md no longer lists this spec's
+  whole-spec sweep. Dispatch this one to the implementer named in the
+  model policy's close-out row, which is not necessarily the one
+  ordinary tasks go to — close-out writes prose rather than code. *Verify: ROADMAP.md no longer lists this spec's
   work as future; README matches actual behavior; the sweep came back
   clean or its findings were resolved.*
 
@@ -78,8 +80,8 @@ constitution), hand it to the implementer with something like:
 > Read [constitution file] and [spec/plan/tasks paths], then begin
 > implementing starting at the first task. Involvement level is
 > [product owner / technical lead]. Dispatch each routine task to the
-> sdd-implementer on a task bundle, per the constitution's model
-> policy; verify with the constitution's verification command, then
+> implementer the model policy's role table names, on a task bundle;
+> verify with the constitution's verification command, then
 > commit. One review and at most one re-review per invocation. Have
 > the skeptical-reviewer review after each phase with a phase bundle;
 > tasks marked review: per-task get their own review as well[;
@@ -124,9 +126,10 @@ person before any code changes.
 
 ## Tier log (recommended for the first spec under a model policy)
 
-<!-- The constitution's model policy decides which tier runs each task
-at dispatch time — there's no per-phase table to fill in. What's worth
-recording here is the evidence: token usage from each subagent return
+<!-- The constitution's model policy has a role table that decides
+which tier each dispatch runs at, so there is nothing to plan per
+phase here. What's worth recording is the evidence, plus any row the
+person moved mid-spec and the date they moved it: token usage from each subagent return
 — implementer runs and reviewer invocations alike — any escape-hatch
 miss (a task the orchestrator had to redo itself, and why),
 and, if the lighter implementer is on, which tasks it took and whether they held
@@ -146,3 +149,4 @@ stay true after it changes again. -->
 | T014a (walkthrough finding) | opus | [...] | diagnosed and fixed in one dispatch; test added |
 | Phase 2 review | opus | [...] | signed off; phase bundle |
 | Pre-merge sweep | opus | [...] | signed off; documents + spec diff |
+| Close-out (`sdd-implementer-fable`) | fable | [...] | ROADMAP + README updated; close-out row runs at the top tier |

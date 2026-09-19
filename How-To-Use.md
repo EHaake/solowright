@@ -3,16 +3,18 @@
 This is the human guide to running a Solowright project: how to start
 one, what the files are for, what the day-to-day flow looks like, and
 what your part of it is. The AI-facing side — `SKILL.md`, the
-project skeleton in `project/`, the three subagents in `agents/` — is
+project skeleton in `project/`, the four subagents in `agents/` — is
 installed once per
 machine (see `README.md`, "Installing"); this file is for you.
 
 ## Starting a project
 
 1. **Install the skill once**, if you haven't: `README.md` covers it.
-   The three subagents (`skeptical-reviewer`, `sdd-implementer`,
-   `sdd-planner`) go in `~/.claude/agents/`; they are per-machine, not
-   per-project.
+   All four subagents (`sdd-planner`, `sdd-implementer`,
+   `skeptical-reviewer`, `sdd-implementer-fable`) go in
+   `~/.claude/agents/`; they are per-machine, not per-project. Install
+   all four even if you never opt into the stronger task implementer —
+   the fourth also runs every spec's close-out.
 2. **Create an empty repository** and open Claude Code in it.
 3. **Say "Start a new Solowright project."** The session opens at
    medium effort and will ask you to raise it to high for this
@@ -51,7 +53,8 @@ machine (see `README.md`, "Installing"); this file is for you.
    technical-lead level you read and approve the plan yourself.)
 6. **Start implementation in a new session.** The spec session ends
    with the exact prompt to paste; that new session opens on the
-   project's default model and runs the whole spec.
+   project's default model and runs the whole spec, phase pauses
+   included. Those are the only two session boundaries in a spec.
 
 Every spec after the first follows the same path minus the scaffold
 and the constitution: a spec session of its own for the conversation
@@ -74,8 +77,14 @@ design turns out infeasible or needs real rework, or a previously
 unknown consideration surfaces that would materially change the
 project's direction. Both are meant to be uncommon.
 
+A phase pause is a pause, not a handoff: the same session continues
+when you say so, and it won't hand you a prompt for a fresh one. If you
+do want to stop there, say so or ask for a prompt and you'll get one.
+Clearing context at a phase costs a full re-read of the constitution
+and the spec's three files, which is why it isn't offered by default.
+
 At the merge, the session ends with the prompt for the next spec, if
-`ROADMAP.md` has one.
+`ROADMAP.md` has one — that's the second boundary.
 
 ## The files, at a glance
 
@@ -92,18 +101,29 @@ At the merge, the session ends with the prompt for the next spec, if
 | `ROADMAP.md` | You + Claude, as needed | Backlog of future specs. Deliberately unordered. |
 
 `DECISIONS.md` and `ROADMAP.md` don't need to exist on day one — create
-them the first time something needs a home.
+them the first time something needs a home. Editing either, or the
+constitution, doesn't need a branch or a pull request: a spec's code
+rides that spec's branch, and everything else commits straight to
+`main`. So a roadmap conversation ends in a commit, not a request for
+permission.
 
 ## What runs where
 
 Three roles, three model tiers, named once in `CLAUDE.md`: the top
-tier decides (the spec conversation, the planner, the sign-off, and
-decision reviews), the implementation tier builds and checks (the
-implementer, phase reviews, the pre-merge sweep), and the session tier
-orchestrates. Every dispatch logs which model ran and what it cost in
-`tasks.md`'s tier log, so the policy stays a measured choice. The full
-table is "The flow at a glance" in `SKILL.md`; the reasoning is in
-`references/design-record.md`.
+tier decides (the spec conversation, the planner, the sign-off,
+decision reviews, and the spec's close-out, which is mostly writing),
+the implementation tier builds and checks (the implementer, phase
+reviews, the pre-merge sweep), and the session tier orchestrates.
+Every dispatch logs which model ran and what it cost in `tasks.md`'s
+tier log, so the policy stays a measured choice.
+
+Which tier each of those runs at is a table in `CLAUDE.md`, one row
+per dispatch. You can move a row by asking — "put the planner on the
+cheaper model until my allowance resets" is a sentence, and the
+session writes it into the table and commits before doing anything
+else, so the next session knows too. It stays until you say otherwise;
+nothing reverts on its own. The full flow is "The flow at a glance" in
+`SKILL.md`; the reasoning is in `references/design-record.md`.
 
 ## A worked example
 
