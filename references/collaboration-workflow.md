@@ -1,4 +1,4 @@
-# Collaboration Workflow: Claude Code, the Reviewer Subagent, and Chat
+# Collaboration Workflow: the dispatch loop, the reviews, and when to escalate
 
 The default is to stay inside Claude Code. A separate chat is a
 deliberate escalation for specific moments, not the normal loop. This
@@ -8,19 +8,47 @@ document afterward, not something to improvise around silently.
 
 ## One-time setup
 
-1. Place the three agent definitions from this skill's `agents/`
-   folder — `skeptical-reviewer.md`, `sdd-implementer.md`, and
-   `sdd-planner.md` — in `~/.claude/agents/`, the user-level directory,
-   so they're available in every project automatically, not just the
-   one they were first set up in.
+1. Place all four agent definitions from this skill's `agents/`
+   folder — `sdd-planner.md`, `sdd-implementer.md`,
+   `skeptical-reviewer.md`, and `sdd-implementer-fable.md` — in
+   `~/.claude/agents/`, the user-level directory, so they're available
+   in every project automatically, not just the one they were first
+   set up in. All four are required even by a project that leaves
+   ordinary tasks on `sdd-implementer`: under the standard profile the
+   close-out row dispatches `sdd-implementer-fable`, so a machine
+   missing it fails at the close-out of every spec.
 2. In any Claude Code session, confirm they're recognized: ask "what
-   subagents do you have available?" or equivalent, and check all
-   three appear.
+   subagents do you have available?" or equivalent, and check all four
+   appear.
 3. Done. They never need to be recreated per project.
 
-If a specific project wants its own customized version of either
+If a specific project wants its own customized version of any of them
 instead of the shared one, a copy at that project's `.claude/agents/`
 takes precedence over the user-level one for that project only.
+
+**Where bundles go.** Every recipe below writes its bundle to
+`scratch/`. That is shorthand for the session's own scratchpad
+directory, outside the repo — bundles are working files for one
+dispatch and have no business in `git status`, let alone in the
+batched commit that follows a task. If a project does put them inside
+the repo, add `scratch/` to its `.gitignore` first.
+
+**Where a device or browser pass runs.** Not in the implementer: both
+implementer definitions declare `tools: Read, Edit, Write, Grep,
+Glob, Bash` and have no simulator or browser access. A task whose
+Verify criterion needs one either gets it from the person's
+walkthrough at the phase pause, or from a general-purpose agent the
+orchestrator dispatches for that check alone. Don't write a task whose
+verification the implementer cannot perform and then read its report
+as if it had.
+
+**Where commits go.** A spec's implementation commits to that spec's
+branch. Everything else — a roadmap edit, a decisions entry, a
+constitution amendment, a docs fix — commits straight to `main`,
+without asking. Several steps below write to `CLAUDE.md` or
+`DECISIONS.md` mid-conversation; those are `main` commits, and pausing
+to request permission for one is the failure the constitution's git
+section is written against.
 
 ## The per-task loop
 
@@ -150,8 +178,8 @@ conservatively.
 
 ## Drafting plan.md and tasks.md: the planner
 
-Once shipped code is what plans extend (see the skill's authorship
-section), the session doesn't draft `plan.md` and `tasks.md` itself —
+Once shipped code is what plans extend (see "Who authors plan.md and tasks.md"
+in `SKILL.md`), the session doesn't draft `plan.md` and `tasks.md` itself —
 the spec session dispatches `sdd-planner`, once per spec, with a
 per-call override to the top tier named in `CLAUDE.md` (explicit, so
 the dispatch lands there whatever the session itself is running on).
@@ -227,8 +255,9 @@ orchestrates. Per task:
    the diff yourself only if something failed. Don't fold the
    reviewer's second-look notes into the code yourself, and don't do
    device or browser checks by hand — the first goes to the log or the
-   next bundle, the second is the implementer's Verify criterion or the
-   person's attestation.
+   next bundle, the second is the person's attestation at the phase
+   pause, or a general-purpose agent dispatched for that check, since
+   the implementer has no device or browser tools.
 4. If the reviewer says fix and re-review: dispatch the fix (the
    findings plus the task bundle), then one re-review scoped to the
    findings and the fix diff — and that is the end of the loop. One
@@ -282,7 +311,9 @@ changed, in their terms.
 
 **One implementation session per spec; phase pauses stay in it.**
 Cache re-sends — context size times turn count — were 97% of all
-tokens on the measured sessions, but under the dispatch loop the
+tokens on the sessions measured before the dispatch loop existed, and
+are still the dominant share, though the volume itself fell four- to
+tenfold once the seat changed. Under the dispatch loop the
 session's own context is bookkeeping, not exploration, and a phase
 pause is where the person attests, not where the context has to go.
 The report goes to the person; they use the app and say continue; the
@@ -306,7 +337,10 @@ than carrying state — anything decided at the pause goes into
 
 A merge ends the same way, with the prompt for the next spec session
 if `ROADMAP.md` has an obvious next item — including the reminder to
-switch that session to the top tier before starting.
+raise that session's effort to high before starting. Under the
+standard profile that is an effort change, not a model change: the
+spec session and the implementation session sit on the same model, and
+the role table's spec-conversation row reads "session tier, high".
 If the next step is the person's decision, say that instead.
 
 Those two are the whole list. A phase pause gets no prompt, and the
@@ -344,10 +378,16 @@ the change.
 
 Good moments to do this: anything that felt uncertain while it was being
 built, and before a spec's PR comes out of draft and merges. For that
-pre-merge pass, the close-out edits come first — update ROADMAP.md and
-the repo README (per the constitution's close-out step) *before*
-invoking the sweep, so the sweep verifies the close-out instead of
-pre-dating it. Then say explicitly that this is the pre-merge pass, so
+pre-merge pass, the close-out comes first — dispatch it, on its own
+bundle, to the implementer named in the model policy's close-out row,
+which under the standard profile is `sdd-implementer-fable` at the top
+tier and is not the implementer ordinary tasks go to. It drafts the
+`ROADMAP.md` and `DECISIONS.md` text into a file on the branch, to be
+applied to `main` after the merge, and updates the repo README if
+user-facing behavior changed. Only then invoke the sweep, so the sweep
+verifies the close-out instead of pre-dating it. Under the allowance
+fallback this row re-points to `sdd-implementer` like every other row
+naming the Fable implementer. Then say explicitly that this is the pre-merge pass, so
 the whole-spec sweep happens on purpose rather than as a guess about
 scope:
 
@@ -418,8 +458,8 @@ Scope by invocation type:
 
 **Tier by invocation type — read it off the role table.** The
 constitution's model policy has one row per dispatch, and the reviewer
-appears in three of them: sign-off and decision reviews at the top
-tier with a per-call override, per-task and phase reviews and the
+appears in four of them: sign-off and decision reviews at the top
+tier with a per-call override, and per-task-and-phase review and the
 pre-merge sweep at the definition's own implementation tier. That
 split is the general rule made concrete — override up only where the
 reviewer exercises judgment rather than checking transcription. The

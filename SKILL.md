@@ -176,7 +176,10 @@ sized to be reviewable on its own.
 
 ## Git conventions
 
-- One branch per **spec**, never per task or phase.
+- One branch per **spec**, never per task or phase — and only for a
+  spec's implementation. Work that isn't that commits straight to
+  `main`; read the category rule below before taking this line as a
+  general ban.
 - Open the PR as a **draft** immediately after pushing the branch — it
   gives a running diff to review commit-by-commit, separate from
   whatever Claude Code's own summaries say.
@@ -192,8 +195,14 @@ sized to be reviewable on its own.
   else forces them — no task references them, no test fails when they
   lag — so the check lives here at the merge gate, and as a standing
   final task in `tasks.md` (see the tasks template). README changes
-  describing the spec's behavior ride the spec branch; `ROADMAP.md`
-  commits straight to `main` per the rule below.
+  describing the spec's behavior ride the spec branch. `ROADMAP.md`
+  and `DECISIONS.md` are the awkward case: the category rule below
+  sends them straight to `main`, but the close-out task that writes
+  them is a task in this spec's `tasks.md`. Resolve it the way the
+  measured projects do — the close-out drafts the roadmap and
+  decisions text into a file on the spec branch, and that text is
+  applied to `main` after the merge. The draft is spec work and rides
+  the branch; the edit to the living document is not, and doesn't.
 - Spec-specific files commit to that spec's branch and ride into
   `main` when the spec merges. **Everything that isn't a spec's
   implementation commits straight to `main`, without asking** — a
@@ -244,16 +253,21 @@ implements, the acceptance criteria it serves — never a fresh
 whole-codebase read; see "Keeping reviews cheap" in
 `references/collaboration-workflow.md`.
 
-## Model tiering: three roles, three tiers
+## Model tiering: three tiers, and a row per dispatch
 
-Three roles, three tiers, named once in the constitution's model
-policy. The top and session tiers are the same model at different
-effort — decided by experiment 1, see `references/design-record.md`:
+Three tiers, named once in the constitution's model policy, and a
+nine-row table there that says which tier each dispatch runs at.
+Under the standard profile the top and session tiers are the same
+model at different effort — decided by experiment 1, see
+`references/design-record.md`; under economy they are two different
+models, which matters wherever this section says the two coincide:
 
-- **The top tier decides.** The spec conversation, plan and task
-  drafting (the `sdd-planner`, one dispatch per spec), and the
-  skeptical-reviewer on sign-off and on decision reviews — and
-  nothing else. It reaches the agents only through explicit per-call
+- **The top tier decides, and writes the spec's prose.** Plan and
+  task drafting (the `sdd-planner`, one dispatch per spec), the
+  skeptical-reviewer on sign-off and on decision reviews, and the
+  close-out dispatch — plus, under the standard profile, the spec
+  conversation, which runs on the session tier's model and is the same
+  one. Nothing else. It reaches the agents only through explicit per-call
   overrides on those dispatches.
 - **The implementation tier builds and checks.** The implementer, one
   task per dispatch — the edit, build, test loop that accounts for
@@ -263,9 +277,10 @@ effort — decided by experiment 1, see `references/design-record.md`:
   `agents/sdd-implementer-fable.md`, is the same body at the top
   tier's model and medium effort; a project names one or the other in
   its constitution, and the default is the implementation tier (see
-  "Three names, one place, two profiles" for the measurement behind
-  that default). The close-out dispatch goes to the top tier's model
-  under the standard profile either way.
+  "Two rows worth explaining" below for the measurement behind that
+  default). The close-out dispatch goes to the top tier's model under
+  the standard profile either way, and to `sdd-implementer` under
+  economy, where nothing runs on a separate top-tier model.
 - **The session tier orchestrates**, at medium effort. The
   orchestrating session takes many bookkeeping turns and re-sends its
   whole context on each, which makes it the dominant cost of the
@@ -280,8 +295,8 @@ effort — decided by experiment 1, see `references/design-record.md`:
 
 The planner and reviewer definitions carry `effort: high`, so
 reasoning stays full-strength inside them regardless of the session's
-setting; the experiment-2 implementer carries `effort: medium`, which
-is the variable under test.
+setting. `sdd-implementer-fable` carries `effort: medium`, which is
+what the close-out row and the opt-in task row resolve to.
 
 The split is by *role*, decided per task at execution time — not a
 per-task model table written in advance. Three things catch a lighter
@@ -407,15 +422,19 @@ The pause report that follows says, in plain language, what was
 reported, what was found, and what changed — or what still needs the
 person's decision.
 
-**A lighter implementer is available but off by default.** The
-dispatch can override the implementer's model per call — a lighter
-model such as Sonnet for a task that meets all three of: an existing automated check
-as its Verify criterion (a manual-check task never drops tiers,
-because the orchestrator can't cheaply verify it), a named file in the
-codebase whose pattern it copies, and a small footprint. Leave it off
-until a project's first spec under this policy shows implementation-
-tier dispatch working, then turn it on in that project's `CLAUDE.md`
-if the numbers justify it.
+**A lighter implementer is available but off by default.** A project
+can add a fourth tier name and point the task-implementation row at
+it — a lighter model such as Sonnet — for tasks that meet all three
+of: an existing automated check as the Verify criterion (a
+manual-check task never drops tiers, because the orchestrator can't
+cheaply verify it), a named file in the codebase whose pattern it
+copies, and a small footprint. Because the role table is per-role and
+not per-task, turning this on means the row applies to every ordinary
+task, so it belongs to a project whose tasks are uniformly that shape.
+Leave it off until a project's first spec under this policy shows
+implementation-tier dispatch working. Per-call improvisation is not
+the mechanism: a model change is a committed row edit, so that the
+next session knows what this one decided.
 
 **Measure it.** The subagent's return reports its token usage; log it
 per invocation in `tasks.md`'s tier log with the resolved model name,
@@ -423,9 +442,10 @@ alongside any escape-hatch misses, and compare the spec's total (from
 `ccusage session --breakdown` afterward — the orchestrator can't see
 its own usage) against a previous spec of similar size. The policy
 earns its keep only while the coordination overhead stays smaller than
-what it replaces; if a spec measured under it still loses to the
-single-session regime on the top tier's budget, roll the implementer
-layer back and keep the reviewer changes.
+what it replaces. If a spec measured under it loses to the
+single-session regime on the top tier's budget, the lever is the role
+table: step the expensive rows down one at a time and re-measure,
+rather than abandoning the dispatch loop wholesale.
 
 **Three names, one place, two profiles.** The constitution's model
 policy names the top, implementation, and session tiers once;
@@ -560,10 +580,16 @@ every implementer dispatch — from reading the codebase at all.
 ## The flow at a glance: where each step runs, and on what
 
 Everything above, laid out as the sequence a spec actually follows.
-"Fable" and "Opus" here stand for the tiers named in the project's
-`CLAUDE.md` model policy — the session tier is Fable at medium and
-the top tier is Fable at high; the roles are what's fixed, the names
-change as models do.
+**This is the standard profile's resolution of the role table in the
+project's `CLAUDE.md`, with that table's defaults unchanged.** Read
+the table itself for what a given project actually does: it is the
+authority, this is the illustration. "Fable" and "Opus" stand for the
+tier names — under the standard profile the session tier is Fable at
+medium and the top tier is Fable at high, so the two coincide
+everywhere below. Under the economy profile they don't: the top tier
+is Opus 5 and the session tier is Opus 4.8, and every row that reads
+"Fable" resolves to one or the other by which tier the role table's
+row names. The roles are what's fixed; the names change as models do.
 
 **A brand-new project, once.** The person creates an empty repository
 and opens Claude Code in it; the first session is a spec session:
@@ -594,13 +620,16 @@ definitions and the orchestrator's overrides do the rest:
 | Phase pause report | same session | Fable, medium | orchestrator → the person, who attests by using the app and says continue; the session stays open |
 | Walkthrough finding | same session | the same implementer, on a diagnosis bundle; a decision review at **Fable** if it returns options | the person → orchestrator → implementer |
 | Pre-merge sweep | same session | `skeptical-reviewer` at **Opus, high**, documents + spec diff | orchestrator → reviewer |
-| Close-out and merge | same session | Fable, medium | orchestrator; ends with the prompt for the next spec session, if `ROADMAP.md` has one |
+| Close-out task | same session | `sdd-implementer-fable` at **Fable, medium**, on a close-out bundle | orchestrator → implementer |
+| Merge | same session | Fable, medium | orchestrator; ends with the prompt for the next spec session, if `ROADMAP.md` has one |
 | Spec merged | **new session** for the next spec, which opens at medium and asks for high effort | — | — |
 
 **The one manual step** is the effort switch at the top of each spec
-session. The session prompts for it; it can't be automated, because
-the settings file pins effort per model and both seats are the same
-model. Everything else resolves from `.claude/settings.json`, the
+session. The session prompts for it; it can't be automated under the
+standard profile, because the settings file pins effort per model and
+the spec session and the implementation session are the same model
+there. Under economy they are different models, so the pins do the
+work and the prompt is a confirmation rather than a request. Everything else resolves from `.claude/settings.json`, the
 agent frontmatter, and the orchestrator's overrides. Both session
 boundaries are new sessions, not `/clear`: `/clear` resets context
 but keeps the session's settings, which would leave implementation at
@@ -610,12 +639,13 @@ session's opening prompt. `/clear` has no place in the workflow;
 
 **Fable's footprint per spec** is the spec session (the conversation
 and the handful of turns that dispatch planning), one planner run,
-one sign-off (plus at most one re-review), any decision reviews — and
-the whole implementation session, at medium — and, under experiment
-2, every implementer dispatch, at medium. The reviewer's phase and
-per-task checks and the sweep still run on Opus. Nearly the whole
-spec now draws on Fable's allowance; that draw is one of the things
-the experiment measures.
+one sign-off (plus at most one re-review), any decision reviews, the
+close-out dispatch, and the whole implementation session at medium.
+The implementer, the reviewer's phase and per-task checks, and the
+sweep run on Opus. Measured across two specs with the implementer
+*also* on Fable, that extra row cost about a fifth more of the weekly
+allowance per task and bought nothing measurable, which is why the
+implementer default sits where it does.
 
 ## Principles worth generalizing
 
@@ -725,7 +755,10 @@ to a different stage, so that is where the boundaries go.
   implementation session has grown large; never clear or compact
   mid-task. If the person decides to stop at a phase pause, they say
   so or ask for a prompt, and it gets written then — the session
-  doesn't offer one in advance (see "Model tiering").
+  doesn't offer one in advance. The full rule, with the reason it is
+  written as a flat default rather than a condition, is under "Model
+  tiering" above, in the paragraph beginning "A phase pause gets no
+  prompt."
 - Each of the two session boundaries ends with a continuation prompt
   for the next session, so a new session costs the person a paste, not
   a reconstruction.
@@ -845,9 +878,9 @@ steps 0 and 2** — the scaffold exists, and the constitution stays in
 force unless this particular feature genuinely requires amending it,
 per `CLAUDE.md`'s own rule (amend explicitly, in its own commit, before
 the spec proceeds). Steps 1 and 3 still happen as a conversation with
-the person, in a spec session of its own at the top tier — a second or
-tenth spec doesn't skip the idea-and-design phase just because the
-project already has a working codebase.
+the person, in a spec session of its own, raised to high effort — a
+second or tenth spec doesn't skip the idea-and-design phase just
+because the project already has a working codebase.
 
 ## Who authors plan.md and tasks.md
 
@@ -986,10 +1019,15 @@ whether it belongs to a spec.
 in the repo: `CLAUDE.md`, `.claude/settings.json` (the standard
 profile) beside `settings.economy.json`, `.github/`, `.gitignore`,
 `specs/001-spec-name/` with `spec.md`, `plan.md`, and `tasks.md`, and
-`design/brief.md` for projects with a UI. `agents/` holds the three
-Claude Code subagent definitions — `skeptical-reviewer.md`,
-`sdd-implementer.md`, `sdd-planner.md` — which install to
-`~/.claude/agents/`, not into any project. The document skeletons have
+`design/brief.md` for projects with a UI. `agents/` holds the four
+Claude Code subagent definitions — `sdd-planner.md`,
+`sdd-implementer.md`, `skeptical-reviewer.md`, and
+`sdd-implementer-fable.md` — which install to `~/.claude/agents/`, not
+into any project. Install all four: `sdd-implementer-fable` is the
+close-out dispatch under the standard profile, so every project uses
+it even when the constitution conversation leaves ordinary tasks on
+`sdd-implementer` (the default). Which implementer the task row names
+is one of the questions that conversation settles. The document skeletons have
 placeholders and inline guidance comments, not fill-in-the-blank forms
 — expect to restructure sections as the actual project's needs diverge
 from the template, the same way real projects always do.

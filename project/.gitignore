@@ -14,3 +14,7 @@ Thumbs.db
 # Add language- or platform-specific entries here once CLAUDE.md's
 # Platform section is filled in for this project (e.g. node_modules/,
 # .build/, __pycache__/, *.xcuserstate).
+
+# Dispatch bundles, if this project writes them inside the repo
+# rather than in the session scratchpad
+scratch/

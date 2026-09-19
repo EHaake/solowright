@@ -13,7 +13,15 @@ app. "The reference project" below means that first one.
 
 ---
 
-## Model tiering: three tiers, and why the session is the lowest
+## Model tiering: three tiers, and why the session was the lowest
+
+> **Superseded, 2026-09-14.** Experiment 1 moved the session to the top
+> tier's model at medium effort; the reasoning below is why it started
+> at the bottom, and the cost premise it rests on turned out to be
+> wrong — Fable 5.1's cache reads bill at half the Opus rate. Read it
+> as the argument that was tested, not as current policy. "Experiment
+> 1: results" has what replaced it, and the constitution's role table
+> is where the answer lives now.
 
 ### The rule
 
@@ -179,6 +187,11 @@ sign-off, decision reviews, and the spec conversation — all short —
 the fallback is a one-line change (drop the override on the
 dispatches; both agent definitions default to the implementation
 tier), not a mid-spec model switch in a long-running session.
+<!-- As of 2026-09-19 the top tier also holds the session seat and the
+close-out dispatch, and sdd-implementer-fable.md pins model: fable
+rather than defaulting down, so the fallback is three moves: drop the
+overrides, switch the session to claude-opus-4-8 mid-session, and
+re-point every row naming the Fable implementer. -->
 Experiment 1 (below) puts the session on the top tier's model and so
 accepts exactly that switch as its fallback; needing it is one of
 the experiment's results.
@@ -193,13 +206,26 @@ inflates the context that every later turn re-sends. Medium is the
 "do the procedure, don't investigate" setting. The subagent
 definitions carry `effort: high`, so implementation, review, and
 planning still reason at full strength inside their own short
-contexts.
+contexts. (The exception, added 2026-09-19:
+`sdd-implementer-fable.md` carries `effort: medium`, and under the
+standard profile it is the standing close-out dispatch.)
 
 This is the least evidence-backed piece of the policy. Output tokens
 were a few percent of the total, so the direct saving from medium is
 small; the argument is behavioral, and plausible rather than measured.
 
 ### What would change the decision, and in what order
+
+> **Superseded, 2026-09-14 and again 2026-09-19.** Rung 4 is where the
+> session actually landed, by a route this ladder didn't anticipate:
+> not accumulated misses but a pricing fact. Rung 1's "first fix" was
+> later measured to cost about double the turns (see "Experiment 1:
+> results"). And `assets/settings-template.json` no longer exists —
+> the settings templates live in `project/.claude/`. The ladder's
+> successor is the role table in the constitution's model policy:
+> roles move a row at a time, with a tier-log entry, so "what would
+> change the decision" is now answered per role rather than for the
+> whole seat at once.
 
 1. **A tier log showing procedural misses by the session** — bundles
    that missed a file the implementer needed, a review skipped, a
@@ -236,6 +262,10 @@ this section took for granted and moved the session to the top tier's
 model.
 
 ### Experiment 1: the session on the top tier's model, at medium
+
+> **Concluded 2026-09-14 and merged.** The protocol and prompt below
+> are the record of how it was run, not instructions to run now.
+> Results are in the section that follows.
 
 **The premise that changed.** Everything above prices the session
 seat as "the model's rate times every re-send", as if a tier's rate
@@ -449,6 +479,12 @@ and nobody noticed for a week.
 
 ### Experiment 2: the implementer on Fable 5.1 at medium
 
+> **Concluded 2026-09-19.** Null result: Opus stayed the default
+> implementer and the choice became a row in the role table. The
+> protocol, decision rule and setup prompt below are the record of how
+> it was run — don't paste the prompt, and note that its `assets/`
+> paths predate the current layout. Results follow.
+
 **Premise.** The implementer is the bulk of a spec's tokens now that
 the seat is cheap: on the experiment-1 specs, Opus implementer
 dispatches were 45–65% of spec cost. Its context is short and fresh,
@@ -645,6 +681,52 @@ by dispatch shape, since 026 and 027 handed the close-out a
 pre-assembled bundle, so it is an observation to test rather than a
 result: if the bundle is what did it, close-out bundling is a cheaper
 win than any model change measured so far.
+
+### A documentation audit, and four follow-ups it closed, 2026-09-19
+
+Two read-only passes over `SKILL.md` and the two reference documents,
+run after a week of changes, on the theory that the changes had landed
+in the files where they were decided and not in the files that repeat
+them. That theory held. The findings worth recording as design, rather
+than as typos:
+
+**The install instruction was the last place to learn about a new
+agent.** `sdd-implementer-fable` had been decided into permanence and
+into the close-out row, but `references/collaboration-workflow.md`
+still told a reader to install three definitions. A machine set up
+from that document fails at the close-out of every spec under the
+standard profile. The general shape: a decision lands in the document
+where it was argued, and the operational step it implies lives
+somewhere else, unlinked. The counter is to treat "which file tells
+someone to do this" as part of the decision, not as cleanup.
+
+**Bundles had no defined home.** Every dispatch recipe wrote to
+`scratch/`, which appeared in no skeleton and no `.gitignore` — while
+the projects were in fact writing bundles to the session scratchpad
+outside the repo. Practice had quietly solved it and the document
+never caught up, which means a new project following the document
+would have committed its bundles. `scratch/` is now defined once as
+the session scratchpad, and added to the skeleton's `.gitignore` for
+anyone who keeps it in-repo.
+
+**Two documents drifted the same way from a third.** Both reference
+files described the session boundary as a *model* switch; `SKILL.md`
+says, correctly, that it is an effort switch, because under the
+standard profile both seats are the same model. Three copies of one
+fact, and the two copies furthest from the measurement moved together.
+Where the same fact has to appear in several places, the ones to
+distrust are the ones that don't own it.
+
+**Three older follow-ups were still open and are now closed or named.**
+The implementer has no simulator or browser tools, so a device pass
+runs in the person's walkthrough or a general-purpose agent — written
+into the workflow document rather than left as a note. The control
+spec separating model from effort was never run and is recorded here
+as dropped rather than pending: experiment 1's confound stands
+unresolved, and the honest statement is that the session's gain is
+attributable to model-and-effort together. The "state model and effort
+at session open" follow-up half-landed as `/effort status` being the
+authoritative check; that is enough and the rest is retired.
 
 ### "Never commit to main" was stopping roadmap edits, 2026-09-19
 
@@ -860,9 +942,13 @@ context is genuinely large and genuinely spent: after `plan.md` and
 context in the workflow, and the files now hold everything it
 decided), and after the merge (one spec's implementation has no value
 to the next spec's conversation). Both are new sessions rather than
-`/clear`, because the model changes at each: the spec session runs at
-the top tier, implementation at the session tier, and the next spec
-session has to open on the session tier to prompt for the switch.
+`/clear` because the *effort* changes at each and the settings file
+pins effort per model: the spec session runs at high, implementation
+at medium, and the next spec session opens at medium to prompt for the
+raise. (Written originally as "the model changes at each", which holds
+only where the top and session tiers are different models; under the
+standard profile they are one model at two efforts, so the effort pin
+is the real mechanism.)
 `/clear` left the workflow entirely; `/compact` remains for an
 implementation session that grows large.
 
@@ -961,7 +1047,8 @@ Claude Code session, at the top tier, once chat's reason to exist
 ## The name: Solowright, and why "system" rather than "skill" or "operating system"
 
 Decided September 2026. The project had outgrown "a Claude Skill": by
-then it was the skill, three subagent roles, a document set with
+then it was the skill, three subagent roles (four from 2026-09-19),
+a document set with
 templates, a model policy with settings, a measured cost model, a
 design record with rollback conditions, and a project-template repo.
 Several coordinated parts that turn a spec into reviewed software is a
@@ -1015,10 +1102,13 @@ folder layout, a pull-request template, a `.gitignore`, a human
 guide, and GitHub's one-click "Use this template".
 
 The fix was to remove the second copy rather than to sync it: the
-skill's first session now scaffolds a new project from `assets/` (the
-two small files moved in there; the guide moved to the skill repo as
-`How-To-Use.md`), so there is one source and drift is impossible by
-construction. The template repo was archived with a pointer. What was
+skill's first session scaffolds a new project from the skill's own
+templates (the two small files moved in with them; the guide moved to
+the skill repo as `How-To-Use.md`), so there is one source and drift
+is impossible by construction. Those templates lived in `assets/` when
+this was decided and moved to `project/` a few days later, in the
+repo-layout entry above; the mechanism is what this entry is about,
+and it did not change. The template repo was archived with a pointer. What was
 given up: the one-click template. What was gained: one install instead
 of two, and every project starting from the current templates.
 
