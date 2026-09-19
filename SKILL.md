@@ -446,40 +446,60 @@ review, a stale `tasks.md` edit, a task done by hand — raise its
 effort to high, one line in the settings file, before changing its
 model.
 
-**One more question at setup: which implementer.** The profile picks
-the tiers; this picks which of two installed implementer definitions
-the project dispatches for ordinary tasks. `sdd-implementer` (the
-implementation tier, `opus` at high) is the default and is what most
-projects should take. `sdd-implementer-fable` is the same body at the
-top tier's model and medium effort. Two kaazap specs measured them
-head to head: cost per completed task was the same inside the
-spec-to-spec noise, both ran every task first try, and the top tier's
-version drew about a fifth more of the separate allowance that the
-spec conversation, the planner, and the sign-off already compete for.
-So the stronger model earns its place where judgment is the work, and
-the implementer — bounded transcription against a verification command
-— is not that place. The honest limit on that finding: it was measured
-on the simplest of three projects, the case least likely to reward a
-stronger model, so a project whose tasks are genuinely hard is the
-open question this setting exists to let someone answer.
+**Under the two profiles, a role table.** The profile fills the three
+tier names; the table says which tier each role runs at, one row per
+dispatch — spec conversation, planner, sign-off, decision review, task
+implementation, close-out, per-task and phase review, pre-merge sweep,
+and the session's own bookkeeping. Its cells hold tier names rather
+than model IDs, so switching profile re-points every row at once and
+the three names stay the only place a model is written down. It lives
+in the constitution's model policy, so every session reads it before
+it dispatches anything.
 
-Ask it once, in the constitution conversation, with the default
-stated; never re-open it spec by spec. Changing it later is one word
-in the constitution and a tier-log row naming the spec it changed at.
-Both definitions stay installed either way, so the switch is a word,
-not a reinstall.
+The table exists because the profiles are all-or-nothing and most real
+requests aren't. "Keep the spec conversation on the top tier and move
+everything else down" is a reasonable thing to want when an allowance
+is running low, and before the table there was nowhere to record it:
+a session would do it, and the next session would never know it had
+been asked. Now it is a row edit. Stepping a role down means replacing
+"top tier (override)" with "implementation tier (no override)", which
+is literally what the dispatch does differently.
 
-**The close-out dispatch is the exception, and goes to the top tier's
-model** under the standard profile whatever the line above says. The
-close-out task writes the `ROADMAP.md` and `DECISIONS.md` entries, the
-acceptance evidence, and the spec's summary — synthesis and prose, not
-transcription, and the one implementer dispatch shaped like planning.
-The measured close-outs cost $5.66 and $3.74 at the implementation
-tier against $0.81 and $1.31 at the top tier's model at medium, but
-those specs also handed close-out a pre-assembled bundle, so the gap
-is confounded and worth watching in the tier log rather than trusting.
-Under the economy profile nothing runs on the top tier's model, close-
-out included.
+**Two rows worth explaining.** *Task implementation* defaults to the
+implementation tier because it was measured there: two kaazap specs
+ran the implementer at the top tier's model at medium against the Opus
+baseline, and cost per completed task matched within noise, first-try
+rate matched at 6/6 and 9/9, and the top tier's separate allowance
+drew about a fifth more per task. The stronger model earns its place
+where judgment is the work, and bounded transcription against a
+verification command is not that place. The honest limit: it was
+measured on the simplest of three projects, the case least likely to
+reward a stronger model, so a project whose tasks are genuinely hard
+is the open question this row exists to let someone answer. Ask it
+once in the constitution conversation, with the default stated; never
+re-open it spec by spec.
+
+*Close-out* goes to the top tier under the standard profile whatever
+the implementation row says, because it writes the `ROADMAP.md` and
+`DECISIONS.md` entries, the acceptance evidence, and the spec's
+summary — synthesis and prose, the one implementer dispatch shaped
+like planning. The measured close-outs cost $5.66 and $3.74 at the
+implementation tier against $0.81 and $1.31 at the top tier's model at
+medium, but those specs also handed close-out a pre-assembled bundle,
+so the gap is confounded and worth watching in the tier log rather
+than trusting.
+
+**A model change the person asks for is written into the table before
+it is acted on**, in the same turn, with a tier-log row naming the
+date and the spec it changed at — then the session does it. This is
+the same principle as everything else here: a preference that lives
+only in a session's context dies at the session boundary, and the next
+session doesn't know enough to ask. If the person frames it as
+temporary, the condition and the date go in the row's comment, and
+nobody reverts it by inference — the person says when it ends. The
+allowance fallback is the one exception, because it fires on a
+condition rather than a request, applies for the rest of the window,
+and leaves the rows alone.
 
 **Spec conversations happen in Claude Code, in a spec session of its
 own** — the project's first session included, which scaffolds the repo
@@ -773,8 +793,10 @@ involved), and follow that instead.
    project, or one that should leave the top tier's allowance to other
    projects — see "Three names, one place, two profiles"; if economy,
    swap `.claude/settings.json` for the economy template), and, on the
-   standard profile, which implementer this project dispatches — fill in
-   `CLAUDE.md` before any code exists, so the first thing an
+   standard profile, which implementer the role table's task row names
+   (ask this one directly, with the default stated; the rest of the
+   table is left at its defaults and moved later if the person wants)
+   — fill in `CLAUDE.md` before any code exists, so the first thing an
    implementation session reads is the constitution, not its own
    defaults, and commit it. Move through this efficiently once the idea
    is settled: when someone doesn't have a strong preference on a

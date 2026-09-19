@@ -98,32 +98,71 @@ sign-off that keeps finding blocking problems is the signal.
 These names are the only place a model is spelled out; everything
 below refers to the roles.
 
-**Task implementer**: `sdd-implementer` (the implementation tier,
-`opus` at high). <!-- Asked once, at project setup, and answered here.
-The alternative is `sdd-implementer-fable` (the top tier's model at
-medium effort) — same body, different frontmatter. Measured over two
-kaazap specs: cost per completed task was the same within noise, first-
-try rate was the same at 6/6 and 9/9, and the Fable implementer drew
-about a fifth more of the top tier's separate allowance. So the default
-is the implementation tier, and the top tier's model is the choice for
-a project whose tasks are genuinely hard rather than bounded
-transcription against a fast automated check. That case is untested —
-the measurement ran on the simplest of three projects, which is the
-case least likely to reward a stronger model. Switching later is one
-word in this line and a tier-log row saying from which spec; no
-re-scaffolding, both agent definitions stay installed. Under the
-economy profile this line always reads `sdd-implementer`. -->
+### The role table
 
-**Close-out dispatch**: `sdd-implementer-fable` under the standard
-profile, `sdd-implementer` under the economy profile — whatever the
-line above says for ordinary tasks. The close-out task writes prose:
-the `ROADMAP.md` and `DECISIONS.md` entries, the acceptance evidence,
-the spec's own summary. That is synthesis, not transcription, and it
-is the one implementer dispatch the top tier's model is worth paying
-for. The measured close-out dispatches cost $5.66 and $3.74 on the
-implementation tier against $0.81 and $1.31 on the top tier's model at
-medium, though that gap is confounded by bundle shape and is a reason
-to watch the tier log, not a settled number.
+Every dispatch in this project resolves here. Cells hold tier names,
+never model IDs, so switching profile re-points every row at once and
+the three names above stay the only place a model is spelled out.
+"Override" means the orchestrator passes a per-call model override on
+that dispatch; without one, the agent's own frontmatter applies, and
+every agent definition defaults to the implementation tier except
+`sdd-implementer-fable`, which pins the top tier's model at medium.
+
+| Role | Dispatched as | Model | Effort |
+|---|---|---|---|
+| Spec conversation | the spec session itself | session tier | high (raised per session) |
+| Plan and tasks draft | `sdd-planner` | **top tier** (override) | high |
+| Plan and tasks sign-off | `skeptical-reviewer` | **top tier** (override) | high |
+| Decision review | `skeptical-reviewer` | **top tier** (override) | high |
+| Task implementation | `sdd-implementer` | implementation tier | high |
+| Close-out task | `sdd-implementer-fable` | top tier | medium |
+| Per-task and phase review | `skeptical-reviewer` | implementation tier | high |
+| Pre-merge sweep | `skeptical-reviewer` | implementation tier | high |
+| Orchestration and bookkeeping | the session itself | session tier | medium |
+
+**Moving a role.** Edit its row, nothing else. To step a role down,
+replace **top tier** (override) with "implementation tier (no
+override)"; the dispatch then carries no override and the agent runs
+at its own default. To change the implementer, change the agent name
+in that row — both definitions stay installed, so it is a word, not a
+reinstall. Under the economy profile the top tier *is* the
+implementation tier, so the overrides become no-ops and the close-out
+row reads `sdd-implementer`; nothing else in the table changes.
+
+**A change the person asks for gets written here before it is acted
+on.** If they say to move a role — for one window, for this project,
+for good — edit the row, note it in the current spec's tier log with
+the date and which spec it changed at, and commit, in the same turn,
+*before* the next dispatch. Then do it. A model preference that lives
+only in a session's context is gone at the next session boundary and
+the next session will not know it ever existed, which is the one
+failure this whole repo-as-interface arrangement exists to prevent.
+If the person frames it as temporary ("while my allowance is low"),
+write the row with the condition and the date in the comment, so
+whoever reads it next knows when it stops applying and can ask. Never
+infer the end of a temporary change and revert it unasked.
+
+<!-- Why the two rows most likely to be questioned read as they do.
+
+Task implementation sits at the implementation tier because it was
+measured there: over two kaazap specs with the implementer at the top
+tier's model at medium, cost per completed task matched within noise,
+first-try rate matched at 6/6 and 9/9, and the top tier's separate
+allowance drew about a fifth more per task. The honest limit is that
+it was measured on bounded transcription against a fast automated
+check, the case least likely to reward a stronger model, so a project
+whose tasks are genuinely hard is the open question this row exists to
+let someone answer. Ask it once, at project setup; don't re-open it
+per spec.
+
+Close-out sits at the top tier because it writes the ROADMAP.md and
+DECISIONS.md entries, the acceptance evidence and the spec summary —
+synthesis and prose, the same work the top tier earns its place on
+everywhere else. The measured close-outs cost $5.66 and $3.74 at the
+implementation tier against $0.81 and $1.31 at the top tier's model at
+medium, but those specs also handed close-out a pre-assembled bundle,
+so the gap is confounded: watch it in the tier log rather than trust
+it. -->
 
 - **The session runs at the session tier, at medium effort**, set in
   this repo's `.claude/settings.json` — written at project setup from
@@ -176,12 +215,15 @@ to watch the tier log, not a settled number.
   logged as a sub-lettered task; a finding that is really the spec
   being ambiguous goes back to the person as a product question. The
   session never diagnoses in place.
-- **The top tier runs only inside the decisions**: the `sdd-planner`
-  (one dispatch per spec) and the `skeptical-reviewer` on plan/tasks
-  sign-off and on decision reviews — each dispatched with an explicit
-  per-call override to the top tier's name. The three agent
-  definitions carry `effort: high`, which overrides the session's
-  medium, so reasoning stays at full strength where it matters.
+- **The top tier runs only where the role table says it does**: by
+  default the `sdd-planner` (one dispatch per spec), the
+  `skeptical-reviewer` on plan/tasks sign-off and on decision reviews,
+  and the close-out dispatch. The first three carry an explicit
+  per-call override to the top tier's name; drop the override and the
+  definition's own implementation tier applies, which is exactly what
+  stepping one of those rows down means. The agent definitions carry
+  `effort: high`, which overrides the session's medium, so reasoning
+  stays at full strength where it matters.
 - **Spec conversations happen in a Claude Code spec session of their
   own**, at the top tier, never inside an implementation session. The
   spec session also runs planning once `spec.md` is approved — the
@@ -208,11 +250,11 @@ to watch the tier log, not a settled number.
   means it would fail an acceptance criterion or a test, or contradicts
   `plan.md` or `CLAUDE.md`; nothing else blocks. Anything open after
   the re-review goes to the tier log and the sweep.
-- **Implementation runs in the subagent the "Task implementer" line
-  above names**, and the close-out task in the one the "Close-out
-  dispatch" line names, one task per dispatch, sequentially. Neither
-  is re-decided per spec: the lines are the answer until the person
-  changes them. The orchestrating
+- **Implementation runs in the subagent the role table names** — the
+  task implementation row for ordinary tasks, the close-out row for
+  close-out — one task per dispatch, sequentially. Neither is
+  re-decided per spec: the table is the answer until the person
+  changes a row. The orchestrating
   session triages each task, dispatches routine ones on a task bundle
   assembled with shell (task line, plan section, acceptance criteria,
   files, the pattern file to copy), and on return verifies with the
@@ -255,9 +297,14 @@ to watch the tier log, not a settled number.
   window (drop the override; both definitions default to `opus`), and
   switch the session itself to `claude-opus-4-8` mid-session
   (`/model claude-opus-4-8` — one cache re-write, then continue), and
-  dispatch `sdd-implementer` for any task whose line above names
-  `sdd-implementer-fable`, including the close-out. Nothing else
-  changes; the tier log records what ran and when the switch happened.
+  dispatch `sdd-implementer` for any row that names
+  `sdd-implementer-fable`, including close-out. This is the whole role
+  table stepped down at once, and it is the automatic form: it fires on
+  the allowance, for the rest of the window, and the rows are not
+  edited. A step-down the person *asks* for is the other form — it
+  edits the rows and persists until they say otherwise. Don't confuse
+  them, and don't silently revert one the person asked for. Either way
+  the tier log records what ran and when the switch happened.
 - **Escape hatch**: two failed verifications on one task, or a "stopped
   on a judgment call" the orchestrator considers well-specified, and
   the orchestrator does that task itself, noting the

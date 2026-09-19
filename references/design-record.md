@@ -646,6 +646,43 @@ pre-assembled bundle, so it is an observation to test rather than a
 result: if the bundle is what did it, close-out bundling is a cheaper
 win than any model change measured so far.
 
+### The role table, 2026-09-19
+
+Adding a second per-role setting exposed the shape of the problem. The
+model policy had exactly two knobs: the profile, which moves every
+role at once, and two named lines, for the implementer and the
+close-out dispatch. Everything else — spec conversation, planner,
+sign-off, decision review, phase review, sweep, session seat — moved
+only by editing the tier names, which is to say all together.
+
+The person's question was whether "spec conversation on the top tier,
+everything else down, until I say otherwise" would be understood and
+respected. The parts existed: that request is precisely the standing
+Fallback clause minus the session model switch. What didn't exist was
+anywhere to write it. A session asked for it would have done it, held
+it in context, and lost it at the session boundary — and the next
+session wouldn't have been wrong, it would simply never have known.
+That is the failure the repo-as-interface principle exists to prevent,
+arriving through the one door nobody had checked: the model policy
+itself was the part of the constitution people changed by conversation
+rather than by commit.
+
+So the two named lines became a nine-row table, one row per dispatch,
+holding tier names rather than model IDs so a profile switch still
+re-points everything at once. Stepping a role down is written as
+"replace top tier (override) with implementation tier (no override)",
+which is literally the mechanical difference in the dispatch, so the
+instruction and the action are the same sentence. And one rule: a
+model change the person asks for is written into the row and committed
+*before* the next dispatch, with a tier-log entry naming the date and
+spec. Temporary changes carry their condition in the row's comment,
+and nobody reverts by inference.
+
+The allowance fallback stays as it was and is now explicitly the other
+kind: it fires on a condition rather than a request, lasts for the
+window, and doesn't touch the rows. Conflating the two would have made
+an asked-for step-down look revertible.
+
 ### The implementer becomes a per-project setting, 2026-09-19
 
 The experiment's decision rule and the person's own reading converged,

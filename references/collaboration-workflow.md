@@ -416,18 +416,24 @@ Scope by invocation type:
   spec; the first measured sweep read the codebase and cost more than
   five tasks, which is what the documents-and-diff bound is for.
 
-**Tier by invocation type.** The reviewer's definition defaults to
-the implementation tier (`model: opus`), which is right for per-phase
-and per-task reviews — checks of a diff against the plan sections it
-implements, and the frequent case. Override up to the top tier named
-in `CLAUDE.md` only where the reviewer is exercising judgment rather
-than checking transcription: plan/tasks sign-off and the decision
-reviews from Step 3. The pre-merge sweep stays at
-the default tier — it's broad by design, which makes it the most
-expensive single invocation, and the orchestrator adjudicates its
-findings anyway. The default should be the frequent
-case, because forgetting to override up costs a lesser review while
-forgetting to override down costs the budget.
+**Tier by invocation type — read it off the role table.** The
+constitution's model policy has one row per dispatch, and the reviewer
+appears in three of them: sign-off and decision reviews at the top
+tier with a per-call override, per-task and phase reviews and the
+pre-merge sweep at the definition's own implementation tier. That
+split is the general rule made concrete — override up only where the
+reviewer exercises judgment rather than checking transcription. The
+sweep stays down despite being the most expensive single invocation,
+because it's broad by design and the orchestrator adjudicates its
+findings anyway. The default belongs on the frequent case, since
+forgetting to override up costs a lesser review while forgetting to
+override down costs the budget.
+
+Read the row, don't recall the rule: a project may have moved one.
+Stepping a role down is exactly "drop the override," which is why the
+table is written in those terms, and a person who asks for it gets it
+written into the row and committed before the next dispatch — not
+carried in the session's head, where the next session can't find it.
 
 **Log it.** The subagent's return reports its token usage. Record each
 reviewer invocation in the spec's tier log alongside the implementer
