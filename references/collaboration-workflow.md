@@ -278,7 +278,25 @@ report is the cheapest escalation in the whole workflow — it costs one
 subagent run — so treat it as the system working, not as a failure to
 route around.
 
-**When the walkthrough finds something.** At the phase pause the
+**Whether this phase pauses at all.** Read the phase header's
+`walkthrough:` marking and the constitution's pause cadence. Under the
+default — "when there's something to try" — a phase marked with a
+walkthrough pauses, and a phase marked `walkthrough: none` does not:
+append its reason to the walkthrough list in `tasks.md`, note it in
+the tier log, and dispatch the next phase's first task. Under "every
+phase" pause either way; under "only when blocked" pause at neither.
+The phase review runs regardless — a phase that doesn't pause is
+unattested, not unchecked.
+
+Two things not to do. Don't re-decide the marking mid-phase because
+the work turned out more visible than expected: if a `none` phase
+produced something worth trying, say so in the report at the next
+pause and let the planner's marking stand, or raise it as a planning
+miss. And don't pause "just to check in" — a pause with nothing to try
+is the thing the cadence setting exists to remove, and offering one
+teaches the person that pauses are noise.
+
+**When the walkthrough finds something.** At a phase pause the
 person uses the app and reports back. A report that something is wrong
 is a finding against an acceptance criterion, in the person's words —
 not a task line, and not something to diagnose in the session. Restate
@@ -333,7 +351,7 @@ than carrying state — anything decided at the pause goes into
 > spec.md, plan.md, and tasks.md, then start from the first unchecked
 > task (Phase 1). Involvement level: product owner. Dispatch per the
 > constitution's model policy; skeptical-reviewer after each phase on
-> a phase bundle; pause for me after each phase.
+> a phase bundle; pause on the constitution's cadence.
 
 A merge ends the same way, with the prompt for the next spec session
 if `ROADMAP.md` has an obvious next item — including the reminder to

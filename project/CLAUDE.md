@@ -63,12 +63,59 @@ approve technical work: `plan.md` and `tasks.md` are drafted by the
 (and any task the planner marked for its own review) is reviewed by
 the `skeptical-reviewer` rather than the person, and what reaches the
 person is a spec-conformance summary, not an architecture review.
-Implementation pauses after each phase unless the person says to run
-further, and whenever something unexpected bears on spec adherence.
+Implementation pauses on the cadence set below, and whenever something
+unexpected bears on spec adherence.
 
 **Technical lead.** As above, but the person also reads and approves
 `plan.md` and `tasks.md`, and implementation pauses for their review
 after every task the planner marked `review: per-task`.
+
+## Pause cadence
+
+<!-- A separate question from the involvement level, asked at the same
+time and answered here. Involvement level says who approves technical
+work; this says how often the build stops for the person. Changing it
+later is one word on this line plus a tier-log row, same as a role
+table row — and it can change mid-spec. -->
+
+**When there's something to try** (the default).
+
+The three values:
+
+- **When there's something to try.** Pause after a phase the planner
+  marked with a walkthrough, and run straight through the phases it
+  marked `walkthrough: none`. A foundational phase that adds a type,
+  a shared helper, or a test harness changes nothing the person can
+  observe, so a pause there asks them to attest to something they
+  cannot see — which is a gate in appearance only.
+- **Every phase.** Pause after each one regardless. The most
+  conservative setting, and the right one for a project whose phases
+  are hard to tell apart from outside, or early in a project where
+  nobody trusts the marking yet.
+- **Only when blocked.** No phase pauses at all. The spec runs to the
+  pre-merge sweep and the person does one walkthrough at the end,
+  against the accumulated list. The most hands-off setting, and the
+  one that costs the most to unwind if something went wrong early.
+
+**Blockers pause under every cadence, including "only when blocked".**
+These are not phase pauses and are never skipped:
+
+- Either escalation trigger: something in the design turns out
+  infeasible or needs real rework, or an unknown surfaces that would
+  materially change the project's direction.
+- A product question `spec.md` doesn't settle.
+- The escape hatch firing twice on one task, which means the task
+  list itself is wrong.
+- A sweep or review finding that can't be resolved without changing
+  what the spec promised.
+
+**Nothing skipped is dropped.** Every phase that runs without a pause
+adds its walkthrough items — or, if it had none, its one-line reason —
+to a running list in `tasks.md`, and that list is what the person
+walks through at the close-out. Skipping a pause defers the person's
+check; it does not remove it. The tier log records which phases ran
+unpaused, so a defect found late can be traced to the phase that
+introduced it.
 
 ## Model policy
 

@@ -33,9 +33,11 @@ machine (see `README.md`, "Installing"); this file is for you.
      you'd rather think this through in chat first, do, and bring the
      conclusions here.
    - **Constitution** — platform, architecture, testing philosophy,
-     dependency policy, and your involvement level (product owner is
-     the default: you own the spec and try the app; you don't approve
-     technical plans). Fills in `CLAUDE.md`. Should move quickly.
+     dependency policy, your involvement level (product owner is the
+     default: you own the spec and try the app; you don't approve
+     technical plans), and your pause cadence (how often the build
+     stops for you — see below). Fills in `CLAUDE.md`. Should move
+     quickly.
    - **First spec** — push on ambiguity here; it's nearly free now and
      expensive after code exists. Expect it to be bigger than later
      specs. Anything decided only in conversation isn't decided: the
@@ -77,11 +79,31 @@ design turns out infeasible or needs real rework, or a previously
 unknown consideration surfaces that would materially change the
 project's direction. Both are meant to be uncommon.
 
-A phase pause is a pause, not a handoff: the same session continues
-when you say so, and it won't hand you a prompt for a fresh one. If you
-do want to stop there, say so or ask for a prompt and you'll get one.
-Clearing context at a phase costs a full re-read of the constitution
-and the spec's three files, which is why it isn't offered by default.
+**How often this happens is your choice**, set in the constitution
+and changeable any time by just saying so. The default is *when
+there's something to try*: the planner marks each phase with what you
+could look at, and phases that change nothing you can see — a new
+type, a shared helper, a test harness — run straight through without
+stopping you. *Every phase* stops regardless. *Only when blocked* runs
+the whole spec and gives you one walkthrough at the end.
+
+Nothing you skip is lost. Every phase that runs without stopping adds
+what it would have asked you to try to a list, and that list is your
+walkthrough at the close-out. The tradeoff is timing, not coverage: a
+problem introduced early and found at the merge costs more to unwind
+than the same problem caught early. That's the price of the
+hands-off settings, and it's yours to decide.
+
+Some things stop the build no matter what you chose: a design that
+turns out infeasible, an unknown that would change the project's
+direction, a product question the spec doesn't answer, or a task that
+fails twice in a way that means the task list itself is wrong.
+
+A pause is a pause, not a handoff: the same session continues when you
+say so, and it won't hand you a prompt for a fresh one. If you do want
+to stop there, say so or ask for a prompt and you'll get one. Clearing
+context at a phase costs a full re-read of the constitution and the
+spec's three files, which is why it isn't offered by default.
 
 At the merge, the session ends with the prompt for the next spec, if
 `ROADMAP.md` has one — that's the second boundary.

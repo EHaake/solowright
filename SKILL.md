@@ -71,8 +71,42 @@ every pause. Two levels:
   `tasks.md`, and implementation pauses for their review after every
   task the planner marked `review: per-task`.
 
+**Pause cadence is a separate question, asked at the same time.**
+Involvement level says who approves technical work; cadence says how
+often the build stops. Three values, in the constitution next to the
+involvement level: **when there's something to try** (the default),
+**every phase**, and **only when blocked**. Under the default the
+planner marks each phase header `walkthrough: <what to try>` or
+`walkthrough: none — <why>`, and the orchestrator pauses after the
+first kind and runs straight through the second.
+
+The marking belongs to the planner because it can see the whole spec
+at once, and because the orchestrator mid-phase cannot tell a phase
+with nothing to show from one it merely hasn't described well. The
+test is observability: does this phase change something the person
+could see by using the app? A type, a shared helper, a test harness,
+an internal refactor — no. A screen, a flow, different behavior — yes.
+
+Two things keep the hands-off settings honest. A `none` phase still
+gets its skeptical-reviewer phase review; what's skipped is the
+person's attestation, not the check. And every unpaused phase appends
+what it would have asked the person to try to a walkthrough list in
+`tasks.md`, which is what they walk at the close-out — so the check is
+deferred, never dropped, and the tier log says which phases ran
+unpaused, so a defect found late can be traced to where it came from.
+The real cost of a hands-off cadence is exactly that: a problem
+introduced in phase one and found at the merge is more expensive to
+unwind than one caught in phase one. That is the trade the setting
+exists to let someone make deliberately.
+
+Blockers pause under every cadence, including "only when blocked":
+either escalation trigger, a product question `spec.md` doesn't
+settle, the escape hatch firing twice on one task, and any finding
+that can't be resolved without changing what the spec promised.
+
 Everything below that mentions a review, an approval, or a pause is
-written for the product-owner level unless it says otherwise; the
+written for the product-owner level at the default cadence unless it
+says otherwise; the
 technical-lead variant is the same flow with the person added back at
 those gates. Whatever reaches the person — a pause report, a
 spec-conformance summary, a question — is written in plain language:
@@ -617,7 +651,7 @@ definitions and the orchestrator's overrides do the rest:
 | Implementation, per task | same session | the implementer the constitution names — `sdd-implementer` at **Opus, high** by default, on a task bundle | orchestrator → implementer |
 | Marked per-task review | same session | `skeptical-reviewer` at **Opus, high** | orchestrator → reviewer |
 | Phase review | same session | `skeptical-reviewer` at **Opus, high**, on a phase bundle | orchestrator → reviewer |
-| Phase pause report | same session | Fable, medium | orchestrator → the person, who attests by using the app and says continue; the session stays open |
+| Phase pause report | same session | Fable, medium | orchestrator → the person, who attests by using the app and says continue; the session stays open. Only for phases the planner marked with a walkthrough, under the default cadence; an unmarked phase adds its line to the walkthrough list and the session continues |
 | Walkthrough finding | same session | the same implementer, on a diagnosis bundle; a decision review at **Fable** if it returns options | the person → orchestrator → implementer |
 | Pre-merge sweep | same session | `skeptical-reviewer` at **Opus, high**, documents + spec diff | orchestrator → reviewer |
 | Close-out task | same session | `sdd-implementer-fable` at **Fable, medium**, on a close-out bundle | orchestrator → implementer |
@@ -838,8 +872,11 @@ involved), and follow that instead.
    swap `.claude/settings.json` for the economy template), and, on the
    standard profile, which implementer the role table's task row names
    (ask this one directly, with the default stated; the rest of the
-   table is left at its defaults and moved later if the person wants)
-   — fill in `CLAUDE.md` before any code exists, so the first thing an
+   table is left at its defaults and moved later if the person wants),
+   and the pause cadence (ask it right after the involvement level —
+   they sound alike and aren't: one is who approves, the other is how
+   often the build stops) — fill in `CLAUDE.md` before any code
+   exists, so the first thing an
    implementation session reads is the constitution, not its own
    defaults, and commit it. Move through this efficiently once the idea
    is settled: when someone doesn't have a strong preference on a

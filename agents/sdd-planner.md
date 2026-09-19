@@ -60,6 +60,23 @@ methodology behind it:
    whose mistake a dozen later files would inherit. The default is one
    review per phase, everywhere; an orchestrator left to guess guesses
    "all of them," which is the expensive answer.
+3a. **Mark every phase for the walkthrough**, on its header line, as
+   either `walkthrough: <what the person can try>` or `walkthrough:
+   none — <why>`. The test is whether the phase changes something the
+   person could observe by using the app: a screen, a flow, output
+   they would read, behavior that differs. A phase that adds a type, a
+   shared helper, a test harness, or an internal refactor changes
+   nothing observable and takes `none`. Be concrete on the `yes` side
+   — "the Outfitter lists locked cards, greyed, with their prices" is
+   usable; "the shop changes" is not, and the orchestrator will have
+   to invent the walkthrough it should have been handed. You are the
+   right place for this call because you can see the whole spec at
+   once; the orchestrator, mid-phase, cannot. Mark honestly rather
+   than generously: under the default cadence a `none` phase runs
+   without stopping, so marking everything `yes` to be safe hands the
+   person a pause with nothing in it, which is the failure this
+   marking exists to prevent. If you genuinely can't tell, mark it
+   `yes` and say why in the reason.
 4. Shared components get one task, referenced by every screen that
    uses them, not rebuilt per screen.
 5. Each task names the files it touches and the existing file whose

@@ -32,9 +32,17 @@ not summarized.
 
 ---
 
-## Phase 0 — Project scaffolding (one-time)
+## Phase 0 — Project scaffolding (one-time) · `walkthrough: none — nothing runs yet`
 
-<!-- Foundational setup. Mistakes here are cheap to catch immediately
+<!-- Every phase header carries a walkthrough marking, written by the
+planner: either `walkthrough: <what the person can try>` or
+`walkthrough: none — <why>`. Under the default pause cadence the
+orchestrator pauses after a marked phase and runs straight through a
+`none` one, adding its reason to the close-out walkthrough list below.
+Under "every phase" it pauses either way; under "only when blocked" it
+pauses at neither. Blockers pause under all three.
+
+Foundational setup. Mistakes here are cheap to catch immediately
 and expensive to unwind later — this phase (and the data-model phase
 right after it) is where marking a task `review: per-task` is worth it
 for anything a dozen later files will depend on. Mark sparingly; the
@@ -44,15 +52,21 @@ tasks also pause for the person. -->
 - [ ] **T001** — [...] *Verify: [concrete, checkable outcome].*
   *review: per-task*
 
-## Phase 1 — [Data model / core architecture]
+## Phase 1 — [Data model / core architecture] · `walkthrough: none — no user-visible change`
 
-<!-- Still foundational. Same tight review cadence as Phase 0. -->
+<!-- Still foundational. Same tight review cadence as Phase 0. Note
+that "no pause" and "no review" are different things: a `none` phase
+still gets its skeptical-reviewer phase review. What's skipped is the
+person's attestation, not the check. -->
 
-## Phase 2 onward — [feature work, roughly in dependency order]
+## Phase 2 onward — [feature work, roughly in dependency order] · `walkthrough: [what the person can try, concretely]`
 
 <!-- Per-phase review here as everywhere — a wrong view or a wrong CRUD
 field is cheap to fix after the fact. Re-tighten around anything that
-turns out to be a genuine judgment call, even mid-phase. -->
+turns out to be a genuine judgment call, even mid-phase.
+
+Feature phases usually earn a walkthrough; write what to try in the
+person's terms, not the task's. -->
 
 ## Final phase — Spec close-out
 
@@ -72,6 +86,20 @@ and no test fails when they go stale. -->
 
 ---
 
+## Walkthrough list (for the close-out)
+
+<!-- The orchestrator appends to this as it goes: one line per phase,
+whether it paused or not. A phase that ran unpaused contributes the
+walkthrough it would have asked for, so the person's check is deferred
+rather than dropped, and the close-out walkthrough covers the whole
+spec. Under "every phase" this list is a summary; under "only when
+blocked" it is the entire walkthrough. -->
+
+| Phase | Paused? | What to try |
+|---|---|---|
+| Phase 1 | no — `walkthrough: none` | nothing observable; type + helper only |
+| Phase 2 | yes | [what the person tried, and what they said] |
+
 ## Handoff note
 
 Once this file is signed off (per the involvement level in the
@@ -86,7 +114,7 @@ constitution), hand it to the implementer with something like:
 > the skeptical-reviewer review after each phase with a phase bundle;
 > tasks marked review: per-task get their own review as well[;
 > technical lead only: and a pause for me after each marked task].
-> Pause for me after each phase [or: "run through phases X–Y without
+> Pause on the constitution's cadence [or: "run through phases X–Y without
 > pausing"], and whenever something unexpected bears on spec
 > adherence.
 

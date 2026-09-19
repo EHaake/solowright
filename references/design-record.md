@@ -682,6 +682,62 @@ pre-assembled bundle, so it is an observation to test rather than a
 result: if the bundle is what did it, close-out bundling is a cheaper
 win than any model change measured so far.
 
+### Pause cadence becomes its own setting, 2026-09-19
+
+The per-phase pause was never per-task — that part of the design was
+already right — but "after each phase" turned out to be the wrong unit
+anyway. A spec with a foundational phase, a revision phase, and two
+feature phases stopped four times, and at least one of those stops
+asked the person to attest to a new type and a shared helper. There is
+nothing to attest to there. A gate the person clicks through because
+there is nothing to see is the same failure the record already
+identified at the technical-lead level: review in appearance only,
+worse than no gate, because it spends the person's attention on the
+occasions when it isn't needed and thereby devalues the ones when it
+is.
+
+So cadence became its own setting, orthogonal to involvement level and
+asked beside it: **when there's something to try** (the new default),
+**every phase**, **only when blocked**. Involvement level says who
+approves technical work; cadence says how often the build stops. They
+sound alike and had been conflated, which is why the pause rule lived
+inside the involvement-level paragraph and could only move by changing
+the person's whole role.
+
+**The marking belongs to the planner.** Each phase header carries
+`walkthrough: <what to try>` or `walkthrough: none — <why>`. Putting
+the call at planning time rather than at the pause is the load-bearing
+choice: the planner sees the whole spec at once, while an orchestrator
+mid-phase cannot distinguish a phase with nothing to show from one it
+has merely failed to describe. The planner's instruction says to mark
+honestly rather than generously, for the same reason — marking
+everything `yes` to be safe reproduces the problem exactly.
+
+**Two guards keep the hands-off settings honest.** A phase that
+doesn't pause still gets its skeptical-reviewer phase review: what is
+skipped is the person's attestation, not the check. And every unpaused
+phase appends what it would have asked to a walkthrough list in
+`tasks.md`, which is what the person walks at the close-out, with the
+tier log recording which phases ran unpaused. The check is deferred,
+not dropped, and a defect found at the merge can be traced to the
+phase that introduced it.
+
+**The cost, stated plainly, because the setting is a trade.** A
+problem introduced in phase one and found at the merge is more
+expensive to unwind than the same problem caught in phase one. Fewer
+pauses buy autonomy with late detection. That is a real price, and the
+right person to decide whether to pay it is the one whose attention is
+being conserved — which is why this is a setting and not a new
+default imposed everywhere.
+
+Blockers pause under every cadence, "only when blocked" included: both
+escalation triggers, a product question `spec.md` doesn't settle, the
+escape hatch firing twice on one task (which means the task list is
+wrong, not the code), and any finding that can't be resolved without
+changing what the spec promised. A cadence setting governs routine
+stops; it never governs the ones that exist because the system has
+stopped knowing what to do.
+
 ### A documentation audit, and four follow-ups it closed, 2026-09-19
 
 Two read-only passes over `SKILL.md` and the two reference documents,
