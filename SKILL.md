@@ -693,13 +693,14 @@ to read it later.
 
 So the constitution template carries a **Scale** section, filled in
 per project with the real numbers — how many users, which machines,
-what data, what breaks — followed by five tests that a reader can
+what data, what breaks — followed by six tests that a reader can
 actually apply to a diff: an abstraction earns its place at the second
 real caller rather than the first imagined one; an extension point
 needs a requirement that exists now; a layer needs a boundary that
 actually varies; prefer deleting to configuring; backward
 compatibility with yourself isn't a constraint, except for data
-already on disk.
+already on disk; and code that arrived with a starter template isn't
+yours until you've used it.
 
 Written as tests, not as advice, and deliberately. "Don't
 over-engineer" is an adjective, and an agent can't check a diff

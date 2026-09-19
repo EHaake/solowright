@@ -31,7 +31,7 @@ defensible in the abstract, each is free to add, and each is a
 permanent tax on every future reader — who is one person, working
 alone, months removed from the reasoning.
 
-Five tests, applied when the plan is drafted and again at review.
+Six tests, applied when the plan is drafted and again at review.
 They're written as tests rather than as advice because "don't
 over-engineer" is not something a reader can check an actual diff
 against:
@@ -51,6 +51,14 @@ against:
 5. **Backward compatibility with yourself is not a constraint** —
    except for data already on disk, which is a real constraint and
    gets the full treatment.
+6. **Code that arrived with a starter template isn't yours until you
+   use it.** A theme, a scaffold or a framework's example app brings
+   working machinery for features this project may never have. It
+   passes every test above — it has callers, it has structure, it was
+   written by someone competent — and it is still dead weight,
+   because nothing here asked for it. Delete on first contact rather
+   than deferring: the decision only gets harder once it has been read
+   a few times and started to look load-bearing.
 
 **What does not scale down.** Tests, error handling on failures that
 can actually happen, data integrity and migrations for anything

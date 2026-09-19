@@ -682,6 +682,63 @@ pre-assembled bundle, so it is an observation to test rather than a
 result: if the bundle is what did it, close-out bundling is a cheaper
 win than any model change measured so far.
 
+### What the three projects actually looked like, 2026-09-19
+
+The Scale section was written from a worry, so it was worth checking
+the worry against the code. Three read-only audits, one per project,
+each applying the five tests as written. The result was mostly a
+correction.
+
+| Project | Production lines | Excess structure | Call |
+|---|---|---|---|
+| kaazap (Rust) | ~9,900 | ~90 lines, under 1% | no refactor |
+| Trove (Swift) | ~25,000 | ~25 lines, under 0.5% | no refactor |
+| photo-pieces (Astro) | ~9,000 | ~600 lines, ~7% | half-day deletion |
+
+Two conclusions, one expected and one not.
+
+**The expected one: the rule would have caught almost nothing.** Two
+of three codebases are already proportioned to their scale, which is
+the strongest available evidence that the discipline was working
+before it was written down. That is also why the retroactive rule
+above is right — a sweep would have found a handful of forwarding
+wrappers and an identity function.
+
+**The unexpected one: photo-pieces' 7% is not over-engineering.** It
+is residue from the Astro theme the project started as — an i18n layer
+with 57 of 77 keys unreferenced and a Japanese dictionary with no
+users, a code-copy component on a photography site with no code blocks
+in any piece, a `LatestWork` component with zero callers whose own
+header says it was built for a design pass that never placed it. All
+of this passes the five tests: it has callers, it has structure, it
+was written by someone competent. Nothing here asked for it. Hence a
+sixth test — code that arrived with a starter template isn't yours
+until you use it, and the deletion only gets harder once the code has
+been read a few times and started to look load-bearing.
+
+**The audits also inverted the question.** All three projects were
+cleaner on structure than on correctness, and the findings worth a
+solo developer's time were the opposite of what was being hunted:
+kaazap restores the terminal only on a clean quit, so any panic in ten
+thousand lines of index arithmetic leaves a hidden cursor in raw mode;
+all three of its persisted files are written non-atomically and an
+unreadable profile silently becomes a new one that then overwrites the
+original; Trove's hex parser renders black in release on a malformed
+token, untested; photo-pieces ships `TODO-AUTHOR` placeholder text as
+the meta description on a live domain. None of these are scale
+questions. All of them are the "what does not scale down" half of the
+same section, which is the half that earned its place.
+
+**And the coverage inversion appeared in all three.** Trove: 502 of
+1,547 tests assert on source text. kaazap: 190 test lines on a drawing
+primitive's bounds checks, zero on the render path whose resize
+short-circuit is the only thing preventing an out-of-bounds write.
+photo-pieces: 43 test lines on a dead function, and 343 lines of
+scroll and DOM JavaScript with essentially none. Three for three, in
+three languages, by the same mechanism — testing effort follows
+testability rather than risk. That is now a principle in `SKILL.md`,
+and it is the single most transferable thing these audits produced.
+
 ### What a new principle does to old code, 2026-09-19
 
 Adding the Scale section immediately raised the question it implies:
