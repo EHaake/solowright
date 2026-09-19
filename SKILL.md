@@ -245,12 +245,17 @@ effort — decided by experiment 1, see `references/design-record.md`:
   skeptical-reviewer on sign-off and on decision reviews — and
   nothing else. It reaches the agents only through explicit per-call
   overrides on those dispatches.
-- **The implementation tier builds and checks.** The `sdd-implementer`
-  (`agents/sdd-implementer.md`), one task per dispatch — the edit,
-  build, test loop that accounts for most of a spec's tokens — and the
-  skeptical-reviewer's per-phase and marked per-task checks, which
-  run on the same tier as the work they check. Both definitions pin
-  this tier by name, so it doesn't follow the session's model.
+- **The implementation tier builds and checks.** The implementer, one
+  task per dispatch — the edit, build, test loop that accounts for
+  most of a spec's tokens — and the skeptical-reviewer's per-phase and
+  marked per-task checks. Both definitions pin their model by name, so
+  neither follows the session's. A second implementer definition,
+  `agents/sdd-implementer-fable.md`, is the same body at the top
+  tier's model and medium effort; a project names one or the other in
+  its constitution, and the default is the implementation tier (see
+  "Three names, one place, two profiles" for the measurement behind
+  that default). The close-out dispatch goes to the top tier's model
+  under the standard profile either way.
 - **The session tier orchestrates**, at medium effort. The
   orchestrating session takes many bookkeeping turns and re-sends its
   whole context on each, which makes it the dominant cost of the
@@ -263,8 +268,10 @@ effort — decided by experiment 1, see `references/design-record.md`:
   allowance at a rate three concurrent projects could sustain (the
   design record has the numbers).
 
-The agent definitions carry `effort: high`, so reasoning stays
-full-strength inside them regardless of the session's setting.
+The planner and reviewer definitions carry `effort: high`, so
+reasoning stays full-strength inside them regardless of the session's
+setting; the experiment-2 implementer carries `effort: medium`, which
+is the variable under test.
 
 The split is by *role*, decided per task at execution time — not a
 per-task model table written in advance. Three things catch a lighter
@@ -326,11 +333,10 @@ How the loop runs, per task, in the orchestrating session:
    grows large; the session ends at the merge (see "Session and
    context hygiene").
 
-**Every pause that ends a session ends with a continuation prompt.**
-A spec has two session boundaries — `plan.md` and `tasks.md` final,
-handed to implementation; the spec merged, with the next one waiting
-on `ROADMAP.md` — plus any pause the person turns into one by saying
-they're stopping. At each, the report's last item is the exact
+**The two session boundaries end with a continuation prompt. Nothing
+else does.** A spec has exactly two: `plan.md` and `tasks.md` final,
+handed to implementation; and the spec merged, with the next one
+waiting on `ROADMAP.md`. At each, the report's last item is the exact
 prompt to paste into the next session, in its own fenced block so it
 copies in one click. It is self-contained: the spec directory, the
 files to read, where to resume (the first unchecked task, or the
@@ -338,10 +344,23 @@ phase), the involvement level, the pause cadence, and any effort
 switch the next session needs (a spec session opens at medium and
 must be raised to high). Anything decided at the pause that
 the next session needs is written to a file first; the prompt points
-at files, it doesn't carry state. A phase pause that isn't ending the
-session gets no prompt — just what the person should check and how to
-say continue. If nothing follows — the person has to decide something
-before work can continue — say so instead of inventing a next step.
+at files, it doesn't carry state. If nothing follows — the person has
+to decide something before work can continue — say so instead of
+inventing a next step.
+
+**A phase pause gets no prompt.** The phase report ends with what the
+person should check in the app and how to say continue. Write the rule
+that way, as a flat default, and not as "unless they're stopping":
+the session is writing the report before the person has said anything,
+so a rule conditioned on their intent resolves to "include one, just
+in case" every time. That is the failure this rule is written against
+— a spec is one implementation session, and a continuation prompt
+sitting at the end of every phase report is a standing invitation to
+`/clear`, which costs a full re-read and buys nothing a pause didn't
+already give. If the person says they're stopping, or just asks for a
+prompt, write it then, in the next message, resuming from the first
+unchecked task. On request it costs one turn. Volunteered eight times
+a spec, it costs the session it was supposed to protect.
 
 **The escape hatch.** If the implementer fails verification twice on
 the same task, or returns "stopped on a judgment call" for something
@@ -427,6 +446,41 @@ review, a stale `tasks.md` edit, a task done by hand — raise its
 effort to high, one line in the settings file, before changing its
 model.
 
+**One more question at setup: which implementer.** The profile picks
+the tiers; this picks which of two installed implementer definitions
+the project dispatches for ordinary tasks. `sdd-implementer` (the
+implementation tier, `opus` at high) is the default and is what most
+projects should take. `sdd-implementer-fable` is the same body at the
+top tier's model and medium effort. Two kaazap specs measured them
+head to head: cost per completed task was the same inside the
+spec-to-spec noise, both ran every task first try, and the top tier's
+version drew about a fifth more of the separate allowance that the
+spec conversation, the planner, and the sign-off already compete for.
+So the stronger model earns its place where judgment is the work, and
+the implementer — bounded transcription against a verification command
+— is not that place. The honest limit on that finding: it was measured
+on the simplest of three projects, the case least likely to reward a
+stronger model, so a project whose tasks are genuinely hard is the
+open question this setting exists to let someone answer.
+
+Ask it once, in the constitution conversation, with the default
+stated; never re-open it spec by spec. Changing it later is one word
+in the constitution and a tier-log row naming the spec it changed at.
+Both definitions stay installed either way, so the switch is a word,
+not a reinstall.
+
+**The close-out dispatch is the exception, and goes to the top tier's
+model** under the standard profile whatever the line above says. The
+close-out task writes the `ROADMAP.md` and `DECISIONS.md` entries, the
+acceptance evidence, and the spec's summary — synthesis and prose, not
+transcription, and the one implementer dispatch shaped like planning.
+The measured close-outs cost $5.66 and $3.74 at the implementation
+tier against $0.81 and $1.31 at the top tier's model at medium, but
+those specs also handed close-out a pre-assembled bundle, so the gap
+is confounded and worth watching in the tier log rather than trusting.
+Under the economy profile nothing runs on the top tier's model, close-
+out included.
+
 **Spec conversations happen in Claude Code, in a spec session of its
 own** — the project's first session included, which scaffolds the repo
 and then hosts the idea, constitution, and first-spec conversations
@@ -504,11 +558,11 @@ definitions and the orchestrator's overrides do the rest:
 | Spec-conformance summary | same session | Fable | orchestrator → the person |
 | Plan and tasks final | **new session** — the spec session ends with the prompt to paste there; the new session opens at medium from settings | — | — |
 | Non-routine task | the implementation session | `skeptical-reviewer` at **Fable, high**, on a decision bundle; the session transcribes the recommendation | orchestrator → reviewer |
-| Implementation, per task | same session | `sdd-implementer` at **Opus, high**, on a task bundle | orchestrator → implementer |
+| Implementation, per task | same session | the implementer the constitution names — `sdd-implementer` at **Opus, high** by default, on a task bundle | orchestrator → implementer |
 | Marked per-task review | same session | `skeptical-reviewer` at **Opus, high** | orchestrator → reviewer |
 | Phase review | same session | `skeptical-reviewer` at **Opus, high**, on a phase bundle | orchestrator → reviewer |
 | Phase pause report | same session | Fable, medium | orchestrator → the person, who attests by using the app and says continue; the session stays open |
-| Walkthrough finding | same session | `sdd-implementer` at **Opus, high**, on a diagnosis bundle; a decision review at **Fable** if it returns options | the person → orchestrator → implementer |
+| Walkthrough finding | same session | the same implementer, on a diagnosis bundle; a decision review at **Fable** if it returns options | the person → orchestrator → implementer |
 | Pre-merge sweep | same session | `skeptical-reviewer` at **Opus, high**, documents + spec diff | orchestrator → reviewer |
 | Close-out and merge | same session | Fable, medium | orchestrator; ends with the prompt for the next spec session, if `ROADMAP.md` has one |
 | Spec merged | **new session** for the next spec, which opens at medium and asks for high effort | — | — |
@@ -527,9 +581,11 @@ session's opening prompt. `/clear` has no place in the workflow;
 **Fable's footprint per spec** is the spec session (the conversation
 and the handful of turns that dispatch planning), one planner run,
 one sign-off (plus at most one re-review), any decision reviews — and
-the whole implementation session, at medium. Everything that edits
-code runs on Opus. Measured, the implementation session is 15–35% of
-a spec's cost, and the planner plus sign-off about as much again.
+the whole implementation session, at medium — and, under experiment
+2, every implementer dispatch, at medium. The reviewer's phase and
+per-task checks and the sweep still run on Opus. Nearly the whole
+spec now draws on Fable's allowance; that draw is one of the things
+the experiment measures.
 
 ## Principles worth generalizing
 
@@ -634,14 +690,15 @@ to a different stage, so that is where the boundaries go.
   discipline loses nothing at either boundary: `CLAUDE.md` re-reads
   automatically, and `tasks.md` is exactly the file designed to answer
   "where was I" cold.
-- **Phase pauses stay in the session.** The person attests and says
-  continue. `/compact` if the implementation session has grown large;
-  never clear or compact mid-task. If the person is stopping at a
-  phase pause, that pause becomes a session-ending one and gets the
-  continuation prompt like any other.
-- Every session-ending pause ends with a continuation prompt for the
-  next session, so a new session costs the person a paste, not a
-  reconstruction (see "Model tiering").
+- **Phase pauses stay in the session, and get no continuation
+  prompt.** The person attests and says continue. `/compact` if the
+  implementation session has grown large; never clear or compact
+  mid-task. If the person decides to stop at a phase pause, they say
+  so or ask for a prompt, and it gets written then — the session
+  doesn't offer one in advance (see "Model tiering").
+- Each of the two session boundaries ends with a continuation prompt
+  for the next session, so a new session costs the person a paste, not
+  a reconstruction.
 - Batch bookkeeping into single shell commands. Each turn saved is a
   re-send of the whole context saved.
 - In a chat interface without a clear command, the equivalent move is
@@ -715,7 +772,8 @@ involved), and follow that instead.
    model profile (standard by default; economy for a small or personal
    project, or one that should leave the top tier's allowance to other
    projects — see "Three names, one place, two profiles"; if economy,
-   swap `.claude/settings.json` for the economy template) — fill in
+   swap `.claude/settings.json` for the economy template), and, on the
+   standard profile, which implementer this project dispatches — fill in
    `CLAUDE.md` before any code exists, so the first thing an
    implementation session reads is the constitution, not its own
    defaults, and commit it. Move through this efficiently once the idea

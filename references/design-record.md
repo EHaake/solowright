@@ -447,6 +447,233 @@ session's opening message should state its model and effort, since
 the per-model effort pin was silently ignored for `claude-opus-4-8`
 and nobody noticed for a week.
 
+### Experiment 2: the implementer on Fable 5.1 at medium
+
+**Premise.** The implementer is the bulk of a spec's tokens now that
+the seat is cheap: on the experiment-1 specs, Opus implementer
+dispatches were 45–65% of spec cost. Its context is short and fresh,
+so its cost is input, output, and thinking, not cache reads — the one
+place Fable's per-token premium (2× Opus on input and output) bites
+directly. Medium effort roughly halves the thinking, so a Fable
+dispatch at medium should cost about what an Opus dispatch at high
+does; the dollar case rests on *fewer dispatches per completed task* —
+fewer iterations, fewer review rounds, fewer follow-up tasks — not on
+a cheaper dispatch. Anthropic's own measurements point that way
+(medium on the newest models matching prior-generation high; a
+coding-benchmark trade of about two points of pass rate for half the
+cost at medium on Opus 5), and the person's reading of the Fable 5.1
+documentation says the same; but those are benchmarks, and the
+implementer's work is bounded, well-specified transcription with a
+verification command, which is exactly the kind of task where a
+stronger model at lower effort may or may not show.
+
+**What changes, and how it is isolated.** One variable: the model and
+effort of the implementer dispatch. Because agent definitions install
+machine-wide, a per-project experiment can't edit `sdd-implementer.md`
+itself; the branch adds a second definition,
+`sdd-implementer-fable.md` — identical body, frontmatter `model:
+fable`, `effort: medium` — and the experiment project's `CLAUDE.md`
+names it as the dispatch. The plain `sdd-implementer` (Opus, high)
+stays installed and is the fallback, so a fallback changes one thing
+back rather than two. The copy is temporary: if the experiment holds,
+`sdd-implementer.md` itself changes and the copy is deleted.
+
+**What stays fixed, and the one tension.** The reviewer stays on Opus
+at high for phase and per-task checks and the sweep. That puts the
+checker on a lower tier than the builder for the first time, against
+the rule this record has kept ("the reviewer never weaker than the
+builder"). It is kept deliberately as the second thing to watch: if
+blocking findings per task fall, the verification command, the sweep,
+and the person's walkthrough are what distinguish cleaner work from a
+reviewer that has stopped seeing. Moving the reviewer up too would
+double the Fable draw and make the result unattributable.
+
+**Hypotheses.** (1) Cost per completed task — implementer dispatches
+plus the review rounds and follow-up tasks they cause — is at or below
+the experiment-1 specs on Opus at high (kaazap 021 $5.7, 022 $5.3,
+photo-pieces 012 $4.7 per task, all-in). (2) Quality proxies are no
+worse: first-try rate, iterations on tuning tasks, escape hatches,
+blocking findings at phase review and sweep. (3) The allowance
+sustains one project's full spec without the fallback; the draw per
+spec is recorded, since the implementer moving to Fable roughly
+doubles Fable's share of a spec. (4) Bundle-assembly misses do not
+rise (they are the session's, not the implementer's, and should be
+unaffected — a rise would mean the session is doing something
+different).
+
+**Protocol.** One project, one spec, then decide whether to widen.
+The project should have a fast, reliable automated verification
+command, so that quality is measured by the checker and not by a
+device pass — kaazap fits; Trove's simulator passes would confound.
+
+1. Install `agents/sdd-implementer-fable.md` into `~/.claude/agents/`
+   alongside the existing three. The skill itself stays on `main` —
+   it is machine-wide, and the constitution is what names the
+   implementer a project dispatches, so the branch's `SKILL.md` is
+   documentation of the experiment, not something to install. Run the
+   project prompt below in a fresh session in the project.
+2. Run the spec as this branch's `SKILL.md` says. Every implementer
+   row in the tier log records `fable` (medium) or, after a fallback,
+   `opus`; the return's token usage is logged as usual.
+3. At the merge: allowance reading, `ccusage`, and the per-task
+   counts — dispatches per task, first-try rate, blocking findings per
+   phase — against the same project's previous spec.
+4. The session logs give the exact split (orchestrator, Fable
+   implementer, Opus reviewer) the way experiment 1's analysis did.
+
+**Decision rule.** All four hold: `sdd-implementer.md` becomes `fable`
+at medium, the copy is deleted, and the reviewer question is
+re-opened (Fable reviewer at medium against Opus at high, one spec).
+Cost per completed task higher: keep Opus, note the finding; the
+Fable implementer remains available as a per-call override for tasks
+the planner marks as hard. Allowance the constraint: keep Opus as the
+default and use the Fable implementer only on marked tasks. Quality
+proxies worse: keep Opus; the "stronger model at lower effort" claim
+did not transfer to bounded transcription work.
+
+**Set up, paused, started.** Kaazap's constitution was edited on
+2026-09-14 mid-spec 023, and the experiment was paused the same day at
+74% Fable allowance with a three-day reset — specs 023, 024 and 025 ran
+the constitution's fallback (`sdd-implementer` on Opus at high), with
+the session on `claude-opus-5` rather than the profile's Fable medium.
+None of them are experiment-2 data. Spec 025 is worth keeping as a
+near-control on the other side: Opus implementer at high, Opus reviewer,
+but the session one model off the baseline. The experiment starts for
+real on 2026-09-17 with kaazap spec 026, in a fresh session on the
+standard profile, the first spec run end to end with the Fable
+implementer. The lesson for the protocol: a model experiment starts at a
+spec boundary, never mid-spec, because an allowance ceiling can stop it
+at any point and a half-and-half spec measures nothing.
+
+**Applying it to a project.** Paste into a fresh session in the
+project, with the new agent file in place and the skill on `main`:
+
+> Experiment 2 setup for this project. Confirm
+> `~/.claude/agents/sdd-implementer-fable.md` exists and report if it
+> doesn't. In `CLAUDE.md`'s "Model policy" section, make these edits
+> in place, changing nothing else: (1) in the profile paragraph, the
+> implementation tier is `opus` for the reviewer, and the implementer
+> is dispatched as `sdd-implementer-fable` (Fable 5.1 at medium) under
+> experiment 2, with the plain `sdd-implementer` (opus, high) as the
+> fallback dispatch; (2) the "Implementation runs at the implementation
+> tier" bullet names `sdd-implementer-fable` as the dispatch and
+> `sdd-implementer` as the fallback; (3) the Fallback bullet adds that
+> the implementer falls back to `sdd-implementer` when Fable's
+> allowance runs out, and that needing it is itself a result. Add a
+> header row to the next spec's tier log: experiment 2, implementer
+> `claude-fable-5-1` at medium, today's date, and the Fable allowance
+> reading I give you. Commit in one commit with a message that says
+> this project now runs experiment 2 from the skill's
+> `exp-2-implementer-fable-medium` branch. Then stop; don't start any
+> spec work in this session.
+
+### Experiment 2: results, 2026-09-19
+
+Two specs ran it end to end in kaazap: 026 (compact layout, 6 tasks,
+started 2026-09-17) and 027 (animation pass, 9 tasks, started
+2026-09-18). No fallback fired in either. Costs below are from the
+session logs, deduplicated by (message id, request id), priced at
+Fable 5.1 $10/$50 per MTok with cache reads at $0.25 and Opus $5/$25
+with cache reads at $0.50.
+
+| Spec | Tasks | Implementer | Impl $/task | Reviewer | Planner | Session | Total $/task | Fable $ |
+|---|---|---|---|---|---|---|---|---|
+| 021 (Opus impl) | 7 | $5.13 | $0.73 | $4.30 | $3.14 | $16.45 | $4.15 | $20.39 |
+| 022 (Opus impl) | 15 | $13.52 | $0.90 | $7.57 | $8.11 | $15.42 | $2.97 | $26.94 |
+| 024 (Opus impl) | 10 | $13.05 | $1.30 | $9.77 | $9.60 | $13.98 | $4.64 | $13.98 |
+| 025 (Opus impl) | 3 | $4.40 | $1.47 | $2.34 | $1.46 | $6.96 | $5.05 | $0.00 |
+| **026 (Fable impl)** | 6 | $4.86 | **$0.81** | $5.17 | $5.43 | $10.49 | $4.33 | $23.15 |
+| **027 (Fable impl)** | 9 | $7.99 | **$0.89** | $7.16 | $11.29 | $17.49 | $4.88 | $40.26 |
+
+**Hypothesis 1 — cost per completed task: not met, and not refuted.**
+The Fable implementer at medium costs $0.81 and $0.89 per task against
+an Opus range of $0.73 to $1.47. It lands inside that range, below its
+midpoint and above its floor. Total cost per task — the number that
+actually decides — is $4.33 and $4.88 against an Opus range of $2.97 to
+$5.05. Every one of these numbers is inside the spec-to-spec noise of
+the same project. The premise was that Fable would win on *fewer
+dispatches per completed task*, not on a cheaper dispatch; dispatches
+per task were 1.0 on both sides, so there was no such gain to have.
+
+**Hypothesis 2 — quality proxies: met, with nothing to show for it.**
+Specs 026 and 027 were 6/6 and 9/9 first try, no escape hatch, no
+fallback. Spec 024 on Opus at high was 10/10 first try. The one
+judgment-call return in 027 (T004a, an impossible instruction about a
+10-character bar) is the implementer doing exactly what it should.
+Blocking findings stayed at zero through per-task and phase review in
+both specs; 026's single blocking sweep finding was in close-out prose,
+not code. The checker being a tier below the builder produced no
+visible harm — and also had nothing to catch. Bundle-assembly misses
+did not rise (hypothesis 4 met).
+
+**Hypothesis 3 — the allowance: this is where it fails.** Spec 026
+opened at 96% of the weekly Fable window remaining and spec 027 opened
+at 70%, so one six-task spec cost about 26 points of the week. Fable
+dollars per task went from $2.91 (021) and $1.80 (022) under experiment
+1 to $3.86 (026) and $4.47 (027). The implementer's own share of the
+Fable draw is about 20% in both specs. That is the whole trade: a fifth
+more of the constrained resource, spent on work that was already
+finishing first try.
+
+**Decision: keep Opus as the default implementer.** By the decision
+rule this is the "cost per completed task not lower" branch, and the
+rule's remedy was to keep the Fable implementer available as an
+override. The person's own reading at the time — that kaazap is the
+simplest of the three projects, and that Fable should be saved for the
+most complex one — points at the same place from a different direction,
+and generalizes the override from per-call to per-project. So
+`sdd-implementer.md` stays on Opus, `sdd-implementer-fable.md` stays
+installed rather than deleted, and the implementer becomes a named
+choice in the constitution's model policy the way the tiers already
+are.
+
+**What this does not settle.** Kaazap's tasks are bounded transcription
+against a fast cargo check, which is the case least likely to reward a
+stronger model — the experiment was designed that way on purpose, to
+isolate cost from device passes, and the design bought clean
+measurement at the price of a weak test of the quality claim. A spec
+whose tasks are genuinely hard is still untested, which is exactly what
+the per-project setting exists to let the person try.
+
+**Two things the split turned up that the experiment wasn't looking
+for.** Planning is now the most expensive Fable role on a spec with a
+revision: 027's planner cost $11.29 across two dispatches, more than
+its implementer and its reviewer. And Opus close-out dispatches cost
+$5.66 (024) and $3.74 (025) against $0.81 (026) and $1.31 (027) on
+Fable — a 3-5x gap, far outside everything else here. That is confounded
+by dispatch shape, since 026 and 027 handed the close-out a
+pre-assembled bundle, so it is an observation to test rather than a
+result: if the bundle is what did it, close-out bundling is a cheaper
+win than any model change measured so far.
+
+### The implementer becomes a per-project setting, 2026-09-19
+
+The experiment's decision rule and the person's own reading converged,
+so the result is a setting rather than a new default for everyone.
+`sdd-implementer` (the implementation tier, Opus at high) is what a
+project gets unless it says otherwise; `sdd-implementer-fable` stays
+installed and is one word away. The question is asked once, in the
+constitution conversation, alongside the involvement level and the
+profile — and explicitly not per spec, because a choice re-opened every
+spec is a choice the person has to make twenty times to keep making the
+same way.
+
+The close-out dispatch is the one exception, and goes to the top tier's
+model under the standard profile whatever the project chose. The
+argument for it is not the measured $5.66-versus-$0.81 gap, which is
+confounded by bundle shape; it is that close-out writes the roadmap
+entry, the decisions entry, the acceptance evidence and the spec
+summary. That is the same synthesis-and-prose work the top tier earns
+its place on everywhere else in this system. The cost numbers point the
+same way, which is a reason to watch the tier log rather than a reason
+to believe them.
+
+What this preserves: the tiering argument stays "the strongest model
+where judgment is the work," and the implementer is the role that
+argument has always placed lowest. What it concedes: the measurement
+ran on bounded transcription against a fast automated check, so the
+setting exists mostly for the case the measurement could not reach.
+
 ## Two model profiles: the names are tunable per project
 
 Added September 2026, at the person's request, after experiment 1.
@@ -583,6 +810,35 @@ session --breakdown` is the check: if the implementation session's
 re-send volume grows to rival what the per-phase clears were saving,
 the phase boundary comes back as an optional clear at the person's
 call, not as the default.
+
+### Why the prompts kept appearing anyway, 2026-09-19
+
+Two days of specs after that rule landed, the person was still getting
+a continuation prompt at the end of every phase report. The rule had
+not been ignored. It had been written in a form no session could
+follow: "a phase pause gets a prompt only when the person says they're
+stopping there." The session writes the phase report *before* the
+person says anything. Asked to condition on a fact that does not exist
+yet, and holding a general instruction to end a pause with the prompt
+for the next session, every session resolved the ambiguity the same
+safe way — include one, in case. A rule that depends on information
+the actor cannot have at the moment it acts is not a strict rule; it
+is a default plus a guess, and the guess wins.
+
+The fix is to state it flatly, with the trigger moved after the fact
+rather than before it: a phase pause gets no prompt, ever. If the
+person stops or asks, the prompt is written then, as its own message,
+resuming from the first unchecked task. Asked for, it costs one turn.
+Volunteered at eight phase pauses a spec, it advertises a `/clear` the
+workflow spent this whole section arguing against, and the person
+reasonably reads a prompt offered unasked as the system telling them
+to use it.
+
+The generalizable lesson, and the reason this is worth a section: when
+a rule keeps being broken by sessions that are otherwise following the
+constitution, check whether it asks them to know something they can't
+know yet, before assuming they drifted. The tell is a conditional whose
+subject is the person's future intent.
 
 ## Review cadence: why per-phase everywhere
 

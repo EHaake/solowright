@@ -306,10 +306,19 @@ than carrying state — anything decided at the pause goes into
 
 A merge ends the same way, with the prompt for the next spec session
 if `ROADMAP.md` has an obvious next item — including the reminder to
-switch that session to the top tier before starting. A phase pause
-gets a prompt only when the person says they're stopping there; the
-resume form is the same, from the first unchecked task.
+switch that session to the top tier before starting.
 If the next step is the person's decision, say that instead.
+
+Those two are the whole list. A phase pause gets no prompt, and the
+rule has to be stated that flatly to work: written as "unless the
+person is stopping", it asks the session to predict something that
+hasn't happened yet at the moment the report goes out, and the safe
+guess is always to include one. A prompt at the end of every phase
+report then teaches the person to `/clear` at every phase, which is
+the opposite of one implementation session per spec. So the phase
+report ends with the walkthrough and how to say continue; if the
+person stops or asks, the prompt is written then, as its own message,
+resuming from the first unchecked task.
 
 **Batch the bookkeeping.** After a task, the commit, the checkbox, and
 the tier-log row are one shell command, not three tool calls; bundle

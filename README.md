@@ -37,6 +37,9 @@ agents/                         The three subagent definitions. Installed
   sdd-implementer.md            Builds one task per dispatch
   skeptical-reviewer.md         Sign-off, phase reviews, decision reviews,
                                  the pre-merge sweep
+  sdd-implementer-fable.md      The optional stronger implementer and the
+                                 close-out dispatch; same body, different
+                                 frontmatter
 project/                        A new project's skeleton, laid out exactly
                                  as it lands; the first session copies it
   CLAUDE.md                     Constitution skeleton
@@ -183,8 +186,9 @@ this machine) or a project-level `.claude/skills/spec-driven-development/`
 there directly — same folder structure as this repo, just at that path
 instead.
 
-The three subagent definitions are a separate copy: everything in
-`agents/` goes to `~/.claude/agents/` (user-level, every
+The subagent definitions are a separate copy: everything in
+`agents/` — on this branch including `sdd-implementer-fable.md` — goes
+to `~/.claude/agents/` (user-level, every
 project on this machine). Claude Code reads them from there, not from
 inside the skill folder.
 
