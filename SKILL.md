@@ -729,6 +729,42 @@ unused extension point, a pass-through layer — with taste
 disagreements left as second-look notes, since a reviewer that blocks
 on style gets skimmed.
 
+## When the constitution gains a principle, what happens to existing code
+
+A new principle **binds work from the commit that adds it**. Code
+written before it is not retroactively a defect list, and the honest
+reason is that the code was built correctly under the rules in force
+at the time — which is exactly what this system asks for.
+
+So the default after an amendment is: nothing. Don't open a cleanup
+spec, don't annotate the old code, don't let the next reviewer treat
+the whole repo as out of compliance. A principle that costs a
+retroactive sweep every time it's added is a principle nobody will add.
+
+A cleanup becomes worth doing when the old shape is **actively
+costing** something, and that has two concrete tells, neither of which
+is "it doesn't match the new rule":
+
+- You keep reading past it. The same indirection gets re-traced every
+  time someone touches that area, which is a tax being paid
+  repeatedly rather than a shape that merely offends.
+- It blocks a change you actually want to make. The next spec has to
+  work around it, or would have to extend it to do something simple.
+
+If one of those is true, the cleanup is **its own spec**, with the
+normal spec-plan-tasks treatment, scoped to the specific structures
+named in `spec.md` — not "apply the new principle to the codebase,"
+which has no acceptance criterion and no end. If neither is true,
+leave it, and let the principle do its work on everything written
+after it. Most of the value of a rule like this is in the code that
+doesn't get written.
+
+The exception is a principle about **correctness or data** —
+persistence without migration, an unhandled failure that can really
+happen, a credential in the wrong place. Those are bugs, they were
+bugs before the principle named them, and they take the
+bug-after-a-spec-ships path immediately, at whatever size fits.
+
 ## Principles worth generalizing
 
 These aren't language-specific or platform-specific — they're patterns

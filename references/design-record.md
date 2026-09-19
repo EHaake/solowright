@@ -682,6 +682,42 @@ pre-assembled bundle, so it is an observation to test rather than a
 result: if the bundle is what did it, close-out bundling is a cheaper
 win than any model change measured so far.
 
+### What a new principle does to old code, 2026-09-19
+
+Adding the Scale section immediately raised the question it implies:
+do the three existing projects now need a refactoring pass? The
+general form is worth answering once, because every future amendment
+asks it again.
+
+The rule adopted: a principle binds work from the commit that adds it,
+and existing code is not retroactively a defect list. The honest
+justification is that the old code was built correctly under the rules
+in force at the time, which is precisely what this system asks of it.
+The practical justification matters more: a principle that costs a
+retroactive sweep every time one is added is a principle nobody will
+add, and this record has accumulated six amendments in a week. Make
+adoption cheap or adoption stops.
+
+A cleanup earns a spec only when the old shape is *actively costing*
+something, with two tells that are deliberately not "it doesn't match
+the new rule": you keep re-reading past the same indirection, or it
+blocks a change you actually want to make. Those are both observable.
+"Violates the principle" is not, in the sense that matters — every
+codebase violates any principle added after it, so that test selects
+everything and therefore nothing.
+
+When a cleanup does happen it is its own spec, scoped to structures
+named in `spec.md`. "Apply the new principle to the codebase" is not a
+spec: it has no acceptance criterion and no end, which is the shape
+this whole system exists to refuse.
+
+One exception, carved narrowly: a principle about correctness or data
+— persistence without migration, an unhandled failure that can really
+happen, a credential in the wrong place — describes bugs that were
+bugs before the principle named them. Those take the
+bug-after-a-spec-ships path at whatever size fits, immediately, and
+don't wait for a cleanup spec.
+
 ### Scale as a stated constraint on the code, 2026-09-19
 
 The README had said since the renaming that this is for a solo builder
