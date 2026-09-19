@@ -79,10 +79,7 @@ names here and swap the settings file, one commit — and the tier log
 shows from which spec. -->
 
 **Standard profile** (the default; measured on the projects the skill
-came from). Top tier `fable`; implementation tier `opus` for the
-reviewer, with the implementer on `fable` at medium effort under
-experiment 2 (the `sdd-implementer-fable` definition; the plain
-`sdd-implementer` on `opus` at high is the fallback dispatch); session
+came from). Top tier `fable`; implementation tier `opus`; session
 tier `fable` at medium effort (the top and session tiers are the same model
 at different effort; the fallback session model is `claude-opus-4-8`,
 the full ID, since a previous-generation model has no short alias).
@@ -100,6 +97,33 @@ sign-off that keeps finding blocking problems is the signal.
 
 These names are the only place a model is spelled out; everything
 below refers to the roles.
+
+**Task implementer**: `sdd-implementer` (the implementation tier,
+`opus` at high). <!-- Asked once, at project setup, and answered here.
+The alternative is `sdd-implementer-fable` (the top tier's model at
+medium effort) — same body, different frontmatter. Measured over two
+kaazap specs: cost per completed task was the same within noise, first-
+try rate was the same at 6/6 and 9/9, and the Fable implementer drew
+about a fifth more of the top tier's separate allowance. So the default
+is the implementation tier, and the top tier's model is the choice for
+a project whose tasks are genuinely hard rather than bounded
+transcription against a fast automated check. That case is untested —
+the measurement ran on the simplest of three projects, which is the
+case least likely to reward a stronger model. Switching later is one
+word in this line and a tier-log row saying from which spec; no
+re-scaffolding, both agent definitions stay installed. Under the
+economy profile this line always reads `sdd-implementer`. -->
+
+**Close-out dispatch**: `sdd-implementer-fable` under the standard
+profile, `sdd-implementer` under the economy profile — whatever the
+line above says for ordinary tasks. The close-out task writes prose:
+the `ROADMAP.md` and `DECISIONS.md` entries, the acceptance evidence,
+the spec's own summary. That is synthesis, not transcription, and it
+is the one implementer dispatch the top tier's model is worth paying
+for. The measured close-out dispatches cost $5.66 and $3.74 on the
+implementation tier against $0.81 and $1.31 on the top tier's model at
+medium, though that gap is confounded by bundle shape and is a reason
+to watch the tier log, not a settled number.
 
 - **The session runs at the session tier, at medium effort**, set in
   this repo's `.claude/settings.json` — written at project setup from
@@ -184,9 +208,11 @@ below refers to the roles.
   means it would fail an acceptance criterion or a test, or contradicts
   `plan.md` or `CLAUDE.md`; nothing else blocks. Anything open after
   the re-review goes to the tier log and the sweep.
-- **Implementation runs in the `sdd-implementer-fable` subagent**
-  (experiment 2 — its definition says `fable` at medium; the reviewer
-  stays on `opus` at high), one task per dispatch, sequentially. The orchestrating
+- **Implementation runs in the subagent the "Task implementer" line
+  above names**, and the close-out task in the one the "Close-out
+  dispatch" line names, one task per dispatch, sequentially. Neither
+  is re-decided per spec: the lines are the answer until the person
+  changes them. The orchestrating
   session triages each task, dispatches routine ones on a task bundle
   assembled with shell (task line, plan section, acceptance criteria,
   files, the pattern file to copy), and on return verifies with the
@@ -202,16 +228,25 @@ below refers to the roles.
   `/compact` if the context grows large; never clear or compact
   mid-task. `/clear` is not part of the workflow: both session
   boundaries are new sessions.
-- **Every session-ending pause ends with a continuation prompt.** When
-  the next step belongs in a fresh session — plan and tasks final, a
-  merge with the next spec waiting on `ROADMAP.md`, or a phase pause
-  the person is stopping at — the report's last item is the exact
-  prompt to paste there, in its own fenced block. It names the spec directory,
-  the files to read, where to resume, the involvement level, the
-  pause cadence, and any effort switch the next session needs. Write
-  anything the next session needs to a file first; the prompt points
-  at files. If nothing can proceed until the person decides
-  something, say so instead.
+- **Two pauses end with a continuation prompt, and only two**: plan
+  and tasks final, and the merge with the next spec waiting on
+  `ROADMAP.md`. At those the report's last item is the exact prompt to
+  paste into the next session, in its own fenced block. It names the
+  spec directory, the files to read, where to resume, the involvement
+  level, the pause cadence, and any effort switch the next session
+  needs. Write anything the next session needs to a file first; the
+  prompt points at files. If nothing can proceed until the person
+  decides something, say so instead.
+- **A phase pause never ends with a continuation prompt.** The phase
+  report ends with what to check in the app and how to say continue —
+  nothing else. The session cannot know whether the person is about to
+  stop, so a rule conditioned on that produces a prompt at every phase,
+  which is what this line exists to prevent: the spec runs in one
+  implementation session, and a prompt offered unasked invites a
+  `/clear` that costs a re-read and buys nothing. If the person says
+  they are stopping, or asks for a prompt, write one then, as the next
+  message — the resume form from the first unchecked task. Asked for,
+  it costs one turn; volunteered, it costs the session.
 - **Batch the bookkeeping**: commit, checkbox, and tier-log row in one
   shell command; bundle assembly and dispatch back to back. Every turn
   saved is one fewer re-send of the whole context.
@@ -220,10 +255,9 @@ below refers to the roles.
   window (drop the override; both definitions default to `opus`), and
   switch the session itself to `claude-opus-4-8` mid-session
   (`/model claude-opus-4-8` — one cache re-write, then continue), and
-  dispatch the plain `sdd-implementer` (opus, high) for tasks instead
-  of `sdd-implementer-fable`. Nothing else changes; the tier log
-  records what ran and when the switch happened — under experiment 2,
-  needing the fallback is itself a result.
+  dispatch `sdd-implementer` for any task whose line above names
+  `sdd-implementer-fable`, including the close-out. Nothing else
+  changes; the tier log records what ran and when the switch happened.
 - **Escape hatch**: two failed verifications on one task, or a "stopped
   on a judgment call" the orchestrator considers well-specified, and
   the orchestrator does that task itself, noting the

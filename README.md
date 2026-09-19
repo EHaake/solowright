@@ -37,8 +37,9 @@ agents/                         The three subagent definitions. Installed
   sdd-implementer.md            Builds one task per dispatch
   skeptical-reviewer.md         Sign-off, phase reviews, decision reviews,
                                  the pre-merge sweep
-  sdd-implementer-fable.md      Experiment 2: the implementer on Fable 5.1
-                                 at medium; same body, different frontmatter
+  sdd-implementer-fable.md      The optional stronger implementer and the
+                                 close-out dispatch; same body, different
+                                 frontmatter
 project/                        A new project's skeleton, laid out exactly
                                  as it lands; the first session copies it
   CLAUDE.md                     Constitution skeleton

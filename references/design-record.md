@@ -646,6 +646,34 @@ pre-assembled bundle, so it is an observation to test rather than a
 result: if the bundle is what did it, close-out bundling is a cheaper
 win than any model change measured so far.
 
+### The implementer becomes a per-project setting, 2026-09-19
+
+The experiment's decision rule and the person's own reading converged,
+so the result is a setting rather than a new default for everyone.
+`sdd-implementer` (the implementation tier, Opus at high) is what a
+project gets unless it says otherwise; `sdd-implementer-fable` stays
+installed and is one word away. The question is asked once, in the
+constitution conversation, alongside the involvement level and the
+profile — and explicitly not per spec, because a choice re-opened every
+spec is a choice the person has to make twenty times to keep making the
+same way.
+
+The close-out dispatch is the one exception, and goes to the top tier's
+model under the standard profile whatever the project chose. The
+argument for it is not the measured $5.66-versus-$0.81 gap, which is
+confounded by bundle shape; it is that close-out writes the roadmap
+entry, the decisions entry, the acceptance evidence and the spec
+summary. That is the same synthesis-and-prose work the top tier earns
+its place on everywhere else in this system. The cost numbers point the
+same way, which is a reason to watch the tier log rather than a reason
+to believe them.
+
+What this preserves: the tiering argument stays "the strongest model
+where judgment is the work," and the implementer is the role that
+argument has always placed lowest. What it concedes: the measurement
+ran on bounded transcription against a fast automated check, so the
+setting exists mostly for the case the measurement could not reach.
+
 ## Two model profiles: the names are tunable per project
 
 Added September 2026, at the person's request, after experiment 1.
@@ -782,6 +810,35 @@ session --breakdown` is the check: if the implementation session's
 re-send volume grows to rival what the per-phase clears were saving,
 the phase boundary comes back as an optional clear at the person's
 call, not as the default.
+
+### Why the prompts kept appearing anyway, 2026-09-19
+
+Two days of specs after that rule landed, the person was still getting
+a continuation prompt at the end of every phase report. The rule had
+not been ignored. It had been written in a form no session could
+follow: "a phase pause gets a prompt only when the person says they're
+stopping there." The session writes the phase report *before* the
+person says anything. Asked to condition on a fact that does not exist
+yet, and holding a general instruction to end a pause with the prompt
+for the next session, every session resolved the ambiguity the same
+safe way — include one, in case. A rule that depends on information
+the actor cannot have at the moment it acts is not a strict rule; it
+is a default plus a guess, and the guess wins.
+
+The fix is to state it flatly, with the trigger moved after the fact
+rather than before it: a phase pause gets no prompt, ever. If the
+person stops or asks, the prompt is written then, as its own message,
+resuming from the first unchecked task. Asked for, it costs one turn.
+Volunteered at eight phase pauses a spec, it advertises a `/clear` the
+workflow spent this whole section arguing against, and the person
+reasonably reads a prompt offered unasked as the system telling them
+to use it.
+
+The generalizable lesson, and the reason this is worth a section: when
+a rule keeps being broken by sessions that are otherwise following the
+constitution, check whether it asks them to know something they can't
+know yet, before assuming they drifted. The tell is a conditional whose
+subject is the person's future intent.
 
 ## Review cadence: why per-phase everywhere
 
