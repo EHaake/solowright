@@ -621,7 +621,7 @@ authority, this is the illustration. "Fable" and "Opus" stand for the
 tier names — under the standard profile the session tier is Fable at
 medium and the top tier is Fable at high, so the two coincide
 everywhere below. Under the economy profile they don't: the top tier
-is Opus 5 and the session tier is Opus 4.8, and every row that reads
+is Opus 5.5 and the session tier is Opus 4.8, and every row that reads
 "Fable" resolves to one or the other by which tier the role table's
 row names. The roles are what's fixed; the names change as models do.
 
