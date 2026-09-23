@@ -1,6 +1,6 @@
 ---
 name: sdd-implementer-fable
-description: The sdd-implementer at the top tier's model and medium effort. Executes exactly one well-specified task from a spec's tasks.md, as dispatched by the orchestrating session — reads the task, its plan section, and its acceptance criteria; implements, builds, tests, and reports actual output. Never decides an open design question; returns it instead. Dispatched for the close-out task under the standard profile, and for ordinary tasks only by projects whose CLAUDE.md names it as the task implementer; the plain sdd-implementer (opus, high) is the default and the fallback when the top tier's allowance runs out. Body identical to sdd-implementer.md.
+description: The sdd-implementer at the top tier's model and medium effort. Executes exactly one well-specified task from a spec's tasks.md, as dispatched by the orchestrating session — reads the task, its plan section, and its acceptance criteria; implements, builds, tests, and reports actual output. Never decides an open design question; returns it instead. Dispatched for the close-out task under the Fable profile, and for ordinary tasks only by projects whose CLAUDE.md names it as the task implementer; the plain sdd-implementer (opus, high) is the default and the fallback when the top tier's allowance runs out. Body identical to sdd-implementer.md.
 tools: Read, Edit, Write, Grep, Glob, Bash
 model: fable
 effort: medium

@@ -192,28 +192,27 @@ introduced it.
 
 ## Model policy
 
-<!-- Decided once, alongside the involvement level: pick one profile
-and delete the other. Adjust the tier names as models change; the
-roles don't. A project can move between profiles later — change the
-names here and swap the settings file, one commit — and the tier log
-shows from which spec. -->
+<!-- Decided once, at the start: the person is asked directly, "Fable
+or Opus?", and this section keeps the profile they chose and deletes
+the other. Adjust the tier names as models change; the roles don't. A
+project can move between profiles later — change the names here and
+swap the settings file, one commit — and the tier log shows from which
+spec. -->
 
-**Standard profile** (the default; measured on the projects the skill
-came from). Top tier `fable`; implementation tier `opus`; session
-tier `fable` at medium effort (the top and session tiers are the same model
-at different effort; the fallback session model is `claude-opus-4-8`,
-the full ID, since a previous-generation model has no short alias).
-Settings from the skill's `project/.claude/settings.json`.
+**Fable profile.** Top tier `fable`; implementation tier `opus`;
+session tier `claude-fable-5-1` at medium effort (the top and session
+tiers are the same model at different effort). The fallback session
+model is `claude-opus-5-5`. Settings from the skill's
+`project/.claude/settings.json`.
 
-**Economy profile** (a small or personal project, or one that should
-leave the top tier's separate allowance to other projects). One model
-family throughout: top tier `opus`; implementation tier `opus`;
-session tier `claude-opus-4-8` at medium effort. Nothing runs on
-Fable: the planner and sign-off dispatches carry no override, and the
-top-tier fallback below never applies. Settings from the skill's
-`project/.claude/settings.economy.json`. Move to the standard profile
-when a spec's plan is the kind a stronger planner would change — a
-sign-off that keeps finding blocking problems is the signal.
+**Opus profile.** Opus for everything: top tier `opus`;
+implementation tier `opus`; session tier `claude-opus-5-5` at medium
+effort. Every dispatch runs at high effort — the agent definitions'
+own default — and only orchestration runs at medium. Nothing runs on
+Fable: the planner and sign-off dispatches carry no override, the
+close-out goes to `sdd-implementer`, and the top-tier fallback below
+never applies. Settings from the skill's
+`project/.claude/settings.opus.json`.
 
 These names are the only place a model is spelled out; everything
 below refers to the roles.
@@ -245,9 +244,10 @@ replace **top tier** (override) with "implementation tier (no
 override)"; the dispatch then carries no override and the agent runs
 at its own default. To change the implementer, change the agent name
 in that row — both definitions stay installed, so it is a word, not a
-reinstall. Under the economy profile the top tier *is* the
+reinstall. Under the Opus profile the top tier *is* the
 implementation tier, so the overrides become no-ops and the close-out
-row reads `sdd-implementer`; nothing else in the table changes.
+row reads `sdd-implementer` at high; nothing else in the table
+changes.
 
 **A change the person asks for gets written here before it is acted
 on.** If they say to move a role — for one window, for this project,
@@ -299,12 +299,12 @@ it. -->
   bookkeeping turns and re-sends its whole context on each one — the
   dominant cost of the workflow — and it makes no design decisions: it
   assembles bundles, dispatches, verifies, commits, and reports. The
-  role never needs the top tier. Under the standard profile it sits
+  role never needs the top tier. Under the Fable profile it sits
   on the top tier's model because, measured, Fable 5.1 at medium in
   this seat cost about a third per task of Opus 4.8 and its allowance
-  held (the skill's design record has the numbers); under the economy
-  profile it sits on Opus 4.8, the model whose reports read most
-  clearly to the person, and the same discipline about turns applies.
+  held (the skill's design record has the numbers); under the Opus
+  profile it sits on Opus 5.5, and the same discipline about turns
+  applies.
   If it drops the protocol (a skipped review, a stale `tasks.md`
   edit, a task done by hand), the first fix is high effort, one line
   in the same file.
@@ -412,11 +412,11 @@ it. -->
 - **Batch the bookkeeping**: commit, checkbox, and tier-log row in one
   shell command; bundle assembly and dispatch back to back. Every turn
   saved is one fewer re-send of the whole context.
-- **Fallback** (standard profile): if the top tier's usage budget runs out, dispatch the
+- **Fallback** (Fable profile): if the top tier's usage budget runs out, dispatch the
   planner and sign-off at the implementation tier for the rest of the
   window (drop the override; both definitions default to `opus`), and
-  switch the session itself to `claude-opus-4-8` mid-session
-  (`/model claude-opus-4-8` — one cache re-write, then continue), and
+  switch the session itself to `claude-opus-5-5` mid-session
+  (`/model claude-opus-5-5` — one cache re-write, then continue), and
   dispatch `sdd-implementer` for any row that names
   `sdd-implementer-fable`, including close-out. This is the whole role
   table stepped down at once, and it is the automatic form: it fires on

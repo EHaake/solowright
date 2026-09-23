@@ -291,17 +291,16 @@ whole-codebase read; see "Keeping reviews cheap" in
 
 Three tiers, named once in the constitution's model policy, and a
 nine-row table there that says which tier each dispatch runs at.
-Under the standard profile the top and session tiers are the same
-model at different effort — decided by experiment 1, see
-`references/design-record.md`; under economy they are two different
-models, which matters wherever this section says the two coincide:
+Which models fill them is the project's first model question, asked
+directly at the start: Fable or Opus. Under either profile the top and
+session tiers are the same model at different effort — decided for
+Fable by experiment 1, see `references/design-record.md`:
 
 - **The top tier decides, and writes the spec's prose.** Plan and
   task drafting (the `sdd-planner`, one dispatch per spec), the
   skeptical-reviewer on sign-off and on decision reviews, and the
-  close-out dispatch — plus, under the standard profile, the spec
-  conversation, which runs on the session tier's model and is the same
-  one. Nothing else. It reaches the agents only through explicit per-call
+  close-out dispatch — plus the spec conversation, which runs on the
+  session tier's model and is the same one. Nothing else. It reaches the agents only through explicit per-call
   overrides on those dispatches.
 - **The implementation tier builds and checks.** The implementer, one
   task per dispatch — the edit, build, test loop that accounts for
@@ -313,8 +312,8 @@ models, which matters wherever this section says the two coincide:
   its constitution, and the default is the implementation tier (see
   "Two rows worth explaining" below for the measurement behind that
   default). The close-out dispatch goes to the top tier's model under
-  the standard profile either way, and to `sdd-implementer` under
-  economy, where nothing runs on a separate top-tier model.
+  the Fable profile either way, and to `sdd-implementer` under the
+  Opus profile, where nothing runs on a separate top-tier model.
 - **The session tier orchestrates**, at medium effort. The
   orchestrating session takes many bookkeeping turns and re-sends its
   whole context on each, which makes it the dominant cost of the
@@ -322,15 +321,17 @@ models, which matters wherever this section says the two coincide:
   role needs the top tier. What decides which model sits there is the
   price of a cache read, since re-sends are almost all of the seat's
   tokens, and the prose of the pause report, the one output a person
-  reads. The seat runs Fable 5.1 at medium: measured against Opus 4.8
-  in the same seat, it cost about a third per task and drew on Fable's
-  allowance at a rate three concurrent projects could sustain (the
-  design record has the numbers).
+  reads. Under the Fable profile the seat runs Fable 5.1 at medium:
+  measured against Opus 4.8 in the same seat, it cost about a third
+  per task and drew on Fable's allowance at a rate three concurrent
+  projects could sustain (the design record has the numbers). Under
+  the Opus profile it runs Opus 5.5 at medium.
 
 The planner and reviewer definitions carry `effort: high`, so
 reasoning stays full-strength inside them regardless of the session's
 setting. `sdd-implementer-fable` carries `effort: medium`, which is
-what the close-out row and the opt-in task row resolve to.
+what the close-out row and the opt-in task row resolve to under the
+Fable profile.
 
 The split is by *role*, decided per task at execution time — not a
 per-task model table written in advance. Three things catch a lighter
@@ -484,27 +485,27 @@ rather than abandoning the dispatch loop wholesale.
 **Three names, one place, two profiles.** The constitution's model
 policy names the top, implementation, and session tiers once;
 everything else refers to the roles. Two named profiles fill the
-names. **Standard** (the measured default): top `fable`,
-implementation `opus`, session `claude-fable-5-1` at medium.
-**Economy**, for a small or personal project, or one that should leave
-the top tier's separate allowance to other projects: one model family
-throughout — top and implementation `opus`, session `claude-opus-4-8`
-at medium — so the planner and sign-off run at their definitions'
-default with no override and nothing draws on Fable. The choice is
-made in the constitution conversation and can change later: edit the
-names, swap the settings file, one commit; the tier log shows from
-which spec. The session's model and effort live in the project's
+names, and the person picks one when the project starts — asked
+directly, "Fable or Opus?", with neither presumed. **Fable**: top
+`fable`, implementation `opus`, session `claude-fable-5-1` at medium —
+the measured arrangement, with judgment on the stronger model and its
+separate allowance. **Opus**: Opus for everything — top and
+implementation `opus`, session `claude-opus-5-5` at medium — so every
+dispatch runs at its definition's default, high, with no override,
+only orchestration runs at medium, and nothing draws on Fable. The
+choice can change later: edit the names, swap the settings file, one
+commit; the tier log shows from which spec. The session's model and effort live in the project's
 `.claude/settings.json`, written at setup from the profile's template
 (`project/.claude/settings.json` or
-`project/.claude/settings.economy.json`) and recreated by the
+`project/.claude/settings.opus.json`) and recreated by the
 orchestrator if missing — project settings outrank the app's picker
 for new sessions, so they hold without anyone remembering. Two
-fallbacks, both under the standard profile: when the top
+fallbacks, both under the Fable profile: when the top
 tier's budget is exhausted, drop the override on the planner and
 sign-off dispatches for the rest of the window (both definitions
 default to the implementation tier), switch the session itself to the
-implementation tier's previous generation (`/model claude-opus-4-8`,
-mid-session — one cache re-write, then business as usual) and log
+Opus profile's session model (`/model claude-opus-5-5`, mid-session
+— one cache re-write, then business as usual) and log
 both in the tier log, since the session shares that budget; and if the session drops the protocol — a skipped
 review, a stale `tasks.md` edit, a task done by hand — raise its
 effort to high, one line in the settings file, before changing its
@@ -543,7 +544,7 @@ is the open question this row exists to let someone answer. Ask it
 once in the constitution conversation, with the default stated; never
 re-open it spec by spec.
 
-*Close-out* goes to the top tier under the standard profile whatever
+*Close-out* goes to the top tier under the Fable profile whatever
 the implementation row says, because it writes the `ROADMAP.md` and
 `DECISIONS.md` entries, the acceptance evidence, and the spec's
 summary — synthesis and prose, the one implementer dispatch shaped
@@ -614,16 +615,16 @@ every implementer dispatch — from reading the codebase at all.
 ## The flow at a glance: where each step runs, and on what
 
 Everything above, laid out as the sequence a spec actually follows.
-**This is the standard profile's resolution of the role table in the
+**This is the Fable profile's resolution of the role table in the
 project's `CLAUDE.md`, with that table's defaults unchanged.** Read
 the table itself for what a given project actually does: it is the
 authority, this is the illustration. "Fable" and "Opus" stand for the
-tier names — under the standard profile the session tier is Fable at
+tier names — under the Fable profile the session tier is Fable at
 medium and the top tier is Fable at high, so the two coincide
-everywhere below. Under the economy profile they don't: the top tier
-is Opus 5.5 and the session tier is Opus 4.8, and every row that reads
-"Fable" resolves to one or the other by which tier the role table's
-row names. The roles are what's fixed; the names change as models do.
+everywhere below. Under the Opus profile every "Fable" below reads
+Opus 5.5, at the same effort, and the close-out row reads
+`sdd-implementer` at Opus, high. The roles are what's fixed; the
+names change as models do.
 
 **A brand-new project, once.** The person creates an empty repository
 and opens Claude Code in it; the first session is a spec session:
@@ -631,6 +632,7 @@ and opens Claude Code in it; the first session is a spec session:
 | Step | Where | Model | Who's talking |
 |---|---|---|---|
 | "Start a new Solowright project" → scaffold from `project/`, committed | Claude Code, **the first spec session** | opens at medium; the person raises effort to high as for any spec session | the person and the session |
+| "Fable or Opus?" → settings file kept or swapped | same session | if Opus, the person switches this session (`/model claude-opus-5-5`, `/effort high`) | the session asks, the person picks |
 | Idea conversation | same session | Fable, high | the person and Claude |
 | Constitution → `CLAUDE.md` filled in | same session, committed | Fable, high | the person and Claude |
 | First spec → `spec.md` | same session | Fable, high | the person and Claude |
@@ -659,11 +661,10 @@ definitions and the orchestrator's overrides do the rest:
 | Spec merged | **new session** for the next spec, which opens at medium and asks for high effort | — | — |
 
 **The one manual step** is the effort switch at the top of each spec
-session. The session prompts for it; it can't be automated under the
-standard profile, because the settings file pins effort per model and
-the spec session and the implementation session are the same model
-there. Under economy they are different models, so the pins do the
-work and the prompt is a confirmation rather than a request. Everything else resolves from `.claude/settings.json`, the
+session. The session prompts for it; it can't be automated under
+either profile, because the settings file pins effort per model and
+the spec session and the implementation session are the same model.
+Everything else resolves from `.claude/settings.json`, the
 agent frontmatter, and the orchestrator's overrides. Both session
 boundaries are new sessions, not `/clear`: `/clear` resets context
 but keeps the session's settings, which would leave implementation at
@@ -968,9 +969,15 @@ involved), and follow that instead.
    adjustments follow: rename `specs/001-spec-name/` to the slug the
    idea conversation settles on; delete `design/` if the project has
    no UI; and keep one settings file — `.claude/settings.json` is the
-   standard profile, and if the constitution conversation picks
-   economy, replace its contents with `settings.economy.json` and
-   delete that file either way, so the project carries exactly one.
+   Fable profile, and if the person picks Opus, replace its contents
+   with `settings.opus.json`; delete `settings.opus.json` either way,
+   so the project carries exactly one. The profile question comes
+   first, right after the scaffold, because it decides which model the
+   rest of this session's conversations run on: ask it directly —
+   "Fable or Opus for this project?" — with neither presumed, and if
+   the answer is Opus, swap the settings file and ask the person to
+   switch this session too (`/model claude-opus-5-5`, then
+   `/effort high`).
    One commit: "Scaffold the project." There is no project template to
    clone — the skeleton lives in the skill so that every new project
    gets the current one, and there is exactly one copy to maintain.
@@ -985,12 +992,10 @@ involved), and follow that instead.
    conclusions here.
 2. **Constitution conversation.** Platform/language/architecture choices,
    testing philosophy, dependency policy, the person's involvement
-   level (ask once, directly, and default to product owner), and the
-   model profile (standard by default; economy for a small or personal
-   project, or one that should leave the top tier's allowance to other
-   projects — see "Three names, one place, two profiles"; if economy,
-   swap `.claude/settings.json` for the economy template), and, on the
-   standard profile, which implementer the role table's task row names
+   level (ask once, directly, and default to product owner), the
+   model profile already chosen at the scaffold (write it into the
+   model policy — see "Three names, one place, two profiles"), and, on
+   the Fable profile, which implementer the role table's task row names
    (ask this one directly, with the default stated; the rest of the
    table is left at its defaults and moved later if the person wants),
    and the pause cadence (ask it right after the involvement level —
@@ -1173,15 +1178,15 @@ whether it belongs to a spec.
 ## Using the templates
 
 `project/` is a new project's skeleton, laid out exactly as it lands
-in the repo: `CLAUDE.md`, `.claude/settings.json` (the standard
-profile) beside `settings.economy.json`, `.github/`, `.gitignore`,
+in the repo: `CLAUDE.md`, `.claude/settings.json` (the Fable
+profile) beside `settings.opus.json`, `.github/`, `.gitignore`,
 `specs/001-spec-name/` with `spec.md`, `plan.md`, and `tasks.md`, and
 `design/brief.md` for projects with a UI. `agents/` holds the four
 Claude Code subagent definitions — `sdd-planner.md`,
 `sdd-implementer.md`, `skeptical-reviewer.md`, and
 `sdd-implementer-fable.md` — which install to `~/.claude/agents/`, not
 into any project. Install all four: `sdd-implementer-fable` is the
-close-out dispatch under the standard profile, so every project uses
+close-out dispatch under the Fable profile, so every Fable project uses
 it even when the constitution conversation leaves ordinary tasks on
 `sdd-implementer` (the default). Which implementer the task row names
 is one of the questions that conversation settles. The document skeletons have

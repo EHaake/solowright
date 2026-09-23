@@ -1027,6 +1027,38 @@ argument has always placed lowest. What it concedes: the measurement
 ran on bounded transcription against a fast automated check, so the
 setting exists mostly for the case the measurement could not reach.
 
+### Opus 5.5, and the profile becomes a plain Fable-or-Opus question, 2026-09-23
+
+Opus 5.5 was released on 2026-09-22 and turned out to be excellent: the
+person moved kaazap and Trove to Opus for everything and kept Fable on
+photo-pieces alone. Nothing needed to change for the dispatches. Every
+agent definition names the `opus` alias, which resolved to
+`claude-opus-5-5` from the first day's logs on. What did need changing
+was every place Opus was spelled by full ID: the settings templates'
+effort pins, and the session model of the two projects that had pinned
+`claude-opus-5`.
+
+The profiles were reframed from "standard" and "economy" to Fable and
+Opus, and the question moved to the very start of a project, asked
+directly with neither presumed. "Economy" had cast the all-Opus
+arrangement as the budget option for small projects. With Opus 5.5 it
+is a first-class choice that two of three projects made on quality, so
+the name was wrong and the default would have prejudged the answer.
+The question comes first, before the idea conversation, because it
+decides which model the rest of the first session runs on.
+
+The Opus profile runs every dispatch at high effort, the definitions'
+own default, with only orchestration at medium. The close-out goes to
+`sdd-implementer` at high, not the Fable implementer at medium. The
+session seat is `claude-opus-5-5`, not Opus 4.8. The 4.8 choice had
+been about which reports read most easily, and its per-model effort pin
+was seen being ignored. The person now prefers 5.5 across the board, so
+the Fable profile's allowance fallback moved to `claude-opus-5-5` too.
+Running out of Fable now means running the Opus profile for the rest of
+the window, one set of names instead of two. Under both profiles the
+spec session and the implementation session sit on the same model, so
+the per-spec `/effort high` step is manual under both.
+
 ## Two model profiles: the names are tunable per project
 
 Added September 2026, at the person's request, after experiment 1.
@@ -1050,6 +1082,11 @@ profiles is one commit (the names and the settings file), and the
 tier log shows from which spec. A third, cheaper notch — a Sonnet
 implementer per marked task — already exists as the lighter-implementer
 lever and was left as it was.
+
+Superseded 2026-09-23: the profiles are now Fable and Opus, asked at
+the start with neither presumed, and the Opus profile's session seat is
+Opus 5.5. See "Opus 5.5, and the profile becomes a plain Fable-or-Opus
+question" above.
 
 ## Repo layout: agents/, project/, references/
 

@@ -43,8 +43,8 @@ agents/                         The four subagent definitions. Installed
 project/                        A new project's skeleton, laid out exactly
                                  as it lands; the first session copies it
   CLAUDE.md                     Constitution skeleton
-  .claude/settings.json         Session model and effort (standard profile)
-  .claude/settings.economy.json The economy profile's version; the
+  .claude/settings.json         Session model and effort (Fable profile)
+  .claude/settings.opus.json    The Opus profile's version; the
                                  scaffold keeps one of the two
   .github/PULL_REQUEST_TEMPLATE.md
   .gitignore
@@ -90,6 +90,13 @@ dispatch actually runs at is a nine-row table in that same
 `CLAUDE.md`, holding tier names rather than model IDs, so a project
 can move one role without touching the others and a profile switch
 re-points them all at once.
+
+Which models fill the tiers is the first thing a new project asks:
+Fable or Opus. The Fable profile is the one drawn below — Fable for
+the judgment and the session seat, Opus 5.5 for implementation and
+routine review. The Opus profile runs Opus 5.5 everywhere, every
+dispatch at high effort and orchestration at medium, and never draws
+on Fable's allowance.
 
 ```mermaid
 flowchart LR
@@ -199,7 +206,7 @@ The subagent definitions are a separate copy: all four files in
 machine). Claude Code reads them from there, not from inside the skill
 folder. All four are needed even by a project that never opts into the
 stronger task implementer, because `sdd-implementer-fable` is also the
-close-out dispatch under the standard profile.
+close-out dispatch under the Fable profile.
 
 Verify it's actually recognized, not just present: open Claude Code
 anywhere and ask what skills are available.

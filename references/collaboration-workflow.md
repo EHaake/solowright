@@ -14,7 +14,7 @@ document afterward, not something to improvise around silently.
    `~/.claude/agents/`, the user-level directory, so they're available
    in every project automatically, not just the one they were first
    set up in. All four are required even by a project that leaves
-   ordinary tasks on `sdd-implementer`: under the standard profile the
+   ordinary tasks on `sdd-implementer`: under the Fable profile the
    close-out row dispatches `sdd-implementer-fable`, so a machine
    missing it fails at the close-out of every spec.
 2. In any Claude Code session, confirm they're recognized: ask "what
@@ -355,8 +355,8 @@ than carrying state — anything decided at the pause goes into
 
 A merge ends the same way, with the prompt for the next spec session
 if `ROADMAP.md` has an obvious next item — including the reminder to
-raise that session's effort to high before starting. Under the
-standard profile that is an effort change, not a model change: the
+raise that session's effort to high before starting. Under either
+profile that is an effort change, not a model change: the
 spec session and the implementation session sit on the same model, and
 the role table's spec-conversation row reads "session tier, high".
 If the next step is the person's decision, say that instead.
@@ -398,8 +398,8 @@ Good moments to do this: anything that felt uncertain while it was being
 built, and before a spec's PR comes out of draft and merges. For that
 pre-merge pass, the close-out comes first — dispatch it, on its own
 bundle, to the implementer named in the model policy's close-out row,
-which under the standard profile is `sdd-implementer-fable` at the top
-tier and is not the implementer ordinary tasks go to. It drafts the
+which under the Fable profile is `sdd-implementer-fable` at the top
+tier (under the Opus profile, `sdd-implementer`) and is not the implementer ordinary tasks go to. It drafts the
 `ROADMAP.md` and `DECISIONS.md` text into a file on the branch, to be
 applied to `main` after the merge, and updates the repo README if
 user-facing behavior changed. Only then invoke the sweep, so the sweep
