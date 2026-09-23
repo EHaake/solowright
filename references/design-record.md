@@ -1052,8 +1052,12 @@ own default, with only orchestration at medium. The close-out goes to
 `sdd-implementer` at high, not the Fable implementer at medium. The
 session seat is `claude-opus-5-5`, not Opus 4.8. The 4.8 choice had
 been about which reports read most easily, and its per-model effort pin
-was seen being ignored. The person now prefers 5.5 across the board, so
-the Fable profile's allowance fallback moved to `claude-opus-5-5` too.
+was seen being ignored. The person finds Opus 5.5 clearly the more
+readable of the two, so 4.8 no longer has a role anywhere: the Fable
+profile's allowance fallback moved to `claude-opus-5-5` too, and 4.8
+appears only if the person asks for it, written into the tier names
+like any other requested change. Its remaining mentions in the skill
+are the experiment 1 baseline, which is history.
 Running out of Fable now means running the Opus profile for the rest of
 the window, one set of names instead of two. Under both profiles the
 spec session and the implementation session sit on the same model, so
