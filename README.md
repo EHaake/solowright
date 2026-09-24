@@ -71,7 +71,8 @@ in the project open on the session tier at medium effort,
 automatically. Each spec is a conversation in a Claude Code session of
 its own, raised to high effort by the person
 (the only manual choice in the workflow); once approved, that
-same session dispatches the planner and the sign-off at the top tier,
+same session dispatches the planner at the implementation tier and the
+sign-off at the top tier,
 then hands off to an implementation session on the session tier that
 builds task by task through implementation-tier implementers and
 per-phase reviews, sending any real design question back up to the
@@ -103,12 +104,12 @@ flowchart LR
     PERSON(("The person"))
     subgraph top["Top tier — Fable: decides, and writes prose"]
         SPEC["Spec conversation"]
-        PLAN["sdd-planner"]
         SIGN["Sign-off review"]
         DEC["Decision review"]
         CLOSE["Close-out — sdd-implementer-fable"]
     end
-    subgraph impl["Implementation tier — Opus, high: builds and checks"]
+    subgraph impl["Implementation tier — Opus, high: drafts, builds and checks"]
+        PLAN["sdd-planner"]
         IMP["sdd-implementer"]
         REV["Phase and per-task reviews, pre-merge sweep"]
     end
@@ -143,7 +144,7 @@ left. Every kind it could face has a defined route away from it:
 
 | The call | Where it goes |
 |---|---|
-| How to build the spec | `sdd-planner`, then sign-off — top tier |
+| How to build the spec | `sdd-planner` at the implementation tier, then sign-off at the top tier |
 | A task that turns out not to be routine | Decision review — top tier; the session frames the question and transcribes the answer |
 | Is the work correct | The constitution's verification command, then the reviewer — implementation tier |
 | The person tried it and something is wrong | Diagnosis dispatch to the implementer; a fix comes back, or options go to a decision review |
@@ -169,8 +170,8 @@ then closed most of the gap: its cache reads cost less than Fable's,
 and the first specs run under each profile put the seat at $1.10 per
 task on Fable against $1.34 on Opus 5.5, with Fable still taking about
 a third of the turns. So price no longer picks the profile. The Fable
-profile puts planning, sign-off, decision reviews and the close-out on
-the stronger model, and pays for it from Fable's allowance. The Opus
+profile puts the spec conversation, sign-off, decision reviews and the
+close-out on the stronger model, and pays for it from Fable's allowance. The Opus
 profile keeps everything on one model that reads well and costs less
 per token. The skill pairs either with a plain-language rule for everything
 the person sees, under any model, and with a continuation prompt at

@@ -172,7 +172,7 @@ stay true after it changes again. -->
 
 | Task / invocation | Tier | Tokens | Outcome / miss reason |
 |---|---|---|---|
-| Planning: draft (`sdd-planner`) | fable | [...] | plan.md + tasks.md drafted; foundational phases 0–1 |
+| Planning: draft (`sdd-planner`) | opus | [...] | plan.md + tasks.md drafted; foundational phases 0–1 |
 | Planning: sign-off | fable | [...] | fix and re-review ×1, then signed off |
 | T001 | opus | [...] | verified first try |
 | T001 review | opus | [...] | signed off; scope statement matched the bundle |

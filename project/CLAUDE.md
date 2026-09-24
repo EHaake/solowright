@@ -201,8 +201,8 @@ spec.
 
 Neither is the budget option: Opus 5.5 costs less per token than Fable
 5.1, and the two orchestrators measured close per task. The Fable
-profile puts planning, sign-off, decision reviews and the close-out on
-the stronger model, paid from Fable's separate allowance. The Opus
+profile puts the spec conversation, sign-off, decision reviews and the
+close-out on the stronger model, paid from Fable's separate allowance. The Opus
 profile keeps everything on one model and one allowance, every dispatch
 at high. Hard design calls lean Fable; well-understood building leans
 Opus. -->
@@ -238,7 +238,7 @@ every agent definition defaults to the implementation tier except
 | Role | Dispatched as | Model | Effort |
 |---|---|---|---|
 | Spec conversation | the spec session itself | session tier | high (raised per session) |
-| Plan and tasks draft | `sdd-planner` | **top tier** (override) | high |
+| Plan and tasks draft | `sdd-planner` | implementation tier (no override) | high |
 | Plan and tasks sign-off | `skeptical-reviewer` | **top tier** (override) | high |
 | Decision review | `skeptical-reviewer` | **top tier** (override) | high |
 | Task implementation | `sdd-implementer` | implementation tier | high |
@@ -423,8 +423,8 @@ to read spec.md, plan.md or tasks.md in full. -->
   shell command; bundle assembly and dispatch back to back. Every turn
   saved is one fewer re-send of the whole context.
 - **Fallback** (Fable profile): if the top tier's usage budget runs out, dispatch the
-  planner and sign-off at the implementation tier for the rest of the
-  window (drop the override; both definitions default to `opus`), and
+  sign-off at the implementation tier for the rest of the window (drop
+  the override; the definition defaults to `opus`), and
   switch the session itself to `claude-opus-5-5` mid-session
   (`/model claude-opus-5-5` — one cache re-write, then continue), and
   dispatch `sdd-implementer` for any row that names
@@ -461,7 +461,7 @@ the involvement level above. Artifacts live in `specs/<NNN>-<slug>/`:
 
 Authorship: `spec.md` is written with the person in a spec session.
 `plan.md` and `tasks.md` are drafted by the `sdd-planner` subagent —
-at the top tier, from a planning bundle, against the actual codebase
+at the implementation tier, from a planning bundle, against the actual codebase
 (or, for the first spec, against the constitution, the spec, and the
 skill's templates) — and the orchestrator commits them to the spec
 branch with the PR still in draft. Both are signed off before any

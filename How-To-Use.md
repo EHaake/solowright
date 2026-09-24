@@ -134,10 +134,10 @@ permission.
 ## What runs where
 
 Three roles, three model tiers, named once in `CLAUDE.md`: the top
-tier decides (the spec conversation, the planner, the sign-off,
-decision reviews, and the spec's close-out, which is mostly writing),
-the implementation tier builds and checks (the implementer, phase
-reviews, the pre-merge sweep), and the session tier orchestrates.
+tier decides (the spec conversation, the sign-off, decision reviews,
+and the spec's close-out, which is mostly writing), the implementation
+tier drafts the plan and builds and checks (the planner, the
+implementer, phase reviews, the pre-merge sweep), and the session tier orchestrates.
 Every dispatch logs which model ran and what it cost in `tasks.md`'s
 tier log, so the policy stays a measured choice.
 

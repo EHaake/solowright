@@ -1,6 +1,6 @@
 ---
 name: sdd-planner
-description: Drafts plan.md and tasks.md for one spec, once, from an approved spec.md, the constitution, and the code the spec touches — at the top tier. Writes the two files marked Draft, returns a summary and its token usage, and never decides a product question spec.md doesn't settle.
+description: Drafts plan.md and tasks.md for one spec, once, from an approved spec.md, the constitution, and the code the spec touches — at the implementation tier, with the top tier signing it off. Writes the two files marked Draft, returns a summary and its token usage, and never decides a product question spec.md doesn't settle.
 tools: Read, Grep, Glob, Write, Edit
 model: opus
 effort: high

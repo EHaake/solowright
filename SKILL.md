@@ -296,11 +296,13 @@ directly at the start: Fable or Opus. Under either profile the top and
 session tiers are the same model at different effort — decided for
 Fable by experiment 1, see `references/design-record.md`:
 
-- **The top tier decides, and writes the spec's prose.** Plan and
-  task drafting (the `sdd-planner`, one dispatch per spec), the
+- **The top tier decides, and writes the spec's prose.** The
   skeptical-reviewer on sign-off and on decision reviews, and the
   close-out dispatch — plus the spec conversation, which runs on the
-  session tier's model and is the same one. Nothing else. It reaches the agents only through explicit per-call
+  session tier's model and is the same one. Nothing else. Plan and
+  task drafting (the `sdd-planner`, one dispatch per spec) sat here
+  until 2026-09-24 and now runs at the implementation tier, with the
+  top tier's sign-off checking it; see "Two rows worth explaining". It reaches the agents only through explicit per-call
   overrides on those dispatches.
 - **The implementation tier builds and checks.** The implementer, one
   task per dispatch — the edit, build, test loop that accounts for
@@ -496,8 +498,8 @@ only orchestration runs at medium, and nothing draws on Fable.
 
 Neither profile is the budget option. Opus 5.5 costs less per token
 than Fable 5.1, and measured per task the two orchestrators are close.
-What the Fable profile buys is its planner, sign-off, decision reviews
-and close-out on the stronger model. It spends Fable's separate
+What the Fable profile buys is its spec conversation, sign-off,
+decision reviews and close-out on the stronger model. It spends Fable's separate
 allowance to get them, and Opus 5.5 is good enough that two of the three
 measured projects chose to skip that. The Opus profile keeps
 everything on one model and one allowance. Its every dispatch runs at
@@ -513,9 +515,9 @@ commit; the tier log shows from which spec. The session's model and effort live 
 orchestrator if missing — project settings outrank the app's picker
 for new sessions, so they hold without anyone remembering. Two
 fallbacks, both under the Fable profile: when the top
-tier's budget is exhausted, drop the override on the planner and
-sign-off dispatches for the rest of the window (both definitions
-default to the implementation tier), switch the session itself to the
+tier's budget is exhausted, drop the override on the sign-off and
+decision-review dispatches for the rest of the window (the reviewer
+defaults to the implementation tier), switch the session itself to the
 Opus profile's session model (`/model claude-opus-5-5`, mid-session
 — one cache re-write, then business as usual) and log
 both in the tier log, since the session shares that budget; and if the session drops the protocol — a skipped
@@ -555,6 +557,18 @@ reward a stronger model, so a project whose tasks are genuinely hard
 is the open question this row exists to let someone answer. Ask it
 once in the constitution conversation, with the default stated; never
 re-open it spec by spec.
+
+*Plan and tasks draft* runs at the implementation tier, under both
+profiles, with the sign-off still at the top tier. This is a trial
+from 2026-09-24, to be revisited once each project has finished a
+spec or two under it. On the four measured specs the Fable planner cost
+$26–31 per spec against $12–19 for Opus 5.5. That was 40–60% of a
+Fable-profile spec's Fable spend. Writing the plan is mostly technical
+synthesis from a bounded bundle, and the judgment is in checking it.
+Checking it on a different model from the author's also catches blind
+spots that model shares with itself. What would move it back: sign-off
+catching more real findings, more re-reviews, or more decision reviews
+during implementation than the Fable-planned specs showed.
 
 *Close-out* goes to the top tier under the Fable profile whatever
 the implementation row says, because it writes the `ROADMAP.md` and
@@ -667,7 +681,7 @@ definitions and the orchestrator's overrides do the rest:
 | Step | Where | Model | Who's talking |
 |---|---|---|---|
 | Spec conversation → `spec.md` | Claude Code, **the spec session** | Fable, high — the session opens at medium, says so, and the person raises effort for this session (`/effort high`) | the person and Claude |
-| Plan and tasks drafted | same session | the spec session dispatches `sdd-planner` at **Fable, high** | orchestrator → planner |
+| Plan and tasks drafted | same session | the spec session dispatches `sdd-planner` at **Opus, high** | orchestrator → planner |
 | Sign-off | same session | `skeptical-reviewer` at **Fable, high**; one review, at most one re-review | orchestrator → reviewer |
 | Spec-conformance summary | same session | Fable | orchestrator → the person |
 | Plan and tasks final | **new session** — the spec session ends with the prompt to paste there; the new session opens at medium from settings | — | — |
@@ -695,11 +709,10 @@ session's opening prompt. `/clear` has no place in the workflow;
 `/compact` is the tool for an implementation session that grows long.
 
 **Fable's footprint per spec** is the spec session (the conversation
-and the handful of turns that dispatch planning), one planner run,
-one sign-off (plus at most one re-review), any decision reviews, the
+and the handful of turns that dispatch planning), one sign-off (plus at most one re-review), any decision reviews, the
 close-out dispatch, and the whole implementation session at medium.
-The implementer, the reviewer's phase and per-task checks, and the
-sweep run on Opus. Measured across two specs with the implementer
+The planner, the implementer, the reviewer's phase and per-task
+checks, and the sweep run on Opus. Measured across two specs with the implementer
 *also* on Fable, that extra row cost about a fifth more of the weekly
 allowance per task and bought nothing measurable, which is why the
 implementer default sits where it does.
@@ -1080,7 +1093,7 @@ spec session assembles a planning bundle with shell — the spec, the
 previous spec's `plan.md` and `tasks.md` as the pattern (or the skill's
 templates, for a first spec), a file listing — and dispatches the
 `sdd-planner` subagent (`agents/sdd-planner.md`) on it, once, at the
-top tier. The planner reads the code the spec touches,
+implementation tier. The planner reads the code the spec touches,
 writes both files marked Draft, and returns a summary with its token
 usage for the tier log. The orchestrator commits the drafts to the spec
 branch with the PR still in draft, and the skeptical-reviewer signs

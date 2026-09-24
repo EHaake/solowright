@@ -204,9 +204,10 @@ conservatively.
 
 Once shipped code is what plans extend (see "Who authors plan.md and tasks.md"
 in `SKILL.md`), the session doesn't draft `plan.md` and `tasks.md` itself —
-the spec session dispatches `sdd-planner`, once per spec, with a
-per-call override to the top tier named in `CLAUDE.md` (explicit, so
-the dispatch lands there whatever the session itself is running on).
+the spec session dispatches `sdd-planner`, once per spec, at the tier
+the role table's planning row names. That row defaults to the
+implementation tier with no override, as a trial since 2026-09-24. The
+top tier's sign-off checks the draft.
 The exploration a plan needs is the expensive part of planning; it
 belongs in a discardable context bounded by a planning bundle, not in
 the session that then carries it through every sign-off round:

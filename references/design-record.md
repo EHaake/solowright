@@ -1151,6 +1151,53 @@ template were updated to match:
   definitions were written and measured at, and nothing measured since
   argues for lowering it.
 
+### The planner moves to the implementation tier, as a trial, 2026-09-24
+
+The plan-and-tasks draft now runs at the implementation tier under both
+profiles, with no override. The sign-off, decision reviews, close-out
+and spec conversation stay on the top tier. This changes only the Fable
+profile, because under the Opus profile the two tiers are the same model.
+
+The four specs measured after the Opus 5.5 release:
+
+| Spec | Planner | Planner $ | Dispatches | Sign-off $ | Dispatches |
+|---|---|---|---|---|---|
+| photo-pieces 017 | Fable | 31.02 | 1 | 10.04 | 2 |
+| photo-pieces 018 | Fable | 26.28 | 1 | 7.44 | 1 |
+| kaazap 030 | Opus 5.5 | 12.18 | 2 | 5.63 | 2 |
+| Trove 009 | Opus 5.5 | 18.55 | 2 | 5.42 | 3 |
+
+The Fable planner cost about twice as much per spec. It was 40–60% of a
+Fable-profile spec's Fable spend, so moving it roughly halves the
+allowance a spec draws. The reasons for the move:
+
+- Drafting a plan from a bounded bundle is mostly technical synthesis,
+  which Opus 5.5 does well. The judgment is in checking it.
+- The sign-off keeps that judgment on the stronger model for about a
+  third of the planner's price.
+- A reviewer on a different model from the author catches blind spots
+  the author's model shares with itself. The all-Opus arrangement does
+  not have that.
+
+The only quality hint in the table leans the other way. The Fable plans
+went through with fewer planner dispatches and sign-off rounds. That is
+confounded by project difficulty and by the reviewer's model, so it
+does not decide anything. It is what the trial watches.
+
+**Revisit after each project has finished a spec or two under it.**
+Compare against 017 and 018 on:
+
+- real sign-off findings
+- re-reviews
+- revisions to the plan after sign-off
+- decision reviews during implementation (018 had six)
+- walkthrough findings that trace back to the plan
+
+The row moves back to the top tier if those get worse. Existing
+projects pick the change up when their constitution is reconciled with
+the template. Until then their role table still sends the planner to
+the top tier.
+
 ## Two model profiles: the names are tunable per project
 
 Added September 2026, at the person's request, after experiment 1.
