@@ -321,11 +321,11 @@ Fable by experiment 1, see `references/design-record.md`:
   role needs the top tier. What decides which model sits there is the
   price of a cache read, since re-sends are almost all of the seat's
   tokens, and the prose of the pause report, the one output a person
-  reads. Under the Fable profile the seat runs Fable 5.1 at medium:
-  measured against Opus 4.8 in the same seat, it cost about a third
-  per task and drew on Fable's allowance at a rate three concurrent
-  projects could sustain (the design record has the numbers). Under
-  the Opus profile it runs Opus 5.5 at medium.
+  reads. Under the Fable profile the seat runs Fable 5.1 at medium.
+  Against Opus 4.8 in the same seat it cost about a third per task.
+  Against Opus 5.5 the two are close: $1.10 against $1.34 per task,
+  with Fable taking about a third of the turns. Under the Opus profile
+  the seat runs Opus 5.5 at medium. The design record has the numbers.
 
 The planner and reviewer definitions carry `effort: high`, so
 reasoning stays full-strength inside them regardless of the session's
@@ -492,7 +492,19 @@ the measured arrangement, with judgment on the stronger model and its
 separate allowance. **Opus**: Opus for everything — top and
 implementation `opus`, session `claude-opus-5-5` at medium — so every
 dispatch runs at its definition's default, high, with no override,
-only orchestration runs at medium, and nothing draws on Fable. The
+only orchestration runs at medium, and nothing draws on Fable.
+
+Neither profile is the budget option. Opus 5.5 costs less per token
+than Fable 5.1, and measured per task the two orchestrators are close.
+What the Fable profile buys is its planner, sign-off, decision reviews
+and close-out on the stronger model. It spends Fable's separate
+allowance to get them, and Opus 5.5 is good enough that two of the three
+measured projects chose to skip that. The Opus profile keeps
+everything on one model and one allowance. Its every dispatch runs at
+high because high is what the definitions were written and measured at.
+A project whose specs rest on hard design calls leans Fable. A project
+whose specs are mostly well-understood building leans Opus. The
+person decides; the session states both and presumes neither. The
 choice can change later: edit the names, swap the settings file, one
 commit; the tier log shows from which spec. The session's model and effort live in the project's
 `.claude/settings.json`, written at setup from the profile's template
@@ -594,11 +606,20 @@ reviewer, product questions to the person — and what's left is
 procedure. The session used to sit one tier down because the top tier
 was assumed to charge a premium on every re-send of the longest-lived
 context. Fable 5.1 broke that assumption: its cache reads bill at
-$0.25 per million tokens, half the Opus rate. Measured across five
-specs on three projects, the seat on Fable 5.1 at medium cost about a
-third per task of the same seat on Opus 4.8 — mostly because it took
-a quarter of the turns — and the allowance held with three projects
-drawing at once. Medium effort stays for the behavioral reason: high
+$0.25 per million tokens, half the rate of Opus 4.8 and Opus 5.
+Measured across five specs on three projects, the seat on Fable 5.1
+at medium cost about a third per task of the same seat on Opus 4.8,
+mostly because it took a quarter of the turns. The allowance held
+with three projects drawing at once.
+
+Opus 5.5 narrowed that gap. Its cache reads bill at $0.20, below
+Fable's, and on the first specs run under each profile the seat cost
+$1.10 per task on Fable against $1.34 on Opus 5.5. Fable still took
+about a third of the turns. Price no longer decides the seat, so
+under the Fable profile the case is the one it had all along: fewer
+turns, and the stronger model on the calls the session keeps. Under
+the Opus profile the seat is Opus 5.5, and the same discipline about
+turns applies. Medium effort stays under both for the behavioral reason: high
 effort makes a session investigate before acting, and everything a
 hands-off orchestrator reads inflates every later re-send.
 `references/design-record.md` has the experiment, its confound (the

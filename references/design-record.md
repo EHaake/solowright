@@ -1126,9 +1126,30 @@ share. What bounds it is fewer turns and shorter context:
 The estimate for the same pass run that way is $6–8. The guidance is in
 `collaboration-workflow.md`, under where a device pass runs.
 
-**Still open:** Trove 009's implementation session ran at high effort
-for 305 turns despite the medium pin. This is the same drift experiment 1
-saw on Opus 4.8. Nothing was changed for it.
+Trove 009's implementation session ran at high effort for 305 turns.
+This was not the medium pin being ignored: the person had set high by
+hand and not set it back. Nothing was changed for it.
+
+**Where the rationale for the model choices now stands.** The
+profile paragraphs in `SKILL.md`, the README and the constitution
+template were updated to match:
+
+- **Neither profile is the budget option.** Opus 5.5 is cheaper per
+  token than Fable 5.1, and the orchestrators measured close. The
+  Fable profile buys the stronger model on planning, sign-off,
+  decision reviews and the close-out, and pays from Fable's separate
+  allowance. The Opus profile keeps one model and one allowance.
+- **The Fable session seat is justified by turns and judgment, not
+  price.** Experiment 1's "a third the cost of Opus 4.8" is still
+  true of 4.8. It is not the comparison anyone now faces.
+- **The implementer default is unchanged.** Experiment 2's result, that
+  the Fable implementer bought nothing on bounded tasks, compared
+  equal-sided runs. The output undercount does not move it.
+- **Close-out stays on the top tier under Fable for the prose.** Its
+  cost is governed by the bundle, which is now a rule.
+- **Every Opus-profile dispatch runs at high.** That is the level the
+  definitions were written and measured at, and nothing measured since
+  argues for lowering it.
 
 ## Two model profiles: the names are tunable per project
 

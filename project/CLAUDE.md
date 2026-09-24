@@ -197,7 +197,15 @@ or Opus?", and this section keeps the profile they chose and deletes
 the other. Adjust the tier names as models change; the roles don't. A
 project can move between profiles later — change the names here and
 swap the settings file, one commit — and the tier log shows from which
-spec. -->
+spec.
+
+Neither is the budget option: Opus 5.5 costs less per token than Fable
+5.1, and the two orchestrators measured close per task. The Fable
+profile puts planning, sign-off, decision reviews and the close-out on
+the stronger model, paid from Fable's separate allowance. The Opus
+profile keeps everything on one model and one allowance, every dispatch
+at high. Hard design calls lean Fable; well-understood building leans
+Opus. -->
 
 **Fable profile.** Top tier `fable`; implementation tier `opus`;
 session tier `claude-fable-5-1` at medium effort (the top and session
@@ -301,12 +309,12 @@ to read spec.md, plan.md or tasks.md in full. -->
   bookkeeping turns and re-sends its whole context on each one — the
   dominant cost of the workflow — and it makes no design decisions: it
   assembles bundles, dispatches, verifies, commits, and reports. The
-  role never needs the top tier. Under the Fable profile it sits
-  on the top tier's model because, measured, Fable 5.1 at medium in
-  this seat cost about a third per task of Opus 4.8 and its allowance
-  held (the skill's design record has the numbers); under the Opus
-  profile it sits on Opus 5.5, and the same discipline about turns
-  applies.
+  role never needs the top tier. Under the Fable profile it sits on
+  the top tier's model. Measured in this seat, Fable 5.1 at medium cost
+  about a third per task of Opus 4.8, and close to Opus 5.5 ($1.10
+  against $1.34) while taking about a third of the turns. The skill's
+  design record has the numbers. Under the Opus profile it sits on Opus
+  5.5, and the same discipline about turns applies.
   If it drops the protocol (a skipped review, a stale `tasks.md`
   edit, a task done by hand), the first fix is high effort, one line
   in the same file.

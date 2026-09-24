@@ -159,13 +159,20 @@ re-send.
 
 Which model fills the session seat used to be constrained to "not
 the top tier", on the assumption that the top tier charged a premium
-on every re-send. Fable 5.1's cache reads bill at half the Opus rate,
-which makes the seat's per-token cost about equal on either model.
-Measured over five specs on three projects, the session on Fable 5.1
-at medium cost about a third per task of the same seat on Opus 4.8,
-and Fable's separate allowance held with three projects drawing at
-once; the pause reports — the one seat whose prose the person reads —
-read at least as well. The skill pairs that with a plain-language rule for everything
+on every re-send. Fable 5.1's cache reads bill at half the rate of
+Opus 4.8 and Opus 5. Measured over five specs on three projects, the
+session on Fable 5.1 at medium cost about a third per task of the same
+seat on Opus 4.8, and Fable's separate allowance held with three
+projects drawing at once. The pause reports, the one output of the
+seat whose prose the person reads, read at least as well. Opus 5.5
+then closed most of the gap: its cache reads cost less than Fable's,
+and the first specs run under each profile put the seat at $1.10 per
+task on Fable against $1.34 on Opus 5.5, with Fable still taking about
+a third of the turns. So price no longer picks the profile. The Fable
+profile puts planning, sign-off, decision reviews and the close-out on
+the stronger model, and pays for it from Fable's allowance. The Opus
+profile keeps everything on one model that reads well and costs less
+per token. The skill pairs either with a plain-language rule for everything
 the person sees, under any model, and with a continuation prompt at
 each of the two session boundaries, so a boundary costs a paste rather
 than a reconstruction. A phase pause gets no prompt: it isn't a
