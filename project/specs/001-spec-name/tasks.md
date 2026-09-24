@@ -80,7 +80,9 @@ and no test fails when they go stale. -->
   user-facing behavior or setup changed. Then request the pre-merge
   whole-spec sweep. Dispatch this one to the implementer named in the
   model policy's close-out row, which is not necessarily the one
-  ordinary tasks go to — close-out writes prose rather than code. *Verify: ROADMAP.md no longer lists this spec's
+  ordinary tasks go to — close-out writes prose rather than code. Hand it
+  a close-out bundle with the evidence already assembled, and tell it
+  not to read spec.md, plan.md or tasks.md in full. *Verify: ROADMAP.md no longer lists this spec's
   work as future; README matches actual behavior; the sweep came back
   clean or its findings were resolved.*
 

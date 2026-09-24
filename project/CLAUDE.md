@@ -278,11 +278,13 @@ per spec.
 Close-out sits at the top tier because it writes the ROADMAP.md and
 DECISIONS.md entries, the acceptance evidence and the spec summary —
 synthesis and prose, the same work the top tier earns its place on
-everywhere else. The measured close-outs cost $5.66 and $3.74 at the
-implementation tier against $0.81 and $1.31 at the top tier's model at
-medium, but those specs also handed close-out a pre-assembled bundle,
-so the gap is confounded: watch it in the tier log rather than trust
-it. -->
+everywhere else. Its cost depends mostly on its bundle, not its model.
+On the same model, one close-out that read the documents and hunted its
+own evidence cost $12.38 over 111 turns. Another, handed the evidence
+with full reads forbidden, cost $0.99 over 24 turns. So the close-out
+bundle carries per-criterion evidence, the walkthrough record, the tier
+log, the spec summary and the ROADMAP entries, and the dispatch says not
+to read spec.md, plan.md or tasks.md in full. -->
 
 - **The session runs at the session tier, at medium effort**, set in
   this repo's `.claude/settings.json` — written at project setup from

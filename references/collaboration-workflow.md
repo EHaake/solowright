@@ -42,6 +42,30 @@ orchestrator dispatches for that check alone. Don't write a task whose
 verification the implementer cannot perform and then read its report
 as if it had.
 
+A dispatched device pass costs mostly re-read context, not thinking.
+The measured one ran 319 turns and cost $17.19. Three quarters of that
+was cache reads, as its context grew from 54k to 332k tokens with every
+screenshot it kept. Three habits keep it bounded:
+
+- **Fold waits into the next action.** A bare `sleep` is a full turn that
+  re-reads the whole context to do nothing, and the measured pass spent
+  100 of its turns that way. Chain the wait onto the call that
+  needs it (`sleep 2 && <screenshot>`), or wait for a condition rather than a
+  fixed time.
+- **One dispatch per checklist section.** Split a long pass into fresh
+  dispatches, each given only its own section of the checklist and
+  returning a short pass/fail list. Context then resets between sections
+  instead of compounding.
+- **Leave the pass only what needs eyes.** A check with a deterministic
+  answer (an element exists, a label reads right, a tap reaches the
+  right screen) belongs in the automated UI tests the plan already
+  names, where it runs every build for nothing. The device pass keeps
+  layout, motion and feel.
+
+A smaller model is not the lever. Sonnet 5 would have saved about 12% on the
+measured pass because its cache reads cost the same as Opus 5.5's, and
+lower effort changes little when output is a tenth of the bill.
+
 **Where commits go.** A spec's implementation commits to that spec's
 branch. Everything else — a roadmap edit, a decisions entry, a
 constitution amendment, a docs fix — commits straight to `main`,
@@ -405,7 +429,23 @@ applied to `main` after the merge, and updates the repo README if
 user-facing behavior changed. Only then invoke the sweep, so the sweep
 verifies the close-out instead of pre-dating it. Under the allowance
 fallback this row re-points to `sdd-implementer` like every other row
-naming the Fable implementer. Then say explicitly that this is the pre-merge pass, so
+naming the Fable implementer.
+
+The close-out bundle carries the evidence, so the close-out never goes
+looking for it. The orchestrator assembles it with shell, as for a
+review bundle: each acceptance criterion with the test names or Done
+notes that satisfied it, the walkthrough list and what the person
+said at each pause, the tier log, the spec's summary and its decided
+lines, the ROADMAP.md entries this spec touches, and the previous
+spec's DECISIONS.md section as the shape to copy. The dispatch says
+not to read `spec.md`, `plan.md` or `tasks.md` in full. Two
+measured close-outs on the same model show why this matters. The one whose brief allowed full
+reads and had it cite evidence for 23 criteria itself took 111 turns and
+$12.38; it re-read the documents and grepped the tests criterion by
+criterion. The one handed a pre-assembled bundle and told not to read
+the documents took 24 turns and $0.99.
+
+Then say explicitly that this is the pre-merge pass, so
 the whole-spec sweep happens on purpose rather than as a guess about
 scope:
 
@@ -467,6 +507,9 @@ Scope by invocation type:
 - **Plan/tasks sign-off**: `spec.md`, `CLAUDE.md`, and the draft
   `plan.md`/`tasks.md` — plus, for a project with shipped code, only
   the existing files the plan claims to extend or depend on.
+- **Close-out** (an implementer dispatch, listed here because it has
+  the same failure): the close-out bundle described above. No full reads of
+  `spec.md`, `plan.md` or `tasks.md`.
 - **Pre-merge sweep**: the whole document set for that spec plus the
   spec's full diff against main (`git diff main...HEAD`) — the
   documents and the change, not the codebase. This is the one

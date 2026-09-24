@@ -548,11 +548,12 @@ re-open it spec by spec.
 the implementation row says, because it writes the `ROADMAP.md` and
 `DECISIONS.md` entries, the acceptance evidence, and the spec's
 summary — synthesis and prose, the one implementer dispatch shaped
-like planning. The measured close-outs cost $5.66 and $3.74 at the
-implementation tier against $0.81 and $1.31 at the top tier's model at
-medium, but those specs also handed close-out a pre-assembled bundle,
-so the gap is confounded and worth watching in the tier log rather
-than trusting.
+like planning. What a close-out costs depends mostly on its bundle,
+not its model. On Opus 5.5 at high, one close-out that could read the
+documents in full and hunt its own evidence cost $12.38 over 111 turns.
+Another, given the evidence pre-assembled and told not to read the
+documents, cost $0.99 over 24 turns. So the bundle carries the evidence
+and the dispatch forbids full reads (`references/collaboration-workflow.md`).
 
 **A model change the person asks for is written into the table before
 it is acted on**, in the same turn, with a tier-log row naming the

@@ -1063,6 +1063,73 @@ the window, one set of names instead of two. Under both profiles the
 spec session and the implementation session sit on the same model, so
 the per-spec `/effort high` step is manual under both.
 
+### The first specs on both profiles, and two corrections, 2026-09-24
+
+Each project closed one spec after the reframe: kaazap 030 and Trove
+009 on the Opus profile, photo-pieces 017 on the Fable profile, and
+photo-pieces 018 on Fable for planning and then all-Opus 5.5. This is
+descriptive, not an experiment; the projects differ in difficulty.
+
+**Two corrections to earlier dollar figures.** The analysis priced
+Opus 5.5 at Opus 5's rates at first. Opus 5.5 costs $4/$20 per MTok,
+$5 per cache write and $0.20 per cache read, against Opus 5's $0.50
+per cache read. Cache reads dominate every role, so the difference is
+large. Separately, the log parser kept the first streamed chunk of each
+response, which carries only a few output tokens. That undercounted
+output roughly tenfold. It affected both arms of experiments 1 and 2
+equally, so their comparisons stand, but their absolute dollar figures
+are low. The parser now keeps the largest output count per message.
+
+**Opus 5.5 is cheaper than Opus 5, and the saving is not only price.**
+Per completed task, kaazap went from $4.56 (028, Opus 5) to $3.58 (030),
+and Trove from $11.89 (015) to $5.87 (009). The median dispatch changed as follows:
+
+| Median dispatch | Opus 5 | Opus 5.5 |
+|---|---|---|
+| Trove implementer | 42 turns, $4.09 | 30 turns, $1.24 |
+| kaazap implementer | 15 turns, $0.99 | 12 turns, $0.51 |
+| Trove review | 14 turns, $2.60 | 7 turns, $0.97 |
+| kaazap review | $1.34 | $0.65 |
+
+Review output roughly halved. Orchestrator turns per task stayed flat,
+at about 11.
+
+**The two orchestrators are close to parity.** Per task, the
+orchestrator cost $1.10 on Fable (photo-pieces 017) and $1.34 on Opus 5.5
+(018). Fable still uses about a third of the turns. At Opus 5's prices
+Fable had been clearly cheaper, which was part of its case. That case now
+rests on quality: fewer turns, and judgment on the calls the orchestrator
+keeps.
+
+**Close-out cost comes from the bundle.** Experiment 2 left this confounded
+(see its results). Trove 009's close-out ran on Opus 5.5 at high. Its brief
+allowed full reads of the spec's documents and had it cite evidence for 23
+criteria itself. It took 111 turns, 103 of them shell calls, with context up
+to 359k tokens, and cost $12.38. Photo-pieces 018's close-out ran on the
+same model. Its bundle pre-assembled the evidence and forbade full reads.
+It took 24 turns and cost $0.99. The close-out bundle rule in
+`collaboration-workflow.md` is the result. The evidence goes in the bundle,
+and the dispatch says not to read `spec.md`, `plan.md` or `tasks.md`.
+
+**The device pass costs mostly context, not model.** Trove 009's
+simulator pass ran 319 turns and cost $17.19. It made 226 taps, 135
+screenshot reads and 100 bare `sleep` calls, and its context grew from
+54k to 332k tokens. Cache reads were 76% of the cost and output only
+14%. Running the same pass on Sonnet 5 would have cost about $15, since
+its cache reads also cost $0.20. Lower effort changes only the output
+share. What bounds it is fewer turns and shorter context:
+
+- fold each wait into the next call
+- split the pass into a fresh dispatch per checklist section
+- move deterministic checks into the automated UI tests
+
+The estimate for the same pass run that way is $6–8. The guidance is in
+`collaboration-workflow.md`, under where a device pass runs.
+
+**Still open:** Trove 009's implementation session ran at high effort
+for 305 turns despite the medium pin. This is the same drift experiment 1
+saw on Opus 4.8. Nothing was changed for it.
+
 ## Two model profiles: the names are tunable per project
 
 Added September 2026, at the person's request, after experiment 1.
