@@ -1198,6 +1198,52 @@ projects pick the change up when their constitution is reconciled with
 the template. Until then their role table still sends the planner to
 the top tier.
 
+### Implementers batch the steps they already know, 2026-09-24
+
+This came out of looking at Jive, a third-party agent built on Jev, a
+fast classifier model released 2026-09-15. Jive has the model submit a
+graph of shell commands that runs without a model turn between steps.
+Most of its reported speed-up came from that batching, not from Jev:
+half its benchmark tasks made no Jev calls at all. Jive itself doesn't
+fit Solowright. It has no subagents, runs outside Claude Code at API
+prices, and published no quality results. But batching fits the
+measured cost model here, where a dispatch costs its turns times its
+context.
+
+The implementer logs show the room for it:
+
+| | Trove 009 | photo-pieces 018 |
+|---|---|---|
+| Implementer dispatches | 28 | 22 |
+| Turns | 997 (~36 each) | 900 (~41 each) |
+| Turns that only read | 559 (56%) | 430 (48%) |
+| Turns with parallel calls | 93 | 24 |
+| Turns that only waited | 38 | 109 |
+
+Those reads came mostly in runs, with a median of 3 and a longest of
+47. One Trove dispatch paged a file 20 lines per turn. Folding each run
+of reads into one turn would remove about 430 turns on Trove and 280 on
+photo-pieces. Some of those reads depended on the one before, so the
+real saving is smaller, perhaps 20–30% of implementer turns. The
+later turns are the most expensive, because context has grown by then.
+
+Both implementer definitions gained a section, "Every turn re-reads
+everything":
+
+- read together
+- verify in one call, including the first look at a failure
+- never poll a background build turn by turn
+- apply known, independent edits together
+- don't batch across a decision, where the output decides the next step
+
+It is the implementer's version of the orchestrator's "batch the
+bookkeeping" and the device pass's "fold waits into the next action".
+The device-pass guidance is unchanged. Its deterministic checks belong
+in UI tests, which is batching taken all the way, and what needs eyes
+stays with a vision-capable model or the person. Watch implementer
+turns per dispatch on the next specs: about 36 on Trove and 41 on
+photo-pieces is the baseline.
+
 ## Two model profiles: the names are tunable per project
 
 Added September 2026, at the person's request, after experiment 1.

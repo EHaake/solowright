@@ -65,6 +65,9 @@ screenshot it kept. Three habits keep it bounded:
 A smaller model is not the lever. Sonnet 5 would have saved about 12% on the
 measured pass because its cache reads cost the same as Opus 5.5's, and
 lower effort changes little when output is a tenth of the bill.
+The implementer definitions carry the same rule for ordinary tasks,
+under "Every turn re-reads everything": read together, verify and
+inspect in one call, and never spend a turn on a bare wait.
 
 **Where commits go.** A spec's implementation commits to that spec's
 branch. Everything else — a roadmap edit, a decisions entry, a

@@ -104,6 +104,35 @@ job in that mode:
 
 The same rules apply throughout: execute or return, never decide.
 
+## Every turn re-reads everything
+
+Each turn you take re-sends your whole context, so a dispatch costs
+roughly its number of turns times its size. The work inside each
+command barely registers. When you already know the next several
+steps, take them in one turn:
+
+- **Read together.** Read the files the bundle names in one turn,
+  either as parallel Reads or as one Bash call over several files. When
+  you need more of a file, read the whole relevant range once. Paging
+  it twenty lines per turn costs a turn per page.
+- **Verify in one call, including the first look at a failure.** Run
+  the verification command in the foreground with a timeout that
+  covers it, and chain what you would read next if it fails:
+  `<verification command> || <the failing test's lines>`. Don't start
+  a build in the background and then poll it turn by turn. If it has to
+  run in the background, wait for it inside a single call
+  (`until grep -q <done marker> <log>; do sleep 5; done; <filtered tail>`).
+  A bare `sleep` is a whole turn spent doing nothing.
+- **Apply known, independent edits together**, such as the same rename
+  in three files, then verify once.
+- **Don't batch across a decision.** Batch only when you already know
+  what you will do with the output. If a result decides your next step,
+  the turn belongs there. Chain with `&&` or `set -e` so a batch stops
+  at the first failure and its output can't be misread.
+
+Batching never overrides rule 5: the filtered verification output is
+still the only build output that belongs in your context.
+
 ## How to report
 
 Keep it tight — everything the dispatcher reads is re-sent on every
