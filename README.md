@@ -37,7 +37,7 @@ agents/                         The four subagent definitions. Installed
   sdd-implementer.md            Builds one task per dispatch
   skeptical-reviewer.md         Sign-off, phase reviews, decision reviews,
                                  the pre-merge sweep
-  sdd-implementer-fable.md      The close-out dispatch, and the optional
+  sdd-implementer-fable.md      The close-out dispatch (Fable profile), and the optional
                                  stronger task implementer; same body as
                                  sdd-implementer, different frontmatter
 project/                        A new project's skeleton, laid out exactly
@@ -102,7 +102,7 @@ on Fable's allowance.
 ```mermaid
 flowchart LR
     PERSON(("The person"))
-    subgraph top["Top tier — Fable: decides, and writes prose"]
+    subgraph top["Top tier — Fable: judges, and writes prose"]
         SPEC["Spec conversation"]
         SIGN["Sign-off review"]
         DEC["Decision review"]
@@ -114,7 +114,7 @@ flowchart LR
         REV["Phase and per-task reviews, pre-merge sweep"]
     end
     subgraph sess["Session tier — Fable 5.1, medium: orchestrates"]
-        ORC["Orchestrating session"]
+        ORC["Orchestrating session:<br/>the spec session through sign-off,<br/>then the implementation session"]
     end
     PERSON <-->|"own session, raised to high effort"| SPEC
     ORC -->|"planning bundle, once per spec"| PLAN
@@ -122,9 +122,9 @@ flowchart LR
     ORC -->|"decision bundle, non-routine task"| DEC
     ORC -->|"task bundle, per task"| IMP
     ORC -->|"diagnosis bundle, walkthrough finding"| IMP
-    ORC -->|"phase bundle"| REV
-    ORC -->|"close-out bundle, once per spec"| CLOSE
-    ORC -->|"pause report, plain language"| PERSON
+    ORC -->|"phase bundle; documents + spec diff for the sweep"| REV
+    ORC -->|"close-out bundle with the evidence, once per spec"| CLOSE
+    ORC -->|"spec-conformance summary; pause reports, plain language"| PERSON
     PERSON -->|"walkthrough finding"| ORC
 ```
 
@@ -134,10 +134,14 @@ session re-sends its entire context on every turn, and on measured
 projects those re-sends were about 97% of all tokens. The
 orchestrating session is the longest-lived context in the workflow
 and takes the most turns, so whatever model sits there pays its
-cache-read rate on everything, constantly. The planner, the sign-off,
-and a decision review are the opposite shape: short-lived, dense with
-judgment. So the top tier at high effort runs inside those dispatches,
-and the session seat is priced by cache reads.
+cache-read rate on everything, constantly. The sign-off and a decision
+review are the opposite shape: short-lived, dense with judgment. So the
+top tier at high effort runs inside those dispatches, and the session
+seat is priced by cache reads. The planner sat there too until
+2026-09-24. It now drafts at the implementation tier, as a trial, with
+the top tier's sign-off checking the draft. Drafting from a bounded
+bundle turned out to be mostly synthesis, and on Fable it cost about
+twice as much per spec.
 
 That only works if the orchestrator genuinely has no judgment calls
 left. Every kind it could face has a defined route away from it:
@@ -179,6 +183,39 @@ each of the two session boundaries, so a boundary costs a paste rather
 than a reconstruction. A phase pause gets no prompt: it isn't a
 boundary, and offering one there invites a context clear that costs a
 full re-read.
+
+### Where the cost actually goes
+
+The same arithmetic holds inside every dispatch: a turn re-sends the
+whole context, so a dispatch costs roughly its turns times its size.
+Which model runs it and at what effort matter much less. Every large
+saving measured so far came from fewer turns or a smaller context, not
+from a cheaper model:
+
+- **Bundles, not pointers.** Each review, planning pass and implementer
+  task gets one pre-assembled file with everything it needs. The first
+  pre-merge sweep, which read the codebase instead, cost more than five
+  tasks.
+- **The close-out bundle carries the evidence.** Two close-outs on the
+  same model show the difference:
+
+  | Close-out | Turns | Cost |
+  |---|---|---|
+  | Full reads allowed, finding its own evidence | 111 | $12.38 |
+  | Pre-assembled evidence, full reads forbidden | 24 | $0.99 |
+
+- **Implementers batch the steps they already know.** They read
+  together, verify and inspect a failure in one call, and never poll a
+  build turn by turn. About half of measured implementer turns were
+  single read-only commands.
+- **Device and browser passes stay bounded.** One simulator pass took
+  319 turns and cost $17.19, three quarters of it re-read context. The
+  fixes:
+  - fold each wait into the next call
+  - give each checklist section a fresh dispatch
+  - move checks with a fixed right answer into automated UI tests
+
+  A smaller model would have saved about 12%.
 
 The full decision record — what was measured, what was tried first,
 and what evidence would change each choice — is
@@ -239,6 +276,15 @@ Edit here first, commit normally. Then manually re-sync the install
 locations — copy the changed files to the Claude Code path, and re-zip
 and re-upload for claude.ai if you use it. Nothing pushes automatically
 to either; this repo having the fix doesn't mean an installed copy has
-it yet. Projects already scaffolded keep the templates they started
-with; only `CLAUDE.md`'s model policy is expected to be brought up to
-date when the policy changes, and the skill says how.
+it yet.
+
+Two kinds of change reach projects differently:
+- **Changes to the agent definitions** take effect in every project on
+  the next dispatch, because all projects read them from
+  `~/.claude/agents/`. The implementer's batching rules are one example.
+- **Changes to the templates and the model policy** don't. Projects
+  keep the `CLAUDE.md` and `.claude/settings.json` they were scaffolded
+  with. To bring one up to date, open its next spec session by asking
+  it to reconcile its constitution and settings with the skill's
+  current templates for its profile, and to commit that to `main`
+  before the spec starts.

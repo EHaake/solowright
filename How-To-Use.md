@@ -14,7 +14,7 @@ machine (see `README.md`, "Installing"); this file is for you.
    `skeptical-reviewer`, `sdd-implementer-fable`) go in
    `~/.claude/agents/`; they are per-machine, not per-project. Install
    all four even if you never opt into the stronger task implementer —
-   the fourth also runs every spec's close-out.
+   under the Fable profile, the fourth also runs every spec's close-out.
 2. **Create an empty repository** and open Claude Code in it.
 3. **Say "Start a new Solowright project."** The session opens at
    medium effort and will ask you to raise it to high for this
@@ -142,7 +142,7 @@ Every dispatch logs which model ran and what it cost in `tasks.md`'s
 tier log, so the policy stays a measured choice.
 
 Which tier each of those runs at is a table in `CLAUDE.md`, one row
-per dispatch. You can move a row by asking — "put the planner on the
+per dispatch. You can move a row by asking — "put the sign-off on the
 cheaper model until my allowance resets" is a sentence, and the
 session writes it into the table and commits before doing anything
 else, so the next session knows too. It stays until you say otherwise;
